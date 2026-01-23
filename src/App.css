@@ -87,18 +87,22 @@ body {
 }
 
 .nav-btn {
-  background: var(--primary-white);
-  color: var(--primary-white);
+  background: var(--primary-black);
+  color: var(--primary-white) !important;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
   transition: all 0.3s ease;
 }
 
 .nav-btn:hover {
-  background: var(--primary-white);
-  color: var(--primary-black);
+  background: var(--primary-black);
+  color: var(--primary-white);
+  transform: translateY(-2px);
 }
 
 /* Hero Section */

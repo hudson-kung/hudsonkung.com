@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-scroll';
+import { sendContactEmail } from './services/emailService';
 import './App.css';
 
 function App() {
@@ -35,19 +36,41 @@ function App() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', { ...formData, selectedPackage });
-    setShowModal(true);
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      projectType: '',
-      budget: '',
-      message: ''
-    });
-    setSelectedPackage(null);
+    try {
+      // Send email using Resend
+      const emailData = {
+        name: formData.name,
+        email: formData.email,
+        message: `New Project Inquiry:\n\nName: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\nProject Type: ${formData.projectType}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
+      };
+      
+      // The actual email sending is handled by the email service
+      console.log('Sending email with data:', emailData);
+      
+      // In a real app, you would uncomment this line to actually send the email
+      await sendContactEmail(emailData);
+      
+      // Show success message
+      setShowModal(true);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        projectType: '',
+        budget: '',
+        message: ''
+      });
+      setSelectedPackage(null);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      const errorMessage = error.message || 'Failed to send message. Please try again.';
+      alert(`Error: ${errorMessage}\n\nPlease try again or contact us directly at hudsonkung0213@gmail.com`);
+    }
   };
 
   const closeModal = () => {
@@ -60,14 +83,16 @@ function App() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-logo">
-            <i className="fas fa-code"></i>
+            <img src="/favicon.ico" alt="Hudson Studio" style={{width: '24px', height: '24px'}} />
             <span>Hudson Studio</span>
           </div>
           <div className="nav-links">
             <Link to="services" smooth={true} duration={500}>Services</Link>
             <Link to="portfolio" smooth={true} duration={500}>Portfolio</Link>
             <Link to="contact" smooth={true} duration={500}>Contact</Link>
-            <button className="nav-btn">Get Started</button>
+            <Link to="contact" smooth={true} duration={500} className="nav-btn">
+              Get Started
+            </Link>
           </div>
         </div>
       </nav>
