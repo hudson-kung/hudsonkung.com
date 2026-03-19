@@ -3,6 +3,8 @@ import './App.css';
 
 function App() {
   const [selectedGame, setSelectedGame] = useState(null);
+  
+  // Force Vercel redeploy - v2
 
   const games = [
     {
