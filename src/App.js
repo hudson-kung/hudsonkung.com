@@ -12,7 +12,7 @@ function App() {
       name: "Build Adventure",
       players: "1.2M",
       image: "🏗️",
-      description: "Build your own world"
+      description: "Build your own world !"
     },
     {
       id: 2,
