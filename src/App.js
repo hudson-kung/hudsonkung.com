@@ -56,10 +56,6 @@ function App() {
           <span className="logo-text">BLOX</span>
           <span className="logo-games">GAMES</span>
         </div>
-        <div className="user-info">
-          <div className="username">Player123</div>
-          <div className="robux">🪙 1,250</div>
-        </div>
       </header>
 
       <main className="game-main">
