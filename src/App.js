@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Test Page</h1>
-      <p>If you can see this, React is working</p>
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h1 style={{ color: 'blue' }}>Hello World!</h1>
+      <p>This is a test to see if React works on Vercel</p>
+      <p>If you can see this, the deployment is working!</p>
     </div>
   );
 }
