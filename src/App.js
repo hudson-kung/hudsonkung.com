@@ -7,10 +7,11 @@ function App() {
   const games = [
     {
       id: 1,
-      name: "Build Adventure",
+      name: "Snake",
       players: "1.2M",
-      image: "🏗️",
-      description: "Build your own world"
+      image: "🐍",
+      description: "Classic snake game",
+      link: "https://snakeio-mu.vercel.app/"
     },
     {
       id: 2,
@@ -69,7 +70,12 @@ function App() {
             <div 
               key={game.id} 
               className={`game-card ${selectedGame === game.id ? 'selected' : ''}`}
-              onClick={() => setSelectedGame(game.id)}
+              onClick={() => {
+                setSelectedGame(game.id);
+                if (game.link) {
+                  window.open(game.link, '_blank');
+                }
+              }}
             >
               <div className="game-image">{game.image}</div>
               <div className="game-info">
@@ -92,6 +98,7 @@ function App() {
             <button className="menu-btn secondary">🛒 Shop</button>
             <button className="menu-btn secondary">👥 Friends</button>
             <button className="menu-btn secondary">⚙️ Settings</button>
+             <button className="menu-btn secondary">⚙️ Test</button>
           </div>
         </section>
       </main>

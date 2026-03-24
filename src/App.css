@@ -232,7 +232,7 @@ body {
 }
 
 .menu-btn.secondary {
-  background: var(--white);
+  background: var(--orange);
   color: var(--black);
   border: 2px solid var(--gray);
 }
