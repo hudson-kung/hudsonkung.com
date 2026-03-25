@@ -9,7 +9,7 @@ function App() {
       id: 1,
       name: "Snake",
       players: "1.2M",
-      image: <img src="/snake.png" alt="Snake" style={{width: '100%', height: '100%', objectFit: 'cover'}} />,
+      image: "/snake.png",
       description: "Classic snake game",
       link: "https://snakeio-mu.vercel.app/"
     },
@@ -77,7 +77,13 @@ function App() {
                 }
               }}
             >
-              <div className="game-image">{game.image}</div>
+              <div className="game-image">
+                {game.image.startsWith('/') ? (
+                  <img src={game.image} alt={game.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                ) : (
+                  game.image
+                )}
+              </div>
               <div className="game-info">
                 <h3 className="game-name">{game.name}</h3>
                 <p className="game-description">{game.description}</p>
