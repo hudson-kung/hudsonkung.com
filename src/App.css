@@ -179,18 +179,19 @@ body {
 
 .play-button {
   width: 100%;
-  background: var(--primary-blue);
-  color: var(--white);
-  border: none;
+  background: var(--white);
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
   padding: 12px;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .play-button:hover {
-  background: var(--secondary-blue);
+  background: var(--light-blue);
+  color: var(--white);
 }
 
 .game-card.selected .play-button {

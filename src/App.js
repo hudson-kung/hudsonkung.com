@@ -9,7 +9,7 @@ function App() {
       id: 1,
       name: "Snake",
       players: "1.2M",
-      image: <img src="/snake.png" alt="Snake" style={{width: '100%', height: '100%', objectFit: 'cover'}} />,
+      image: "🐍",
       description: "Classic snake game",
       link: "https://snakeio-mu.vercel.app/"
     },
