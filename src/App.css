@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: #000000;
+  background: #1a1a1a;
   min-height: 100vh;
   color: var(--black);
 }
@@ -35,7 +35,7 @@ body {
 
 /* Header */
 .game-header {
-  background: #000000;
+  background: #1a1a1a;
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
