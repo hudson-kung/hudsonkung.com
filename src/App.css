@@ -1,17 +1,17 @@
 /* Roblox-style Game Menu CSS */
 
 :root {
-  --primary-blue: #0066ff;
-  --secondary-blue: #0052cc;
-  --dark-blue: #003d99;
-  --light-blue: #e6f2ff;
-  --white: #ffffff;
-  --black: #000000;
-  --gray: #808080;
-  --light-gray: #f0f0f0;
-  --green: #00ff00;
-  --orange: #ff6600;
-  --purple: #9966ff;
+  --primary-blue: #4a9eff;
+  --secondary-blue: #3680e0;
+  --dark-blue: #1a5fb4;
+  --light-blue: #2d3748;
+  --white: #1a202c;
+  --black: #e2e8f0;
+  --gray: #a0aec0;
+  --light-gray: #2d3748;
+  --green: #48bb78;
+  --orange: #ed8936;
+  --purple: #805ad5;
 }
 
 * {
@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   min-height: 100vh;
   color: var(--black);
 }
@@ -35,12 +35,12 @@ body {
 
 /* Header */
 .game-header {
-  background: var(--white);
+  background: var(--light-gray);
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -123,10 +123,10 @@ body {
 }
 
 .game-card {
-  background: var(--white);
+  background: var(--light-gray);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -244,9 +244,9 @@ body {
 
 /* Footer */
 .game-footer {
-  background: var(--white);
+  background: var(--light-gray);
   padding: 20px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
 }
 
 .footer-nav {
@@ -267,7 +267,7 @@ body {
 }
 
 .nav-btn:hover {
-  background: var(--light-gray);
+  background: var(--white);
   transform: scale(1.1);
 }
 
