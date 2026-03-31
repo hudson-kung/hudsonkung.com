@@ -144,7 +144,7 @@ body {
 
 .game-image {
   height: 150px;
-  background: linear-gradient(135deg, var(--primary-blue), var(--purple));
+  background: linear-gradient(135deg, var(--dark-blue), var(--light-blue));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,8 +179,8 @@ body {
 
 .play-button {
   width: 100%;
-  background: var(--primary-blue);
-  color: var(--white);
+  background: var(--dark-blue);
+  color: var(--black);
   border: none;
   padding: 12px;
   font-weight: bold;
@@ -190,7 +190,7 @@ body {
 }
 
 .play-button:hover {
-  background: var(--secondary-blue);
+  background: var(--primary-blue);
 }
 
 .game-card.selected .play-button {
