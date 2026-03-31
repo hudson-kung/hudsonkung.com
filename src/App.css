@@ -35,7 +35,7 @@ body {
 
 /* Header */
 .game-header {
-  background: var(--light-gray);
+  background: #000000;
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
