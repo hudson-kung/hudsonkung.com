@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: #000000;
   min-height: 100vh;
   color: var(--black);
 }
@@ -55,13 +55,13 @@ body {
 .logo-text {
   font-size: 28px;
   font-weight: bold;
-  color: var(--primary-blue);
+  color: var(--black);
 }
 
 .logo-games {
   font-size: 28px;
   font-weight: bold;
-  color: var(--orange);
+  color: var(--black);
 }
 
 .user-info {
