@@ -1,17 +1,17 @@
 /* Roblox-style Game Menu CSS */
 
 :root {
-  --primary-blue: #4a9eff;
-  --secondary-blue: #3680e0;
-  --dark-blue: #1a5fb4;
-  --light-blue: #2d3748;
-  --white: #1a202c;
-  --black: #e2e8f0;
-  --gray: #a0aec0;
-  --light-gray: #2d3748;
-  --green: #48bb78;
-  --orange: #ed8936;
-  --purple: #805ad5;
+  --primary-blue: #2563eb;
+  --secondary-blue: #1d4ed8;
+  --dark-blue: #1e3a8a;
+  --light-blue: #1e293b;
+  --white: #0f172a;
+  --black: #ffffff;
+  --gray: #94a3b8;
+  --light-gray: #1e293b;
+  --green: #16a34a;
+  --orange: #ea580c;
+  --purple: #7c3aed;
 }
 
 * {
@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   min-height: 100vh;
   color: var(--black);
 }
@@ -233,7 +233,7 @@ body {
 
 .menu-btn.secondary {
   background: var(--white);
-  color: var(--primary-blue);
+  color: var(--black);
   border: 2px solid var(--primary-blue);
 }
 
@@ -259,6 +259,7 @@ body {
 .nav-btn {
   background: none;
   border: none;
+  color: var(--black);
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
