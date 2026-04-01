@@ -54,8 +54,8 @@ function App() {
     <div className="App">
       <header className="game-header">
         <div className="logo">
-          <span className="logo-text">BLOX</span>
-          <span className="logo-games">GAMES</span>
+          <span className="logo-text">Hudson's</span>
+          <span className="logo-games">Websites</span>
         </div>
       </header>
 
