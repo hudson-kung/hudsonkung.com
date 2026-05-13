@@ -1,479 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hudson Studio - Professional Website Creation Services</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-pink: #000000;
-            --primary-purple: #333333;
-            --primary-blue: #FFFFFF;
-            --primary-green: #666666;
-            --primary-yellow: #999999;
-            --light-pink: #F5F5F5;
-            --light-purple: #E0E0E0;
-            --light-blue: #FFFFFF;
-            --light-green: #F0F0F0;
-            --light-yellow: #FAFAFA;
-            --bg-gradient: linear-gradient(135deg, #000000 0%, #333333 50%, #FFFFFF 100%);
-        }
-        .bg-primary-pink { background-color: var(--primary-pink); }
-        .bg-primary-purple { background-color: var(--primary-purple); }
-        .bg-primary-blue { background-color: var(--primary-blue); }
-        .bg-primary-green { background-color: var(--primary-green); }
-        .bg-primary-yellow { background-color: var(--primary-yellow); }
-        .bg-light-pink { background-color: var(--light-pink); }
-        .bg-light-purple { background-color: var(--light-purple); }
-        .bg-light-blue { background-color: var(--light-blue); }
-        .bg-light-green { background-color: var(--light-green); }
-        .bg-light-yellow { background-color: var(--light-yellow); }
-        .text-primary-pink { color: var(--primary-pink); }
-        .text-primary-purple { color: var(--primary-purple); }
-        .text-primary-blue { color: var(--primary-blue); }
-        .text-primary-green { color: var(--primary-green); }
-        .text-primary-yellow { color: var(--primary-yellow); }
-        .text-dark { color: #000000; }
-        .border-light-pink { border-color: var(--light-pink); }
-        .border-light-purple { border-color: var(--light-purple); }
-        .border-light-blue { border-color: var(--light-blue); }
-        .hover\:bg-primary-pink:hover { background-color: var(--primary-pink); }
-        .hover\:bg-primary-purple:hover { background-color: var(--primary-purple); }
-        .hover\:bg-primary-blue:hover { background-color: var(--primary-blue); }
-        .hover\:bg-light-pink:hover { background-color: var(--light-pink); }
-        .hover\:bg-light-purple:hover { background-color: var(--light-purple); }
-        .hover\:bg-light-blue:hover { background-color: var(--light-blue); }
-        .hover\:text-primary-pink:hover { color: var(--primary-pink); }
-        .hover\:text-primary-purple:hover { color: var(--primary-purple); }
-        .hover\:text-primary-blue:hover { color: var(--primary-blue); }
-    </style>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizRush</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-light-blue">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-code text-primary-purple text-2xl mr-2"></i>
-                        <span class="font-bold text-xl text-dark">Hudson Studio</span>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-8">
-                    <a href="#services" class="text-dark hover:text-primary-purple transition">Services</a>
-                    <a href="#pricing" class="text-dark hover:text-primary-pink transition">Pricing</a>
-                    <a href="#portfolio" class="text-dark hover:text-primary-blue transition">Portfolio</a>
-                    <a href="#contact" class="text-dark hover:text-primary-green transition">Contact</a>
-                    <button class="bg-gradient-to-r from-primary-pink to-primary-purple text-white px-4 py-2 rounded-lg hover:from-primary-purple hover:to-primary-blue transition">
-                        Get Started
-                    </button>
-                </div>
-            </div>
-        </div>
+<body>
+  <main class="shell">
+    <nav class="topbar" aria-label="Main navigation">
+      <a class="brand" href="#home" data-view-link="home" aria-label="QuizRush home">
+        <span class="brand-mark">QR</span>
+        <span>QuizRush</span>
+      </a>
+      <div class="nav-actions">
+        <a class="active" href="#home" data-view-link="home">Home</a>
+        <a href="#join" data-view-link="join">Join</a>
+        <a href="#skins" data-view-link="skins">Skins</a>
+        <a href="#packs" data-view-link="packs">Packs</a>
+        <a href="#sets" data-view-link="sets">Sets</a>
+        <a href="#host" data-view-link="host">Host</a>
+        <a href="#leaderboard" data-view-link="leaderboard">Leaderboard</a>
+      </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-primary-pink via-primary-purple to-primary-blue text-black min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                    Build Your Dream Website
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 text-black">
-                    Professional website creation services tailored to your business needs
-                </p>
-                <div class="flex justify-center">
-                    <button onclick="scrollToSection('pricing')" class="bg-primary-pink text-white px-16 py-8 rounded-lg font-bold text-2xl hover:bg-light-pink transition transform hover:scale-110 shadow-2xl">
-                        Shop Now
-                    </button>
-                </div>
-            </div>
+    <section id="home" class="hero-band app-view active">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Live quiz battles</span>
+          <h1>Jump into a quiz room, flex your avatar, and race the scoreboard.</h1>
+          <p>Build a lobby that feels fast, social, and game-like from the first click. Join with a code, pick a skin, and get ready for rapid-fire rounds.</p>
+          <div class="hero-actions">
+            <button class="button primary" type="button" data-view-link="join">Join a game</button>
+            <button class="button ghost" type="button" data-view-link="host">Start hosting</button>
+          </div>
+          <div class="home-stats" aria-label="Player stats">
+            <div><strong>18</strong><span>Live rooms</span></div>
+            <div><strong id="ownedSkinCount">1</strong><span>Skins owned</span></div>
+            <div><strong>92%</strong><span>Accuracy</span></div>
+          </div>
         </div>
+
+        <div class="play-stage" aria-label="Quiz game preview">
+          <div class="stage-card question-card">
+            <span class="timer-ring">12</span>
+            <p>Which planet has the most moons?</p>
+            <div class="answer-grid">
+              <button>Saturn</button>
+              <button>Jupiter</button>
+              <button>Neptune</button>
+              <button>Mars</button>
+            </div>
+          </div>
+          <div class="avatar-orbit">
+            <div class="mini-avatar skin-blaze"></div>
+            <div class="mini-avatar skin-mint"></div>
+            <div class="mini-avatar skin-candy"></div>
+          </div>
+          <div class="score-chip">+890 streak</div>
+        </div>
+      </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark mb-4">Why Choose Hudson Studio?</h2>
-                <p class="text-lg text-primary-purple">We deliver exceptional websites that drive results</p>
+    <section id="join" class="join-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Join code</span>
+        <h2>Enter the room code</h2>
+      </div>
+      <div class="join-layout">
+        <form class="join-panel" id="joinForm">
+          <label for="playerName">Player name</label>
+          <input id="playerName" name="playerName" autocomplete="nickname" maxlength="18" placeholder="Your name">
+
+          <label for="roomCode">Game code</label>
+          <div class="code-input-wrap">
+            <input id="roomCode" name="roomCode" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="123 456" aria-describedby="codeHint">
+            <button class="icon-button" type="button" id="randomCode" aria-label="Fill random code">#</button>
+          </div>
+          <p id="codeHint" class="hint">Codes are 6 digits. Spaces are fine.</p>
+
+          <div class="join-icon-picker" aria-label="Choose player icon">
+            <span>Choose icon</span>
+            <div class="join-icon-grid">
+              <button class="join-icon active" type="button" data-player-icon="blaze" aria-label="Blaze icon"><span class="avatar skin-blaze"></span></button>
+              <button class="join-icon" type="button" data-player-icon="mint" aria-label="Mint icon"><span class="avatar skin-mint"></span></button>
+              <button class="join-icon" type="button" data-player-icon="candy" aria-label="Candy icon"><span class="avatar skin-candy"></span></button>
+              <button class="join-icon" type="button" data-player-icon="shadow" aria-label="Shadow icon"><span class="avatar skin-shadow"></span></button>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center p-6">
-                    <div class="bg-light-pink w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-rocket text-primary-pink text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">Fast Delivery</h3>
-                    <p class="text-primary-pink">Get your website live in as little as 7 days</p>
-                </div>
-                <div class="text-center p-6">
-                    <div class="bg-light-blue w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-mobile-alt text-primary-blue text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">Mobile Responsive</h3>
-                    <p class="text-dark">Perfect on all devices, from phones to desktops</p>
-                </div>
-                <div class="text-center p-6">
-                    <div class="bg-light-green w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-chart-line text-primary-green text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">SEO Optimized</h3>
-                    <p class="text-primary-green">Built to rank high on search engines</p>
-                </div>
-            </div>
+          </div>
+
+          <button class="button primary full" type="submit" id="joinButton">Enter lobby</button>
+          <p class="join-status" id="joinStatus" role="status">Waiting for a room code.</p>
+        </form>
+
+        <div class="lobby-preview">
+          <div class="lobby-header">
+            <span>Lobby Preview</span>
+            <strong id="previewCode">------</strong>
+          </div>
+          <div class="podium">
+            <div class="podium-player second">Waiting</div>
+            <div class="podium-player first">You</div>
+            <div class="podium-player third">Waiting</div>
+          </div>
+          <div class="room-feed" aria-label="Live room feed">
+            <p><span></span> New music round loaded</p>
+            <p><span></span> 18 players waiting</p>
+            <p><span></span> Bonus skins enabled</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="py-16 bg-light-purple">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark mb-4">Our Services</h2>
-                <p class="text-lg text-primary-pink">Comprehensive web solutions for every need</p>
+    <section id="player-lobby" class="player-lobby-band app-view">
+      <div class="player-lobby-layout">
+        <div class="player-card">
+          <span class="eyebrow">You joined</span>
+          <div class="player-hero">
+            <div class="avatar large skin-blaze" id="waitingAvatar"></div>
+            <div>
+              <h2 id="waitingName">Player</h2>
+              <p id="waitingRoom">Waiting for the host to start.</p>
+              <div class="loadout">
+                <span id="waitingMode">Mode: Classic</span>
+                <span id="waitingCode">Code: ------</span>
+              </div>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <i class="fas fa-paint-brush text-primary-pink text-3xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">Custom Design</h3>
-                    <p class="text-primary-pink mb-4">Unique designs tailored to your brand</p>
-                    <ul class="text-sm text-dark space-y-1">
-                        <li>• Brand-aligned visuals</li>
-                        <li>• Modern UI/UX</li>
-                        <li>• Interactive elements</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <i class="fas fa-shopping-cart text-primary-blue text-3xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">E-commerce</h3>
-                    <p class="text-dark mb-4">Complete online stores ready to sell</p>
-                    <ul class="text-sm text-dark space-y-1">
-                        <li>• Payment integration</li>
-                        <li>• Inventory management</li>
-                        <li>• Order tracking</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <i class="fas fa-wordpress text-primary-green text-3xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">WordPress Sites</h3>
-                    <p class="text-primary-green mb-4">Easy-to-manage WordPress solutions</p>
-                    <ul class="text-sm text-dark space-y-1">
-                        <li>• Custom themes</li>
-                        <li>• Plugin setup</li>
-                        <li>• Content management</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <i class="fas fa-bullhorn text-primary-yellow text-3xl mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2 text-dark">Digital Marketing</h3>
-                    <p class="text-primary-yellow mb-4">Drive traffic and conversions</p>
-                    <ul class="text-sm text-dark space-y-1">
-                        <li>• SEO optimization</li>
-                        <li>• Social media integration</li>
-                        <li>• Analytics setup</li>
-                    </ul>
-                </div>
-            </div>
+          </div>
         </div>
+
+        <aside class="player-stats-card">
+          <span class="eyebrow">Your stats</span>
+          <div class="stat-stack">
+            <div><strong id="statAccuracy">88%</strong><span>Accuracy</span></div>
+            <div><strong id="statStreak">5</strong><span>Best streak</span></div>
+            <div><strong id="statRank">Rookie</strong><span>Rank</span></div>
+          </div>
+          <div class="waiting-pulse">
+            <span></span>
+            <p id="playerLobbyStatus">Waiting for host...</p>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <p class="text-lg text-primary-purple">Flexible pricing for businesses of all sizes</p>
+    <section id="skins" class="skins-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Avatar skins</span>
+        <h2>Pick your look</h2>
+      </div>
+      <div class="skin-shop">
+        <div class="avatar-showcase">
+          <div class="avatar large skin-blaze" id="mainAvatar" aria-label="Selected avatar preview"></div>
+          <div>
+            <h3 id="skinName">Blaze Bot</h3>
+            <p id="skinBio">A fast answer streak specialist with molten confidence.</p>
+            <div class="loadout">
+              <span id="skinTrait">Speed +8</span>
+              <span id="skinRarity">Rare</span>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Starter Package -->
-                <div class="bg-white border-2 border-light-pink rounded-lg p-8 hover:border-primary-pink transition">
-                    <h3 class="text-2xl font-bold text-center mb-2 text-dark">Starter</h3>
-                    <div class="text-center mb-6">
-                        <span class="text-4xl font-bold text-primary-pink">$599</span>
-                        <span class="text-dark">/one-time</span>
-                    </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-primary-pink mr-2"></i>
-                            <span class="text-dark">5-page website</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Mobile responsive design</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Contact form</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Basic SEO setup</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>2 revisions included</span>
-                        </li>
-                    </ul>
-                    <button onclick="selectPackage('Starter', 599)" class="w-full bg-gradient-to-r from-primary-pink to-primary-purple text-white py-3 rounded-lg hover:from-primary-purple hover:to-primary-blue transition">
-                        Get Started
-                    </button>
-                </div>
-
-                <!-- Professional Package -->
-                <div class="bg-gradient-to-r from-primary-purple to-primary-blue text-black rounded-lg p-8 transform scale-105 shadow-xl">
-                    <div class="bg-light-yellow text-black text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4">
-                        MOST POPULAR
-                    </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">Professional</h3>
-                    <div class="text-center mb-6">
-                        <span class="text-4xl font-bold">$1,299</span>
-                        <span class="text-black">/one-time</span>
-                    </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>15-page website</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>Custom design & branding</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>Blog integration</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>Advanced SEO</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>Social media integration</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-white mr-2"></i>
-                            <span>5 revisions included</span>
-                        </li>
-                    </ul>
-                    <button onclick="selectPackage('Professional', 1299)" class="w-full bg-white text-primary-purple py-3 rounded-lg hover:bg-light-pink transition font-semibold">
-                        Get Started
-                    </button>
-                </div>
-
-                <!-- Enterprise Package -->
-                <div class="bg-white border-2 border-light-blue rounded-lg p-8 hover:border-primary-blue transition">
-                    <h3 class="text-2xl font-bold text-center mb-2 text-dark">Enterprise</h3>
-                    <div class="text-center mb-6">
-                        <span class="text-4xl font-bold text-primary-blue">$2,499</span>
-                        <span class="text-dark">/one-time</span>
-                    </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Unlimited pages</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>E-commerce functionality</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Custom web applications</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>CMS integration</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Priority support</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 mr-2"></i>
-                            <span>Unlimited revisions</span>
-                        </li>
-                    </ul>
-                    <button onclick="selectPackage('Enterprise', 2499)" class="w-full bg-gradient-to-r from-primary-blue to-primary-green text-white py-3 rounded-lg hover:from-primary-green hover:to-primary-yellow transition">
-                        Get Started
-                    </button>
-                </div>
-            </div>
+          </div>
         </div>
+
+        <div class="skin-grid" id="skinGrid" aria-label="Avatar skin choices">
+          <button class="skin-card active" type="button" data-skin="blaze">
+            <span class="avatar skin-blaze"></span>
+            <strong>Blaze Bot</strong>
+            <small>Rare</small>
+          </button>
+          <button class="skin-card" type="button" data-skin="mint">
+            <span class="avatar skin-mint"></span>
+            <strong>Mint Mage</strong>
+            <small>Epic</small>
+          </button>
+          <button class="skin-card" type="button" data-skin="candy">
+            <span class="avatar skin-candy"></span>
+            <strong>Candy Byte</strong>
+            <small>Uncommon</small>
+          </button>
+          <button class="skin-card" type="button" data-skin="shadow">
+            <span class="avatar skin-shadow"></span>
+            <strong>Shadow Ace</strong>
+            <small>Legendary</small>
+          </button>
+        </div>
+      </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="py-16 bg-light-green">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark mb-4">Recent Projects</h2>
-                <p class="text-lg text-primary-blue">See our work in action</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
-                    <div class="h-48 bg-gradient-to-br from-primary-pink to-primary-purple"></div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2 text-dark">Tech Startup Website</h3>
-                        <p class="text-primary-pink mb-4">Modern, sleek design for a technology company</p>
-                        <div class="flex gap-2">
-                            <span class="bg-light-pink text-primary-pink px-3 py-1 rounded-full text-sm">React</span>
-                            <span class="bg-light-blue text-primary-blue px-3 py-1 rounded-full text-sm">Node.js</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
-                    <div class="h-48 bg-gradient-to-br from-primary-blue to-primary-green"></div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2 text-dark">E-commerce Store</h3>
-                        <p class="text-dark mb-4">Full-featured online store with payment integration</p>
-                        <div class="flex gap-2">
-                            <span class="bg-light-purple text-primary-purple px-3 py-1 rounded-full text-sm">Shopify</span>
-                            <span class="bg-light-green text-primary-green px-3 py-1 rounded-full text-sm">Stripe</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
-                    <div class="h-48 bg-gradient-to-br from-primary-yellow to-primary-green"></div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2 text-dark">Restaurant Website</h3>
-                        <p class="text-primary-green mb-4">Elegant site with online ordering system</p>
-                        <div class="flex gap-2">
-                            <span class="bg-light-yellow text-primary-yellow px-3 py-1 rounded-full text-sm">WordPress</span>
-                            <span class="bg-light-blue text-primary-blue px-3 py-1 rounded-full text-sm">PHP</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section id="packs" class="packs-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Packs</span>
+        <h2>Open packs for skins</h2>
+      </div>
+      <div class="packs-layout">
+        <div class="pack-grid">
+          <button class="pack-card selected" type="button" data-pack="starter">
+            <span>Common Pack</span>
+            <strong>Bright basics</strong>
+            <small>Common, Uncommon, Rare</small>
+          </button>
+          <button class="pack-card" type="button" data-pack="mystic">
+            <span>Rare Pack</span>
+            <strong>Magic drops</strong>
+            <small>Uncommon, Rare, Epic</small>
+          </button>
+          <button class="pack-card" type="button" data-pack="legend">
+            <span>Legendary Pack</span>
+            <strong>Big pulls</strong>
+            <small>Rare, Epic, Legendary</small>
+          </button>
         </div>
+
+        <div class="pack-opener">
+          <div class="pack-box" id="packBox">
+            <span id="packLabel">Common Pack</span>
+          </div>
+          <div class="pack-result">
+            <div class="avatar large skin-blaze" id="packRewardAvatar"></div>
+            <div>
+              <span class="eyebrow" id="packRewardRarity">Ready</span>
+              <h3 id="packRewardName">Choose a pack</h3>
+              <p id="packRewardText">Open a pack to unlock a random skin for your locker.</p>
+            </div>
+          </div>
+          <button class="button primary full" type="button" id="openPack">Open pack</button>
+        </div>
+      </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark mb-4">Start Your Project</h2>
-                <p class="text-lg text-primary-green">Get a free consultation and quote</p>
+    <section id="sets" class="sets-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Question sets</span>
+        <h2>Create your own quiz</h2>
+      </div>
+      <div class="sets-layout">
+        <form class="set-builder" id="setForm">
+          <div class="set-toolbar">
+            <label for="questionTimeLimit">Time Limit
+              <input id="questionTimeLimit" type="number" min="5" max="120" value="20">
+            </label>
+            <label class="check-control">
+              <input id="questionRandomOrder" type="checkbox" checked>
+              Random Order
+            </label>
+            <label for="questionType">Question Type
+              <select id="questionType">
+                <option value="multiple-choice">Multiple Choice</option>
+                <option value="true-false">True / False</option>
+              </select>
+            </label>
+          </div>
+
+          <label for="setTitle">Set name</label>
+          <input id="setTitle" maxlength="32" placeholder="Space Trivia">
+
+          <div class="question-builder">
+            <label for="setQuestion">Question</label>
+            <input id="setQuestion" placeholder="What planet has rings?">
+            <div class="answer-editor-grid">
+              <label class="answer-editor-card answer-one">
+                <input class="set-correct" type="checkbox" checked>
+                <span>Correct</span>
+                <input class="set-answer" placeholder="Answer 1">
+              </label>
+              <label class="answer-editor-card answer-two">
+                <input class="set-correct" type="checkbox">
+                <span>Correct</span>
+                <input class="set-answer" placeholder="Answer 2">
+              </label>
+              <label class="answer-editor-card answer-three">
+                <input class="set-correct" type="checkbox">
+                <span>Correct</span>
+                <input class="set-answer" placeholder="Answer 3 (optional)">
+              </label>
+              <label class="answer-editor-card answer-four">
+                <input class="set-correct" type="checkbox">
+                <span>Correct</span>
+                <input class="set-answer" placeholder="Answer 4 (optional)">
+              </label>
             </div>
-            <div class="max-w-2xl mx-auto">
-                <form id="contactForm" class="bg-light-yellow p-8 rounded-lg">
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-dark font-semibold mb-2">Name *</label>
-                            <input type="text" id="name" required class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple">
-                        </div>
-                        <div>
-                            <label class="block text-dark font-semibold mb-2">Email *</label>
-                            <input type="email" id="email" required class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple">
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-dark font-semibold mb-2">Company</label>
-                        <input type="text" id="company" class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-dark font-semibold mb-2">Project Type *</label>
-                        <select id="projectType" required class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple">
-                            <option value="">Select a project type</option>
-                            <option value="business">Business Website</option>
-                            <option value="ecommerce">E-commerce Store</option>
-                            <option value="portfolio">Portfolio Site</option>
-                            <option value="blog">Blog/Content Site</option>
-                            <option value="custom">Custom Application</option>
-                        </select>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-dark font-semibold mb-2">Budget Range</label>
-                        <select id="budget" class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple">
-                            <option value="">Select budget range</option>
-                            <option value="500-1000">$500 - $1,000</option>
-                            <option value="1000-2000">$1,000 - $2,000</option>
-                            <option value="2000-5000">$2,000 - $5,000</option>
-                            <option value="5000+">$5,000+</option>
-                        </select>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-dark font-semibold mb-2">Project Details *</label>
-                        <textarea id="message" required rows="4" class="w-full px-4 py-3 border border-light-purple rounded-lg focus:outline-none focus:border-primary-purple"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-primary-green to-primary-blue text-white py-3 rounded-lg hover:from-primary-blue hover:to-primary-purple transition font-semibold">
-                        Send Message
-                    </button>
-                </form>
+            <p class="hint">Check every answer that should count as correct.</p>
+            <button class="button ghost full" type="button" id="addQuestion">Add question</button>
+          </div>
+
+          <button class="button primary full" type="submit">Save set</button>
+          <p class="join-status" id="setStatus">Add at least one question.</p>
+        </form>
+
+        <div class="sets-panel">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">Saved sets</span>
+              <h2 id="setCount">0 sets</h2>
             </div>
+          </div>
+          <div class="set-question-preview" id="setQuestionPreview">
+            <div class="empty-lobby">
+              <strong>No draft questions</strong>
+              <span>Add questions on the left, then save the set.</span>
+            </div>
+          </div>
+          <div class="saved-sets" id="savedSets"></div>
         </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-primary-purple to-primary-blue text-black py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-code text-light-yellow text-2xl mr-2"></i>
-                        <span class="font-bold text-xl">Hudson Studio</span>
-                    </div>
-                    <p class="text-black">Creating exceptional websites that drive business growth.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Services</h4>
-                    <ul class="space-y-2 text-black">
-                        <li><a href="#" class="hover:text-primary-pink transition">Web Design</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">Development</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">E-commerce</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">SEO</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Company</h4>
-                    <ul class="space-y-2 text-black">
-                        <li><a href="#" class="hover:text-primary-pink transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">Portfolio</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">Testimonials</a></li>
-                        <li><a href="#" class="hover:text-primary-pink transition">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Connect</h4>
-                    <div class="flex space-x-4 mb-4">
-                        <a href="#" class="text-black hover:text-primary-pink transition">
-                            <i class="fab fa-facebook text-xl"></i>
-                        </a>
-                        <a href="#" class="text-black hover:text-primary-pink transition">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-black hover:text-primary-pink transition">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
-                        <a href="#" class="text-black hover:text-primary-pink transition">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                    </div>
-                    <p class="text-black">info@hudsonstudio.com</p>
-                    <p class="text-black">+1 (555) 123-4567</p>
-                </div>
-            </div>
-            <div class="border-t border-black mt-8 pt-8 text-center text-black">
-                <p>&copy; 2024 Hudson Studio. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <section id="host" class="host-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Host controls</span>
+        <h2>Spin up a room</h2>
+      </div>
+      <div class="host-grid">
+        <article class="mode-card selected" data-mode="classic">
+          <span>Classic</span>
+          <h3>Four answers, one winner</h3>
+          <p>Great for classrooms, parties, and quick knowledge battles.</p>
+        </article>
+        <article class="mode-card" data-mode="speed">
+          <span>Speed Run</span>
+          <h3>Short timer chaos</h3>
+          <p>Bonus points for streaks and faster reactions.</p>
+        </article>
+        <article class="mode-card" data-mode="team">
+          <span>Teams</span>
+          <h3>Squads share points</h3>
+          <p>Players combine answers to climb the leaderboard together.</p>
+        </article>
+        <article class="mode-card" data-mode="gold">
+          <span>Gold Quest</span>
+          <h3>Risk points for treasure</h3>
+          <p>Players earn coins, buy boosts, and make comeback plays.</p>
+        </article>
+      </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-        <div class="bg-white rounded-lg p-8 max-w-md mx-4">
-            <div class="text-center">
-                <div class="bg-light-green w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-check text-primary-green text-2xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold mb-2 text-dark">Message Sent!</h3>
-                <p class="text-dark mb-6">Thank you for your inquiry. We'll get back to you within 24 hours.</p>
-                <button onclick="closeModal()" class="bg-gradient-to-r from-primary-green to-primary-blue text-white px-6 py-2 rounded-lg hover:from-primary-blue hover:to-primary-purple transition">
-                    Close
-                </button>
-            </div>
+      <div class="launch-strip">
+        <div>
+          <span class="eyebrow">Selected mode</span>
+          <strong id="selectedModeLabel">Classic</strong>
         </div>
-    </div>
+        <label class="host-set-picker" for="hostSetSelect">
+          Question set
+          <select id="hostSetSelect"></select>
+        </label>
+        <button class="button primary" type="button" id="createRoom">Create host lobby</button>
+      </div>
+    </section>
 
-    <script src="script.js"></script>
+    <section id="host-lobby" class="host-lobby-band app-view">
+      <div class="host-lobby-top">
+        <button class="button ghost" type="button" data-view-link="host">Back to modes</button>
+        <div class="host-code-card">
+          <span class="eyebrow">Game code</span>
+          <strong id="hostCode">------</strong>
+          <button class="button primary" type="button" id="copyCode">Copy code</button>
+          <p class="join-url" id="joinUrl">Create a room to get a join link.</p>
+        </div>
+        <div class="host-status-card">
+          <span class="eyebrow">Mode</span>
+          <strong id="lobbyModeLabel">Classic</strong>
+          <p id="hostLobbyStatus">Waiting for players...</p>
+        </div>
+      </div>
+
+      <div class="host-lobby-layout">
+        <div class="players-panel">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">Players joined</span>
+              <h2 id="playerCount">0 players</h2>
+            </div>
+          </div>
+          <div class="player-grid" id="playerGrid" aria-label="Joined players"></div>
+        </div>
+
+        <aside class="start-panel">
+          <div class="start-preview">
+            <span class="timer-ring">30</span>
+            <h3>Ready check</h3>
+            <p>Players can join with the code on screen. Start when everyone is in.</p>
+          </div>
+          <button class="button primary full" type="button" id="startGame">Start game</button>
+          <button class="button ghost full" type="button" id="resetLobby">Reset lobby</button>
+        </aside>
+      </div>
+
+      <div class="host-monitor-layout">
+        <section class="host-monitor-card">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">Live leaderboard</span>
+              <h2>Scores</h2>
+            </div>
+          </div>
+          <div class="host-leaderboard" id="hostLeaderboard">
+            <div class="empty-lobby">
+              <strong>No scores yet</strong>
+              <span>Player scores will appear here when they finish the game.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="host-monitor-card">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">Game logs</span>
+              <h2>Activity</h2>
+            </div>
+          </div>
+          <div class="host-logs" id="hostLogs">
+            <p><strong>Ready</strong><span>Create a room to start collecting logs.</span></p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="game" class="game-band app-view">
+      <div class="game-layout">
+        <div class="game-main">
+          <div class="game-topline">
+            <span class="eyebrow" id="gameModeLabel">Classic</span>
+            <strong id="gameProgress">Question 1 / 5</strong>
+          </div>
+          <div class="game-question-card">
+            <span class="timer-ring" id="gameTimer">15</span>
+            <h2 id="gameQuestion">Ready?</h2>
+            <div class="game-answer-grid" id="gameAnswers"></div>
+          </div>
+          <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
+        </div>
+
+        <aside class="game-score-panel">
+          <span class="eyebrow">Your run</span>
+          <div class="avatar large skin-blaze" id="gameAvatar"></div>
+          <div class="stat-stack">
+            <div><strong id="gameScore">0</strong><span>Score</span></div>
+            <div><strong id="gameStreak">0</strong><span>Streak</span></div>
+            <div><strong id="gameCorrect">0</strong><span>Correct</span></div>
+          </div>
+          <button class="button ghost full" type="button" id="playAgain">Play again</button>
+        </aside>
+      </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Leaderboard</span>
+        <h2>Top players today</h2>
+      </div>
+      <div class="leaderboard-layout">
+        <div class="rank-list" aria-label="Top players">
+          <div class="empty-lobby">
+            <strong>No scores yet</strong>
+            <span>Start a hosted game and real player results will show here.</span>
+          </div>
+        </div>
+        <div class="season-card">
+          <span class="eyebrow">Season pass</span>
+          <h3>Unlock neon trails by winning 3 more games.</h3>
+          <div class="progress-track"><span></span></div>
+          <button class="button primary" type="button" data-view-link="join">Play next match</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
 </body>
 </html>
