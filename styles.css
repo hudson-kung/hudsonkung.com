@@ -45,6 +45,10 @@ a {
   overflow: hidden;
 }
 
+body.signed-in .shell {
+  padding-left: 17rem;
+}
+
 body:not(.signed-in) .topbar,
 body:not(.signed-in) .app-view {
   display: none;
@@ -128,13 +132,15 @@ body.signed-in .auth-view {
 }
 
 .nav-user {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
   min-height: 2.55rem;
   padding: 0.35rem 0.6rem;
   color: var(--ink);
-  background: white;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.88);
   border-radius: 8px;
 }
 
@@ -151,16 +157,18 @@ body.signed-in .auth-view {
 }
 
 .topbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 10;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem clamp(1rem, 4vw, 4rem);
-  background: rgba(255, 253, 247, 0.82);
-  border-bottom: 1px solid var(--line);
+  flex-direction: column;
+  width: 17rem;
+  height: 100vh;
+  gap: 1.25rem;
+  padding: 1.1rem;
+  background: rgba(255, 253, 247, 0.9);
+  border-right: 1px solid var(--line);
   backdrop-filter: blur(18px);
 }
 
@@ -168,8 +176,20 @@ body.signed-in .auth-view {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.7rem;
   font-weight: 900;
+}
+
+.brand {
+  width: 100%;
+  padding: 0.35rem;
+}
+
+.nav-actions {
+  align-items: stretch;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
 }
 
 .brand-mark {
@@ -185,7 +205,10 @@ body.signed-in .auth-view {
 }
 
 .nav-actions a {
-  padding: 0.6rem 0.8rem;
+  display: flex;
+  align-items: center;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.8rem;
   color: var(--muted);
   border-radius: 8px;
 }
@@ -196,9 +219,13 @@ body.signed-in .auth-view {
   background: white;
 }
 
+.nav-actions .nav-user {
+  margin-top: auto;
+}
+
 .app-view {
   display: none;
-  min-height: calc(100vh - 4.8rem);
+  min-height: 100vh;
 }
 
 .app-view.active {
@@ -1695,6 +1722,44 @@ select {
 }
 
 @media (max-width: 880px) {
+  body.signed-in .shell {
+    padding-left: 0;
+  }
+
+  .topbar {
+    position: sticky;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.75rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .brand span:last-child {
+    display: none;
+  }
+
+  .nav-actions {
+    align-items: center;
+    flex: 1;
+    flex-direction: row;
+    width: auto;
+    overflow-x: auto;
+  }
+
+  .nav-actions .nav-user {
+    flex: 0 0 auto;
+    width: auto;
+    margin-top: 0;
+  }
+
   .hero-grid,
   .join-layout,
   .player-lobby-layout,
@@ -1721,16 +1786,6 @@ select {
 }
 
 @media (max-width: 560px) {
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .nav-actions {
-    width: 100%;
-    overflow-x: auto;
-  }
-
   h1 {
     max-width: 9ch;
   }
