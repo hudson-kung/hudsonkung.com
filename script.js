@@ -111,6 +111,7 @@ const setQuestionPreview = document.querySelector("#setQuestionPreview");
 const savedSets = document.querySelector("#savedSets");
 const hostSetSelect = document.querySelector("#hostSetSelect");
 const createRoom = document.querySelector("#createRoom");
+const hostLobbyView = document.querySelector("#host-lobby");
 const selectedModeLabel = document.querySelector("#selectedModeLabel");
 const lobbyModeLabel = document.querySelector("#lobbyModeLabel");
 const hostLobbyStatus = document.querySelector("#hostLobbyStatus");
@@ -598,6 +599,10 @@ function renderPlayers() {
   hostLobbyStatus.textContent = joinedPlayers.length > 0 ? "Waiting for host to start..." : "Waiting for players...";
 }
 
+function setHostGameStarted(started) {
+  hostLobbyView.classList.toggle("game-started", Boolean(started));
+}
+
 function renderHostMonitor(room = {}) {
   const scores = room.scores || [];
   const logs = room.logs || [];
@@ -683,6 +688,7 @@ function applyRoom(room) {
   joinedPlayers = room.players || [];
   window.localStorage.setItem("quizrush-active-room", currentRoomCode);
   lobbyModeLabel.textContent = modeNames[room.mode] || modeNames[selectedMode];
+  setHostGameStarted(room.started);
   renderPlayers();
   renderHostMonitor(room);
   hostLobbyStatus.textContent = room.started
@@ -1140,6 +1146,7 @@ createRoom.addEventListener("click", async () => {
       watchRoom(room.code);
       startGame.textContent = "Start game";
       startGame.disabled = false;
+      setHostGameStarted(false);
       showView("host-lobby");
       showToast("Host lobby created");
       return;
@@ -1157,6 +1164,7 @@ createRoom.addEventListener("click", async () => {
   hostLobbyStatus.textContent = "Waiting for players...";
   startGame.textContent = "Start game";
   startGame.disabled = false;
+  setHostGameStarted(false);
   renderPlayers();
   showView("host-lobby");
   showToast("Host lobby created");
@@ -1174,6 +1182,7 @@ startGame.addEventListener("click", async () => {
   hostLobbyStatus.textContent = `Game started with ${joinedPlayers.length} players.`;
   startGame.textContent = "Game running";
   startGame.disabled = true;
+  setHostGameStarted(true);
   showToast("Starting game...");
   showView("host-lobby");
 });
@@ -1186,6 +1195,7 @@ resetLobby.addEventListener("click", () => {
   joinedPlayers = [];
   startGame.textContent = "Start game";
   startGame.disabled = false;
+  setHostGameStarted(false);
   renderPlayers();
   showToast("Lobby reset");
 });

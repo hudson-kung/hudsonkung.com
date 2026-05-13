@@ -1319,6 +1319,19 @@ select {
   margin-top: 1rem;
 }
 
+.host-lobby-band.game-started .host-lobby-layout {
+  display: none;
+}
+
+.host-lobby-band.game-started .host-monitor-layout {
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.45fr);
+  margin-top: 0;
+}
+
+.host-lobby-band.game-started .host-monitor-card:first-child .panel-header h2 {
+  font-size: clamp(2.1rem, 5vw, 4rem);
+}
+
 .players-panel,
 .start-panel,
 .host-monitor-card {
