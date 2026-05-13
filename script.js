@@ -50,6 +50,19 @@ const skins = {
   }
 };
 
+const showLogin = document.querySelector("#showLogin");
+const showSignup = document.querySelector("#showSignup");
+const loginForm = document.querySelector("#loginForm");
+const signupForm = document.querySelector("#signupForm");
+const loginName = document.querySelector("#loginName");
+const loginPassword = document.querySelector("#loginPassword");
+const signupName = document.querySelector("#signupName");
+const signupEmail = document.querySelector("#signupEmail");
+const signupPassword = document.querySelector("#signupPassword");
+const authStatus = document.querySelector("#authStatus");
+const logoutButton = document.querySelector("#logoutButton");
+const navUserInitial = document.querySelector("#navUserInitial");
+const navUserName = document.querySelector("#navUserName");
 const roomCode = document.querySelector("#roomCode");
 const playerName = document.querySelector("#playerName");
 const previewCode = document.querySelector("#previewCode");
@@ -191,6 +204,7 @@ let selectedMode = "classic";
 let selectedPack = "starter";
 let packOpening = false;
 let draftQuestions = [];
+let activeUser = JSON.parse(window.localStorage.getItem("quizrush-active-user") || "null");
 let questionSets = JSON.parse(window.localStorage.getItem("quizrush-question-sets") || "[]");
 let selectedPlayerIcon = window.localStorage.getItem("quizrush-player-icon") || "blaze";
 let ownedSkins = JSON.parse(window.localStorage.getItem("quizrush-owned-skins") || "[\"blaze\"]");
@@ -237,6 +251,52 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   toastTimeout = window.setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function getUsers() {
+  return JSON.parse(window.localStorage.getItem("quizrush-users") || "[]");
+}
+
+function saveUsers(users) {
+  window.localStorage.setItem("quizrush-users", JSON.stringify(users));
+}
+
+function setAuthMode(mode) {
+  const isSignup = mode === "signup";
+  showLogin.classList.toggle("active", !isSignup);
+  showSignup.classList.toggle("active", isSignup);
+  loginForm.classList.toggle("active", !isSignup);
+  signupForm.classList.toggle("active", isSignup);
+  authStatus.textContent = isSignup ? "Make your QuizRush account." : "Log in to keep playing.";
+  authStatus.classList.remove("ready");
+}
+
+function applyAuthState() {
+  document.body.classList.toggle("signed-in", Boolean(activeUser));
+
+  if (!activeUser) return;
+
+  const name = activeUser.name || "Player";
+  navUserName.textContent = name;
+  navUserInitial.textContent = name.slice(0, 1).toUpperCase();
+  playerName.value = playerName.value || name;
+  currentPlayerName = currentPlayerName || name;
+}
+
+function signInUser(user) {
+  activeUser = {
+    name: user.name,
+    email: user.email || "",
+    signedInAt: Date.now()
+  };
+  window.localStorage.setItem("quizrush-active-user", JSON.stringify(activeUser));
+  applyAuthState();
+  showView("home", false);
+  showToast(`Welcome, ${activeUser.name}`);
+}
+
+function normalizeUsername(value) {
+  return value.trim().replace(/\s+/g, " ").slice(0, 18);
 }
 
 function updateJoinState() {
@@ -820,12 +880,73 @@ function watchRoom(code) {
 viewLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
+    if (!activeUser) {
+      setAuthMode("login");
+      return;
+    }
     showView(link.dataset.viewLink);
   });
 });
 
 window.addEventListener("hashchange", () => {
+  if (!activeUser) return;
   showView(window.location.hash.replace("#", ""), false);
+});
+
+showLogin.addEventListener("click", () => setAuthMode("login"));
+showSignup.addEventListener("click", () => setAuthMode("signup"));
+
+loginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = normalizeUsername(loginName.value);
+  const password = loginPassword.value;
+  const user = getUsers().find((savedUser) => savedUser.name.toLowerCase() === name.toLowerCase());
+
+  if (!user || user.password !== password) {
+    authStatus.textContent = "That username or password is wrong.";
+    authStatus.classList.remove("ready");
+    return;
+  }
+
+  authStatus.textContent = "Logged in.";
+  authStatus.classList.add("ready");
+  signInUser(user);
+});
+
+signupForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = normalizeUsername(signupName.value);
+  const email = signupEmail.value.trim();
+  const password = signupPassword.value;
+  const users = getUsers();
+
+  if (name.length < 2 || password.length < 4) {
+    authStatus.textContent = "Use a name and a password with at least 4 characters.";
+    authStatus.classList.remove("ready");
+    return;
+  }
+
+  if (users.some((user) => user.name.toLowerCase() === name.toLowerCase())) {
+    authStatus.textContent = "That username is already taken on this browser.";
+    authStatus.classList.remove("ready");
+    return;
+  }
+
+  const user = { name, email, password, createdAt: Date.now() };
+  users.push(user);
+  saveUsers(users);
+  authStatus.textContent = "Account created.";
+  authStatus.classList.add("ready");
+  signInUser(user);
+});
+
+logoutButton.addEventListener("click", () => {
+  activeUser = null;
+  currentPlayerName = "";
+  window.localStorage.removeItem("quizrush-active-user");
+  document.body.classList.remove("signed-in");
+  window.history.replaceState(null, "", window.location.pathname);
+  setAuthMode("login");
 });
 
 roomCode.addEventListener("input", updateJoinState);
@@ -1090,11 +1211,15 @@ selectSkin(window.localStorage.getItem("quizrush-skin") || ownedSkins[0], false)
 selectPlayerIcon(selectedPlayerIcon, false);
 updateJoinState();
 renderPlayers();
-const startingRoom = cleanCode(new URLSearchParams(window.location.search).get("room") || "");
-if (startingRoom) {
-  roomCode.value = formatCode(startingRoom);
-  updateJoinState();
-  showView("join", false);
-} else {
-  showView(window.location.hash.replace("#", ""), false);
+applyAuthState();
+setAuthMode("login");
+if (activeUser) {
+  const startingRoom = cleanCode(new URLSearchParams(window.location.search).get("room") || "");
+  if (startingRoom) {
+    roomCode.value = formatCode(startingRoom);
+    updateJoinState();
+    showView("join", false);
+  } else {
+    showView(window.location.hash.replace("#", ""), false);
+  }
 }

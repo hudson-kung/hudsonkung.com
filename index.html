@@ -11,6 +11,48 @@
 </head>
 <body>
   <main class="shell">
+    <section id="auth" class="auth-view">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <span class="brand-mark">QR</span>
+          <div>
+            <span class="eyebrow">QuizRush account</span>
+            <h1>Log in to play, host, and collect skins.</h1>
+          </div>
+        </div>
+
+        <div class="auth-tabs" role="tablist" aria-label="Account actions">
+          <button class="active" type="button" id="showLogin" aria-controls="loginForm">Log in</button>
+          <button type="button" id="showSignup" aria-controls="signupForm">Sign up</button>
+        </div>
+
+        <form class="auth-form active" id="loginForm">
+          <label for="loginName">Username</label>
+          <input id="loginName" autocomplete="username" maxlength="18" placeholder="Hudson">
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" minlength="4" placeholder="Password">
+
+          <button class="button primary full" type="submit">Log in</button>
+        </form>
+
+        <form class="auth-form" id="signupForm">
+          <label for="signupName">Username</label>
+          <input id="signupName" autocomplete="username" maxlength="18" placeholder="Choose a name">
+
+          <label for="signupEmail">Email</label>
+          <input id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com">
+
+          <label for="signupPassword">Password</label>
+          <input id="signupPassword" type="password" autocomplete="new-password" minlength="4" placeholder="Make a password">
+
+          <button class="button primary full" type="submit">Create account</button>
+        </form>
+
+        <p class="join-status" id="authStatus" role="status">Create an account or log back in.</p>
+      </div>
+    </section>
+
     <nav class="topbar" aria-label="Main navigation">
       <a class="brand" href="#home" data-view-link="home" aria-label="QuizRush home">
         <span class="brand-mark">QR</span>
@@ -24,6 +66,10 @@
         <a href="#sets" data-view-link="sets">Sets</a>
         <a href="#host" data-view-link="host">Host</a>
         <a href="#leaderboard" data-view-link="leaderboard">Leaderboard</a>
+        <button class="nav-user" type="button" id="logoutButton" title="Log out">
+          <span id="navUserInitial">?</span>
+          <strong id="navUserName">Player</strong>
+        </button>
       </div>
     </nav>
 
