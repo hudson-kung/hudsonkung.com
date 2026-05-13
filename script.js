@@ -57,7 +57,6 @@ const signupForm = document.querySelector("#signupForm");
 const loginName = document.querySelector("#loginName");
 const loginPassword = document.querySelector("#loginPassword");
 const signupName = document.querySelector("#signupName");
-const signupEmail = document.querySelector("#signupEmail");
 const signupPassword = document.querySelector("#signupPassword");
 const authStatus = document.querySelector("#authStatus");
 const logoutButton = document.querySelector("#logoutButton");
@@ -286,7 +285,6 @@ function applyAuthState() {
 function signInUser(user) {
   activeUser = {
     name: user.name,
-    email: user.email || "",
     signedInAt: Date.now()
   };
   window.localStorage.setItem("quizrush-active-user", JSON.stringify(activeUser));
@@ -916,7 +914,6 @@ loginForm.addEventListener("submit", (event) => {
 signupForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const name = normalizeUsername(signupName.value);
-  const email = signupEmail.value.trim();
   const password = signupPassword.value;
   const users = getUsers();
 
@@ -932,7 +929,7 @@ signupForm.addEventListener("submit", (event) => {
     return;
   }
 
-  const user = { name, email, password, createdAt: Date.now() };
+  const user = { name, password, createdAt: Date.now() };
   users.push(user);
   saveUsers(users);
   authStatus.textContent = "Account created.";
