@@ -1644,6 +1644,94 @@ select {
   box-shadow: var(--shadow);
 }
 
+.tower-panel {
+  display: none;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.tower-panel.active {
+  display: grid;
+}
+
+.tower-track {
+  position: relative;
+  height: 4.5rem;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(40, 214, 163, 0.26), rgba(255, 209, 102, 0.26), rgba(255, 92, 92, 0.28)),
+    repeating-linear-gradient(90deg, rgba(22, 32, 51, 0.1) 0 1px, transparent 1px 24px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.tower-base,
+.tower-enemy {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  min-width: 4.4rem;
+  min-height: 2.3rem;
+  place-items: center;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 900;
+  border-radius: 8px;
+  transform: translateY(-50%);
+}
+
+.tower-base {
+  left: 0.55rem;
+  background: var(--green);
+}
+
+.tower-enemy {
+  left: 82%;
+  background: var(--coral);
+  transition: left 220ms ease;
+}
+
+.tower-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.tower-stats div {
+  padding: 0.65rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.tower-stats strong,
+.tower-stats span {
+  display: block;
+}
+
+.tower-stats strong {
+  font-size: 1.35rem;
+}
+
+.tower-stats span,
+.tower-panel p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.tower-shop {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tower-panel p {
+  margin: 0;
+}
+
 .game-topline {
   display: flex;
   justify-content: space-between;

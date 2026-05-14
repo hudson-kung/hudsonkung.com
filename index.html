@@ -390,6 +390,11 @@
           <h3>Risk points for treasure</h3>
           <p>Players earn coins, buy boosts, and make comeback plays.</p>
         </article>
+        <article class="mode-card" data-mode="tower">
+          <span>Tower Defense</span>
+          <h3>Answer, earn, defend</h3>
+          <p>Correct answers give coins to buy towers and stop incoming waves.</p>
+        </article>
       </div>
 
       <div class="launch-strip">
@@ -520,6 +525,23 @@
             <div><strong id="gameScore">0</strong><span>Score</span></div>
             <div><strong id="gameStreak">0</strong><span>Streak</span></div>
             <div><strong id="gameCorrect">0</strong><span>Correct</span></div>
+          </div>
+          <div class="tower-panel" id="towerPanel">
+            <span class="eyebrow">Defense</span>
+            <div class="tower-track">
+              <div class="tower-base">Base</div>
+              <div class="tower-enemy" id="towerEnemy">Wave 1</div>
+            </div>
+            <div class="tower-stats">
+              <div><strong id="towerCoins">0</strong><span>Coins</span></div>
+              <div><strong id="towerBase">10</strong><span>Base HP</span></div>
+              <div><strong id="towerWave">1</strong><span>Wave</span></div>
+            </div>
+            <div class="tower-shop">
+              <button class="button ghost full" type="button" data-tower="bolt">Bolt tower - 40</button>
+              <button class="button ghost full" type="button" data-tower="cannon">Cannon tower - 75</button>
+            </div>
+            <p id="towerStatus">Answer correctly to earn coins.</p>
           </div>
           <button class="button ghost full" type="button" id="playAgain">Play again</button>
         </aside>

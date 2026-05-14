@@ -139,6 +139,13 @@ const gameAvatar = document.querySelector("#gameAvatar");
 const gameScore = document.querySelector("#gameScore");
 const gameStreak = document.querySelector("#gameStreak");
 const gameCorrect = document.querySelector("#gameCorrect");
+const towerPanel = document.querySelector("#towerPanel");
+const towerCoins = document.querySelector("#towerCoins");
+const towerBase = document.querySelector("#towerBase");
+const towerWave = document.querySelector("#towerWave");
+const towerEnemy = document.querySelector("#towerEnemy");
+const towerStatus = document.querySelector("#towerStatus");
+const towerButtons = document.querySelectorAll("[data-tower]");
 const playAgain = document.querySelector("#playAgain");
 const viewLinks = document.querySelectorAll("[data-view-link]");
 const views = document.querySelectorAll(".app-view");
@@ -148,7 +155,8 @@ const modeNames = {
   classic: "Classic",
   speed: "Speed Run",
   team: "Teams",
-  gold: "Gold Quest"
+  gold: "Gold Quest",
+  tower: "Tower Defense"
 };
 const packNames = {
   starter: "Common Pack",
@@ -205,6 +213,13 @@ const quizQuestions = {
     { question: "What helps a comeback?", answers: ["Boost", "Quit", "Skip every round", "Lose coins"], correct: 0 },
     { question: "Which is worth more?", answers: ["10", "50", "25", "5"], correct: 1 },
     { question: "A treasure chest usually holds...", answers: ["Rewards", "Homework", "Rain", "Passwords"], correct: 0 }
+  ],
+  tower: [
+    { question: "What resource buys towers?", answers: ["Coins", "Smoke", "Clouds", "Keys"], correct: 0 },
+    { question: "What should towers protect?", answers: ["The base", "The enemy", "The shop", "The timer"], correct: 0 },
+    { question: "Which tower sounds strongest?", answers: ["Cannon", "Leaf", "Blanket", "Bubble"], correct: 0 },
+    { question: "What happens when an enemy reaches the base?", answers: ["Base loses HP", "Coins double", "Timer stops", "All towers sell"], correct: 0 },
+    { question: "Best strategy after earning coins?", answers: ["Buy towers", "Ignore waves", "Skip answers", "Close shop"], correct: 0 }
   ]
 };
 
@@ -239,6 +254,7 @@ let gameState = {
   questionDuration: 15,
   gameTime: 120,
   remainingGameTime: 120,
+  tower: null,
   submitted: false,
   questions: null
 };
@@ -763,6 +779,87 @@ function currentQuestions() {
   return gameState.questions?.length ? gameState.questions : (quizQuestions[gameState.mode] || quizQuestions.classic);
 }
 
+function makeTowerState() {
+  return {
+    coins: 25,
+    baseHp: 10,
+    wave: 1,
+    enemyHp: 70,
+    enemyMaxHp: 70,
+    towers: {
+      bolt: 0,
+      cannon: 0
+    }
+  };
+}
+
+function renderTowerDefense() {
+  const active = gameState.mode === "tower";
+  towerPanel.classList.toggle("active", active);
+  if (!active || !gameState.tower) return;
+
+  const tower = gameState.tower;
+  towerCoins.textContent = String(tower.coins);
+  towerBase.textContent = String(tower.baseHp);
+  towerWave.textContent = String(tower.wave);
+  towerEnemy.textContent = `HP ${tower.enemyHp}/${tower.enemyMaxHp}`;
+  towerEnemy.style.left = `${Math.max(8, 82 - (tower.enemyHp / tower.enemyMaxHp) * 64)}%`;
+  towerButtons.forEach((button) => {
+    const cost = button.dataset.tower === "bolt" ? 40 : 75;
+    const count = tower.towers[button.dataset.tower] || 0;
+    button.disabled = tower.coins < cost || tower.baseHp <= 0;
+    button.textContent = `${button.dataset.tower === "bolt" ? "Bolt tower" : "Cannon tower"} - ${cost} (${count})`;
+  });
+}
+
+function runTowerDefenseTurn(wasCorrect) {
+  if (gameState.mode !== "tower" || !gameState.tower) return;
+
+  const tower = gameState.tower;
+  if (wasCorrect) {
+    tower.coins += 35 + (gameState.streak * 5);
+  } else {
+    tower.baseHp -= 1;
+  }
+
+  const damage = (tower.towers.bolt * 18) + (tower.towers.cannon * 42);
+  tower.enemyHp -= damage;
+
+  if (tower.enemyHp <= 0) {
+    tower.wave += 1;
+    tower.coins += 25;
+    tower.enemyMaxHp = 70 + (tower.wave * 28);
+    tower.enemyHp = tower.enemyMaxHp;
+    towerStatus.textContent = `Wave cleared. +25 coins. Wave ${tower.wave} incoming.`;
+  } else if (damage > 0) {
+    towerStatus.textContent = `Towers dealt ${damage} damage.`;
+  } else {
+    towerStatus.textContent = wasCorrect ? "Coins earned. Buy a tower." : "Enemy hit your base.";
+  }
+
+  if (tower.baseHp <= 0) {
+    tower.baseHp = 0;
+    gameState.remainingGameTime = 0;
+    towerStatus.textContent = "Base destroyed.";
+  }
+
+  renderTowerDefense();
+}
+
+function buyTower(type) {
+  if (gameState.mode !== "tower" || !gameState.tower) return;
+  const cost = type === "bolt" ? 40 : 75;
+  if (gameState.tower.coins < cost) {
+    showToast("Not enough coins yet.");
+    return;
+  }
+
+  gameState.tower.coins -= cost;
+  gameState.tower.towers[type] += 1;
+  towerStatus.textContent = `${type === "bolt" ? "Bolt" : "Cannon"} tower placed.`;
+  renderTowerDefense();
+}
+
 function shuffleAnswers(question) {
   const correctAnswers = question.correctAnswers || [question.correct ?? 0];
   const paired = question.answers.map((answer, index) => ({
@@ -812,11 +909,13 @@ function startQuiz(mode = selectedMode, questions = null, title = "", gameTime =
     questionDuration: 15,
     gameTime: totalGameTime,
     remainingGameTime: totalGameTime,
+    tower: mode === "tower" ? makeTowerState() : null,
     submitted: false,
     questions: Array.isArray(questions) && questions.length ? questions : null
   };
   gameModeLabel.textContent = title || modeNames[mode] || "Classic";
   gameAvatar.className = `avatar large ${skins[selectedPlayerIcon]?.className || skins.blaze.className}`;
+  renderTowerDefense();
   showView("game");
   renderQuestion();
 }
@@ -893,11 +992,12 @@ function answerQuestion(answerIndex) {
       : `Not quite. Correct: ${answerMap.filter((item) => item.wasCorrect).map((item) => item.answer).join(", ")}.`;
   }
 
+  runTowerDefenseTurn(isCorrect);
   gameState.answered += 1;
   updateGameStats();
   window.setTimeout(() => {
     if (gameState.remainingGameTime <= 0) {
-      endGame("Time is up");
+      endGame(gameState.tower?.baseHp === 0 ? "Base destroyed" : "Time is up");
       return;
     }
     gameState.index += 1;
@@ -1291,6 +1391,10 @@ startGame.addEventListener("click", async () => {
 
 playAgain.addEventListener("click", () => {
   startQuiz(gameState.mode, gameState.questions, gameModeLabel.textContent, gameState.gameTime);
+});
+
+towerButtons.forEach((button) => {
+  button.addEventListener("click", () => buyTower(button.dataset.tower));
 });
 
 resetLobby.addEventListener("click", () => {
