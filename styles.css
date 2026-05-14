@@ -2075,6 +2075,19 @@ body.reduced-motion *::after {
   gap: 0.7rem;
 }
 
+.admin-tool-grid {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.35fr) minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.admin-tool-grid label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
 .admin-account-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

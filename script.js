@@ -151,6 +151,12 @@ const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
 const adminAccountCount = document.querySelector("#adminAccountCount");
 const adminAccountList = document.querySelector("#adminAccountList");
+const adminGrantUser = document.querySelector("#adminGrantUser");
+const adminGrantSkin = document.querySelector("#adminGrantSkin");
+const adminCoinAmount = document.querySelector("#adminCoinAmount");
+const adminGiveSkin = document.querySelector("#adminGiveSkin");
+const adminGiveCoins = document.querySelector("#adminGiveCoins");
+const adminGrantStatus = document.querySelector("#adminGrantStatus");
 const globalMessageInput = document.querySelector("#globalMessageInput");
 const sendGlobalMessage = document.querySelector("#sendGlobalMessage");
 const clearGlobalMessage = document.querySelector("#clearGlobalMessage");
@@ -162,6 +168,7 @@ const settingsName = document.querySelector("#settingsName");
 const settingsStatus = document.querySelector("#settingsStatus");
 const settingsUsername = document.querySelector("#settingsUsername");
 const settingsSkins = document.querySelector("#settingsSkins");
+const settingsCoins = document.querySelector("#settingsCoins");
 const settingsMode = document.querySelector("#settingsMode");
 const settingsAdmin = document.querySelector("#settingsAdmin");
 const settingsPasswordStatus = document.querySelector("#settingsPasswordStatus");
@@ -263,6 +270,7 @@ let activeUser = JSON.parse(window.localStorage.getItem("quizrush-active-user") 
 let questionSets = JSON.parse(window.localStorage.getItem("quizrush-question-sets") || "[]");
 let selectedPlayerIcon = window.localStorage.getItem("quizrush-player-icon") || "blaze";
 let ownedSkins = JSON.parse(window.localStorage.getItem("quizrush-owned-skins") || "[\"blaze\"]");
+let accountCoins = Number(window.localStorage.getItem("polymath-coins") || "0");
 if (!ownedSkins.includes(selectedPlayerIcon)) {
   selectedPlayerIcon = ownedSkins[0] || "blaze";
 }
@@ -326,6 +334,38 @@ function saveUsers(users) {
   window.localStorage.setItem("quizrush-users", JSON.stringify(users));
 }
 
+function cleanOwnedSkins(skinIds = []) {
+  const validSkinIds = skinIds.filter((skinId) => skins[skinId]);
+  return [...new Set(validSkinIds.length ? validSkinIds : ["blaze"])];
+}
+
+function findUserIndex(users, name) {
+  return users.findIndex((user) => String(user.name || "").toLowerCase() === String(name || "").toLowerCase());
+}
+
+function saveActiveUserRewards() {
+  window.localStorage.setItem("quizrush-owned-skins", JSON.stringify(ownedSkins));
+  window.localStorage.setItem("polymath-coins", String(accountCoins));
+
+  if (!activeUser || activeUser.guest) return;
+  const users = getUsers();
+  const userIndex = findUserIndex(users, activeUser.name);
+  if (userIndex === -1) return;
+  users[userIndex].ownedSkins = cleanOwnedSkins(ownedSkins);
+  users[userIndex].coins = accountCoins;
+  saveUsers(users);
+}
+
+function loadAccountRewards(user) {
+  ownedSkins = cleanOwnedSkins(user.ownedSkins || ownedSkins);
+  accountCoins = Number.isFinite(Number(user.coins)) ? Number(user.coins) : accountCoins;
+  if (!ownedSkins.includes(selectedPlayerIcon)) {
+    selectedPlayerIcon = ownedSkins[0] || "blaze";
+    window.localStorage.setItem("quizrush-player-icon", selectedPlayerIcon);
+  }
+  saveActiveUserRewards();
+}
+
 function isAdminUser() {
   return activeUser?.name?.trim().toLowerCase() === "hudson kung" && !activeUser.guest;
 }
@@ -354,6 +394,10 @@ function applyAuthState() {
   if (!activeUser) return;
 
   const name = activeUser.name || "Player";
+  if (!activeUser.guest) {
+    const user = getUsers().find((savedUser) => savedUser.name.toLowerCase() === name.toLowerCase());
+    if (user) loadAccountRewards(user);
+  }
   navUserName.textContent = name;
   navUserInitial.textContent = name.slice(0, 1).toUpperCase();
   logoutButton.title = activeUser.guest ? "Leave guest mode" : "Log out";
@@ -369,6 +413,7 @@ function signInUser(user) {
     signedInAt: Date.now()
   };
   window.localStorage.setItem("quizrush-active-user", JSON.stringify(activeUser));
+  loadAccountRewards(user);
   applyAuthState();
   showView("home", false);
   showToast(`Welcome, ${activeUser.name}`);
@@ -397,17 +442,35 @@ function renderAdminPanel() {
   if (!adminAccountList || !adminAccountCount) return;
 
   const users = getUsers();
+  const selectedGrantUser = adminGrantUser?.value || "0";
   adminAccountCount.textContent = `${users.length} account${users.length === 1 ? "" : "s"}`;
+  if (adminGrantUser) {
+    adminGrantUser.innerHTML = users.length
+      ? users.map((user, index) => `<option value="${index}">${escapeHtml(user.name || "Unnamed")}</option>`).join("")
+      : `<option value="">No accounts</option>`;
+    adminGrantUser.value = users[selectedGrantUser] ? selectedGrantUser : "0";
+    adminGrantUser.disabled = users.length === 0;
+  }
+  if (adminGrantSkin) {
+    adminGrantSkin.innerHTML = Object.entries(skins)
+      .map(([skinId, skin]) => `<option value="${skinId}">${escapeHtml(skin.name)} (${escapeHtml(skin.rarity)})</option>`)
+      .join("");
+  }
+  if (adminGiveSkin) adminGiveSkin.disabled = users.length === 0;
+  if (adminGiveCoins) adminGiveCoins.disabled = users.length === 0;
+
   adminAccountList.innerHTML = users.length
     ? users.map((user, index) => {
         const safeName = escapeHtml(user.name || "Unnamed");
         const created = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Unknown";
         const isCurrent = activeUser?.name?.toLowerCase() === String(user.name || "").toLowerCase();
+        const userSkins = cleanOwnedSkins(user.ownedSkins || ["blaze"]);
+        const userCoins = Number(user.coins || 0);
         return `
           <div class="admin-account-row">
             <div>
               <strong>${safeName}</strong>
-              <span>Created: ${escapeHtml(created)}</span>
+              <span>Created: ${escapeHtml(created)} | ${userCoins} coins | ${userSkins.length} skins</span>
             </div>
             <div class="admin-actions">
               <button class="button ghost" type="button" data-delete-account="${index}" ${isCurrent ? "disabled" : ""}>Delete</button>
@@ -456,6 +519,7 @@ function renderSettings() {
     : "Signed in and ready to play.";
   settingsUsername.textContent = name;
   settingsSkins.textContent = String(ownedSkins.length);
+  settingsCoins.textContent = String(accountCoins);
   settingsMode.textContent = isGuest ? "Guest" : "Account";
   settingsAdmin.textContent = isAdminUser() ? "Yes" : "No";
   settingsPasswordStatus.textContent = isGuest ? "None" : "Hidden";
@@ -549,6 +613,7 @@ function selectPlayerIcon(iconId, notify = true) {
 
 function saveOwnedSkins() {
   window.localStorage.setItem("quizrush-owned-skins", JSON.stringify(ownedSkins));
+  saveActiveUserRewards();
 }
 
 function unlockSkin(skinId) {
@@ -1273,7 +1338,7 @@ signupForm.addEventListener("submit", (event) => {
     return;
   }
 
-  const user = { name, password, createdAt: Date.now() };
+  const user = { name, password, createdAt: Date.now(), coins: 0, ownedSkins: cleanOwnedSkins(ownedSkins) };
   users.push(user);
   saveUsers(users);
   authStatus.textContent = "Account created.";
@@ -1304,6 +1369,58 @@ adminAccountList.addEventListener("click", (event) => {
   saveUsers(users);
   renderAdminPanel();
   showToast(`${accountName} removed.`);
+});
+
+function getAdminGrantTarget() {
+  if (!isAdminUser()) return null;
+  const users = getUsers();
+  const userIndex = Number(adminGrantUser.value);
+  if (!Number.isInteger(userIndex) || !users[userIndex]) {
+    adminGrantStatus.textContent = "Choose an account first.";
+    return null;
+  }
+  return { users, userIndex, user: users[userIndex] };
+}
+
+function syncGrantIfActive(user) {
+  const isCurrent = activeUser?.name?.toLowerCase() === String(user.name || "").toLowerCase();
+  if (!isCurrent) return;
+  loadAccountRewards(user);
+  renderSkinCollections();
+  renderSettings();
+}
+
+adminGiveSkin.addEventListener("click", () => {
+  const target = getAdminGrantTarget();
+  if (!target) return;
+  const skinId = adminGrantSkin.value;
+  const skin = skins[skinId];
+  if (!skin) {
+    adminGrantStatus.textContent = "Choose a valid skin.";
+    return;
+  }
+
+  target.user.ownedSkins = cleanOwnedSkins(target.user.ownedSkins || ["blaze"]);
+  if (!target.user.ownedSkins.includes(skinId)) {
+    target.user.ownedSkins.push(skinId);
+  }
+  saveUsers(target.users);
+  syncGrantIfActive(target.user);
+  renderAdminPanel();
+  adminGrantStatus.textContent = `${skin.name} granted to ${target.user.name}.`;
+  showToast(`${skin.name} granted.`);
+});
+
+adminGiveCoins.addEventListener("click", () => {
+  const target = getAdminGrantTarget();
+  if (!target) return;
+  const amount = Math.max(1, Math.min(99999, Number(adminCoinAmount.value) || 0));
+  target.user.coins = Number(target.user.coins || 0) + amount;
+  saveUsers(target.users);
+  syncGrantIfActive(target.user);
+  renderAdminPanel();
+  adminGrantStatus.textContent = `${amount} coins granted to ${target.user.name}.`;
+  showToast(`${amount} coins granted.`);
 });
 
 sendGlobalMessage.addEventListener("click", () => {

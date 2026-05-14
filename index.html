@@ -610,6 +610,28 @@
         <div class="admin-card">
           <div class="panel-header">
             <div>
+              <span class="eyebrow">Rewards</span>
+              <h2>Grant items</h2>
+            </div>
+          </div>
+          <div class="admin-tool-grid">
+            <label for="adminGrantUser">Account</label>
+            <select id="adminGrantUser"></select>
+            <label for="adminGrantSkin">Skin</label>
+            <select id="adminGrantSkin"></select>
+            <label for="adminCoinAmount">Coins</label>
+            <input id="adminCoinAmount" type="number" min="1" max="99999" step="25" value="100">
+          </div>
+          <div class="admin-actions">
+            <button class="button primary" type="button" id="adminGiveSkin">Give skin</button>
+            <button class="button ghost" type="button" id="adminGiveCoins">Give coins</button>
+          </div>
+          <p class="hint" id="adminGrantStatus">Choose an account, then grant a skin or coins.</p>
+        </div>
+
+        <div class="admin-card">
+          <div class="panel-header">
+            <div>
               <span class="eyebrow">Local accounts</span>
               <h2 id="adminAccountCount">0 accounts</h2>
             </div>
@@ -644,6 +666,7 @@
             <div class="settings-grid">
               <div><strong id="settingsUsername">Player</strong><span>Username</span></div>
               <div><strong id="settingsSkins">1</strong><span>Skins owned</span></div>
+              <div><strong id="settingsCoins">0</strong><span>Coins</span></div>
               <div><strong id="settingsMode">Account</strong><span>Session type</span></div>
               <div><strong id="settingsAdmin">No</strong><span>Admin access</span></div>
               <div><strong id="settingsPasswordStatus">Hidden</strong><span>Password</span></div>
