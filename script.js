@@ -104,6 +104,8 @@ const setCorrectAnswers = document.querySelectorAll(".set-correct");
 const questionTimeLimit = document.querySelector("#questionTimeLimit");
 const questionRandomOrder = document.querySelector("#questionRandomOrder");
 const questionType = document.querySelector("#questionType");
+const setsView = document.querySelector("#sets");
+const createSetToggle = document.querySelector("#createSetToggle");
 const addQuestion = document.querySelector("#addQuestion");
 const setStatus = document.querySelector("#setStatus");
 const setCount = document.querySelector("#setCount");
@@ -599,6 +601,11 @@ function renderPlayers() {
   hostLobbyStatus.textContent = joinedPlayers.length > 0 ? "Waiting for host to start..." : "Waiting for players...";
 }
 
+function setSetCreatorOpen(open) {
+  setsView.classList.toggle("creating", Boolean(open));
+  createSetToggle.textContent = open ? "Back to sets" : "Create set";
+}
+
 function setHostGameStarted(started) {
   hostLobbyView.classList.toggle("game-started", Boolean(started));
 }
@@ -1065,9 +1072,14 @@ setForm.addEventListener("submit", (event) => {
   setTitle.value = "";
   setStatus.textContent = `${title} saved.`;
   setStatus.classList.add("ready");
+  setSetCreatorOpen(false);
   renderDraftQuestions();
   renderQuestionSets();
   showToast("Question set saved");
+});
+
+createSetToggle.addEventListener("click", () => {
+  setSetCreatorOpen(!setsView.classList.contains("creating"));
 });
 
 openPack.addEventListener("click", () => {
@@ -1213,6 +1225,7 @@ copyCode.addEventListener("click", async () => {
 renderSkinCollections();
 renderDraftQuestions();
 renderQuestionSets();
+setSetCreatorOpen(false);
 syncQuestionTypeFields();
 selectSkin(window.localStorage.getItem("quizrush-skin") || ownedSkins[0], false);
 selectPlayerIcon(selectedPlayerIcon, false);
