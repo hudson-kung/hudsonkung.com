@@ -273,7 +273,7 @@ function setAuthMode(mode) {
   showSignup.classList.toggle("active", isSignup);
   loginForm.classList.toggle("active", !isSignup);
   signupForm.classList.toggle("active", isSignup);
-  authStatus.textContent = isSignup ? "Make your QuizRush account." : "Log in to keep playing.";
+  authStatus.textContent = isSignup ? "Make your Polymath account." : "Log in to keep playing.";
   authStatus.classList.remove("ready");
 }
 

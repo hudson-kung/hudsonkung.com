@@ -288,5 +288,5 @@ const server = http.createServer(async (request, response) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`QuizRush running at http://localhost:${PORT}`);
+  console.log(`Polymath running at http://localhost:${PORT}`);
 });
