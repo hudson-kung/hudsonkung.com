@@ -148,11 +148,19 @@ const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
 const adminAccountCount = document.querySelector("#adminAccountCount");
 const adminAccountList = document.querySelector("#adminAccountList");
+const settingsAvatar = document.querySelector("#settingsAvatar");
+const settingsRole = document.querySelector("#settingsRole");
+const settingsName = document.querySelector("#settingsName");
+const settingsStatus = document.querySelector("#settingsStatus");
+const settingsSkins = document.querySelector("#settingsSkins");
+const settingsMode = document.querySelector("#settingsMode");
+const settingsAdmin = document.querySelector("#settingsAdmin");
+const settingsLogout = document.querySelector("#settingsLogout");
 const playAgain = document.querySelector("#playAgain");
 const viewLinks = document.querySelectorAll("[data-view-link]");
 const views = document.querySelectorAll(".app-view");
-const validViews = ["home", "join", "player-lobby", "skins", "packs", "sets", "host", "host-lobby", "game", "leaderboard", "admin"];
-const guestViews = ["home", "join", "player-lobby", "game", "leaderboard"];
+const validViews = ["home", "join", "player-lobby", "skins", "packs", "sets", "host", "host-lobby", "game", "leaderboard", "settings", "admin"];
+const guestViews = ["home", "join", "player-lobby", "game", "leaderboard", "settings"];
 const modeNames = {
   classic: "Classic",
   speed: "Speed Run",
@@ -324,6 +332,7 @@ function applyAuthState() {
   logoutButton.title = activeUser.guest ? "Leave guest mode" : "Log out";
   playerName.value = playerName.value || name;
   renderAdminPanel();
+  renderSettings();
 }
 
 function signInUser(user) {
@@ -385,6 +394,22 @@ function renderAdminPanel() {
         `;
       }).join("")
     : `<div class="empty-lobby"><strong>No accounts yet</strong><span>Created accounts on this browser will appear here.</span></div>`;
+}
+
+function renderSettings() {
+  if (!settingsName) return;
+
+  const name = activeUser?.name || "Player";
+  const isGuest = activeUser?.guest === true;
+  settingsAvatar.className = `avatar large ${skins[selectedPlayerIcon]?.className || skins.blaze.className}`;
+  settingsRole.textContent = isAdminUser() ? "Admin" : isGuest ? "Guest" : "Player";
+  settingsName.textContent = name;
+  settingsStatus.textContent = isGuest
+    ? "Guest mode can join games without an account."
+    : "Signed in and ready to play.";
+  settingsSkins.textContent = String(ownedSkins.length);
+  settingsMode.textContent = isGuest ? "Guest" : "Account";
+  settingsAdmin.textContent = isAdminUser() ? "Yes" : "No";
 }
 
 function normalizeUsername(value) {
@@ -647,6 +672,10 @@ function showView(viewId, updateHash = true) {
 
   if (nextView === "admin") {
     renderAdminPanel();
+  }
+
+  if (nextView === "settings") {
+    renderSettings();
   }
 
   if (nextView === "host-lobby" && currentRoomCode) {
@@ -1210,6 +1239,10 @@ adminAccountList.addEventListener("click", (event) => {
   saveUsers(users);
   renderAdminPanel();
   showToast(`${accountName} removed.`);
+});
+
+settingsLogout.addEventListener("click", () => {
+  logoutButton.click();
 });
 
 roomCode.addEventListener("input", updateJoinState);

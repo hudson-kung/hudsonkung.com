@@ -65,6 +65,7 @@
         <a href="#sets" data-view-link="sets">Sets</a>
         <a href="#host" data-view-link="host">Host</a>
         <a href="#leaderboard" data-view-link="leaderboard">Leaderboard</a>
+        <a href="#settings" data-view-link="settings">Settings</a>
         <a href="#admin" data-view-link="admin" class="admin-link">Admin</a>
         <button class="nav-user" type="button" id="logoutButton" title="Log out">
           <span id="navUserInitial">?</span>
@@ -585,6 +586,31 @@
           </div>
           <p class="hint">Passwords are protected from being displayed. You can reset or remove accounts from this browser.</p>
           <div class="admin-account-list" id="adminAccountList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="settings-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Settings</span>
+        <h2>Account & session</h2>
+      </div>
+      <div class="settings-layout">
+        <div class="settings-card">
+          <div class="settings-profile">
+            <div class="avatar large skin-blaze" id="settingsAvatar"></div>
+            <div>
+              <span class="eyebrow" id="settingsRole">Player</span>
+              <h2 id="settingsName">Player</h2>
+              <p id="settingsStatus">Signed in and ready to play.</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <div><strong id="settingsSkins">1</strong><span>Skins owned</span></div>
+            <div><strong id="settingsMode">Account</strong><span>Session type</span></div>
+            <div><strong id="settingsAdmin">No</strong><span>Admin access</span></div>
+          </div>
+          <button class="button ghost full" type="button" id="settingsLogout">Log out</button>
         </div>
       </div>
     </section>
