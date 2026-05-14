@@ -1833,10 +1833,14 @@ select {
 }
 
 .settings-layout {
-  width: min(880px, 100%);
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+  width: min(980px, 100%);
   margin: 0 auto;
 }
 
+.settings-side,
 .settings-card {
   display: grid;
   gap: 1rem;
@@ -1845,6 +1849,40 @@ select {
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+}
+
+.settings-side {
+  align-content: start;
+}
+
+.settings-side button {
+  min-height: 3rem;
+  padding: 0.75rem;
+  color: var(--muted);
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+}
+
+.settings-side button.active,
+.settings-side button:hover {
+  color: var(--ink);
+  background: #f7fbff;
+}
+
+.settings-content {
+  display: grid;
+}
+
+.settings-card {
+  display: none;
+}
+
+.settings-card.active {
+  display: grid;
 }
 
 .settings-profile {
@@ -1889,6 +1927,56 @@ select {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 900;
+}
+
+.settings-toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.settings-toggle input {
+  width: 1.3rem;
+  height: 1.3rem;
+  accent-color: var(--violet);
+}
+
+.settings-toggle strong,
+.settings-toggle small {
+  display: block;
+}
+
+.settings-toggle small {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+body.compact-ui .hero-band,
+body.compact-ui .join-band,
+body.compact-ui .skins-band,
+body.compact-ui .packs-band,
+body.compact-ui .sets-band,
+body.compact-ui .host-band,
+body.compact-ui .host-lobby-band,
+body.compact-ui .game-band,
+body.compact-ui .leaderboard-band,
+body.compact-ui .settings-band,
+body.compact-ui .admin-band {
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+body.reduced-motion *,
+body.reduced-motion *::before,
+body.reduced-motion *::after {
+  animation: none !important;
+  scroll-behavior: auto !important;
+  transition: none !important;
 }
 
 .admin-band {
@@ -2182,6 +2270,7 @@ textarea {
   .skin-grid,
   .host-grid,
   .player-grid,
+  .settings-layout,
   .settings-grid,
   .admin-account-row,
   .score-row,

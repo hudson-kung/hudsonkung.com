@@ -612,21 +612,51 @@
         <h2>Account & session</h2>
       </div>
       <div class="settings-layout">
-        <div class="settings-card">
-          <div class="settings-profile">
-            <div class="avatar large skin-blaze" id="settingsAvatar"></div>
-            <div>
-              <span class="eyebrow" id="settingsRole">Player</span>
-              <h2 id="settingsName">Player</h2>
-              <p id="settingsStatus">Signed in and ready to play.</p>
+        <aside class="settings-side">
+          <button class="active" type="button" data-settings-tab="account">Account settings</button>
+          <button type="button" data-settings-tab="ui">UI settings</button>
+        </aside>
+
+        <div class="settings-content">
+          <div class="settings-card active" data-settings-panel="account">
+            <div class="settings-profile">
+              <div class="avatar large skin-blaze" id="settingsAvatar"></div>
+              <div>
+                <span class="eyebrow" id="settingsRole">Player</span>
+                <h2 id="settingsName">Player</h2>
+                <p id="settingsStatus">Signed in and ready to play.</p>
+              </div>
             </div>
+            <div class="settings-grid">
+              <div><strong id="settingsSkins">1</strong><span>Skins owned</span></div>
+              <div><strong id="settingsMode">Account</strong><span>Session type</span></div>
+              <div><strong id="settingsAdmin">No</strong><span>Admin access</span></div>
+            </div>
+            <button class="button ghost full" type="button" id="settingsLogout">Log out</button>
           </div>
-          <div class="settings-grid">
-            <div><strong id="settingsSkins">1</strong><span>Skins owned</span></div>
-            <div><strong id="settingsMode">Account</strong><span>Session type</span></div>
-            <div><strong id="settingsAdmin">No</strong><span>Admin access</span></div>
+
+          <div class="settings-card" data-settings-panel="ui">
+            <div class="panel-header">
+              <div>
+                <span class="eyebrow">Interface</span>
+                <h2>UI settings</h2>
+              </div>
+            </div>
+            <label class="settings-toggle">
+              <input id="compactUi" type="checkbox">
+              <span>
+                <strong>Compact UI</strong>
+                <small>Tightens spacing so more game info fits on screen.</small>
+              </span>
+            </label>
+            <label class="settings-toggle">
+              <input id="reduceMotion" type="checkbox">
+              <span>
+                <strong>Reduced motion</strong>
+                <small>Turns off pulsing and sliding animations.</small>
+              </span>
+            </label>
           </div>
-          <button class="button ghost full" type="button" id="settingsLogout">Log out</button>
         </div>
       </div>
     </section>

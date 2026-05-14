@@ -161,6 +161,10 @@ const settingsSkins = document.querySelector("#settingsSkins");
 const settingsMode = document.querySelector("#settingsMode");
 const settingsAdmin = document.querySelector("#settingsAdmin");
 const settingsLogout = document.querySelector("#settingsLogout");
+const settingsTabs = document.querySelectorAll("[data-settings-tab]");
+const settingsPanels = document.querySelectorAll("[data-settings-panel]");
+const compactUi = document.querySelector("#compactUi");
+const reduceMotion = document.querySelector("#reduceMotion");
 const playAgain = document.querySelector("#playAgain");
 const viewLinks = document.querySelectorAll("[data-view-link]");
 const views = document.querySelectorAll(".app-view");
@@ -240,6 +244,7 @@ const quizQuestions = {
 
 let toastTimeout;
 let globalMessagePoller;
+let uiSettings = JSON.parse(window.localStorage.getItem("polymath-ui-settings") || "{\"compact\":false,\"reduceMotion\":false}");
 let selectedMode = "classic";
 let selectedPack = "starter";
 let packOpening = false;
@@ -436,6 +441,27 @@ function renderSettings() {
   settingsSkins.textContent = String(ownedSkins.length);
   settingsMode.textContent = isGuest ? "Guest" : "Account";
   settingsAdmin.textContent = isAdminUser() ? "Yes" : "No";
+}
+
+function applyUiSettings() {
+  document.body.classList.toggle("compact-ui", Boolean(uiSettings.compact));
+  document.body.classList.toggle("reduced-motion", Boolean(uiSettings.reduceMotion));
+  if (compactUi) compactUi.checked = Boolean(uiSettings.compact);
+  if (reduceMotion) reduceMotion.checked = Boolean(uiSettings.reduceMotion);
+}
+
+function saveUiSettings() {
+  window.localStorage.setItem("polymath-ui-settings", JSON.stringify(uiSettings));
+  applyUiSettings();
+}
+
+function setSettingsTab(tab) {
+  settingsTabs.forEach((button) => {
+    button.classList.toggle("active", button.dataset.settingsTab === tab);
+  });
+  settingsPanels.forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.settingsPanel === tab);
+  });
 }
 
 function normalizeUsername(value) {
@@ -1291,6 +1317,20 @@ settingsLogout.addEventListener("click", () => {
   logoutButton.click();
 });
 
+settingsTabs.forEach((button) => {
+  button.addEventListener("click", () => setSettingsTab(button.dataset.settingsTab));
+});
+
+compactUi.addEventListener("change", () => {
+  uiSettings.compact = compactUi.checked;
+  saveUiSettings();
+});
+
+reduceMotion.addEventListener("change", () => {
+  uiSettings.reduceMotion = reduceMotion.checked;
+  saveUiSettings();
+});
+
 roomCode.addEventListener("input", updateJoinState);
 
 randomCode.addEventListener("click", () => {
@@ -1576,6 +1616,7 @@ renderPlayers();
 hostGameTime.value = window.localStorage.getItem("quizrush-host-game-time") || "120";
 refreshGlobalMessage();
 globalMessagePoller = window.setInterval(refreshGlobalMessage, 5000);
+applyUiSettings();
 applyAuthState();
 setAuthMode("login");
 if (activeUser) {
