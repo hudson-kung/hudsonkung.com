@@ -38,22 +38,18 @@
           <button class="auth-link" type="button" id="showResetPassword">Forgot password?</button>
         </form>
 
-        <form class="auth-form" id="resetPasswordForm">
+        <section class="auth-form" id="passwordHelpPanel">
           <div>
-            <span class="eyebrow">Password reset</span>
-            <h2>Make a new password.</h2>
-            <p>Since Polymath does not use email, this resets accounts saved on this browser.</p>
+            <span class="eyebrow">Password help</span>
+            <h2>Forgot your password?</h2>
+            <p>Polymath does not use email or verified recovery yet, so it cannot safely reset a password from only a username.</p>
           </div>
-
-          <label for="resetName">Username</label>
-          <input id="resetName" autocomplete="username" maxlength="18" placeholder="Your username">
-
-          <label for="resetPassword">New password</label>
-          <input id="resetPassword" type="password" autocomplete="new-password" minlength="4" placeholder="New password">
-
-          <button class="button primary full" type="submit">Reset password</button>
+          <div class="recovery-options">
+            <p>If you are still logged in somewhere, go to Settings and change it with your current password.</p>
+            <p>If this is only your browser account and you cannot remember it, make a new account or continue as guest.</p>
+          </div>
           <button class="button ghost full" type="button" id="cancelResetPassword">Back to login</button>
-        </form>
+        </section>
 
         <form class="auth-form" id="signupForm">
           <label for="signupName">Username</label>

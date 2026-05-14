@@ -159,6 +159,15 @@ body.signed-in .auth-view {
   cursor: pointer;
 }
 
+.recovery-options {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.8rem;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .nav-user {
   display: flex;
   align-items: center;
