@@ -165,6 +165,7 @@ const settingsPasswordStatus = document.querySelector("#settingsPasswordStatus")
 const settingsPasswordForm = document.querySelector("#settingsPasswordForm");
 const currentPassword = document.querySelector("#currentPassword");
 const newPassword = document.querySelector("#newPassword");
+const togglePasswordVisibility = document.querySelector("#togglePasswordVisibility");
 const settingsPasswordStatusText = document.querySelector("#settingsPasswordStatusText");
 const settingsLogout = document.querySelector("#settingsLogout");
 const settingsTabs = document.querySelectorAll("[data-settings-tab]");
@@ -1358,6 +1359,13 @@ settingsPasswordForm.addEventListener("submit", (event) => {
   newPassword.value = "";
   settingsPasswordStatusText.textContent = "Password updated.";
   showToast("Password updated.");
+});
+
+togglePasswordVisibility.addEventListener("click", () => {
+  const shouldShow = currentPassword.type === "password";
+  currentPassword.type = shouldShow ? "text" : "password";
+  newPassword.type = shouldShow ? "text" : "password";
+  togglePasswordVisibility.textContent = shouldShow ? "Hide password fields" : "Show password fields";
 });
 
 compactUi.addEventListener("change", () => {

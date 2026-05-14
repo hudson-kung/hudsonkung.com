@@ -1957,6 +1957,10 @@ select {
   cursor: not-allowed;
 }
 
+.password-visibility {
+  justify-content: center;
+}
+
 .settings-toggle {
   display: grid;
   grid-template-columns: auto 1fr;
