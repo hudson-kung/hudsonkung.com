@@ -58,6 +58,7 @@ const loginName = document.querySelector("#loginName");
 const loginPassword = document.querySelector("#loginPassword");
 const signupName = document.querySelector("#signupName");
 const signupPassword = document.querySelector("#signupPassword");
+const guestMode = document.querySelector("#guestMode");
 const authStatus = document.querySelector("#authStatus");
 const logoutButton = document.querySelector("#logoutButton");
 const navUserInitial = document.querySelector("#navUserInitial");
@@ -139,6 +140,7 @@ const playAgain = document.querySelector("#playAgain");
 const viewLinks = document.querySelectorAll("[data-view-link]");
 const views = document.querySelectorAll(".app-view");
 const validViews = ["home", "join", "player-lobby", "skins", "packs", "sets", "host", "host-lobby", "game", "leaderboard"];
+const guestViews = ["home", "join", "player-lobby", "game", "leaderboard"];
 const modeNames = {
   classic: "Classic",
   speed: "Speed Run",
@@ -279,12 +281,14 @@ function setAuthMode(mode) {
 
 function applyAuthState() {
   document.body.classList.toggle("signed-in", Boolean(activeUser));
+  document.body.classList.toggle("guest-session", activeUser?.guest === true);
 
   if (!activeUser) return;
 
   const name = activeUser.name || "Player";
   navUserName.textContent = name;
   navUserInitial.textContent = name.slice(0, 1).toUpperCase();
+  logoutButton.title = activeUser.guest ? "Leave guest mode" : "Log out";
   playerName.value = playerName.value || name;
   currentPlayerName = currentPlayerName || name;
 }
@@ -292,12 +296,30 @@ function applyAuthState() {
 function signInUser(user) {
   activeUser = {
     name: user.name,
+    guest: false,
     signedInAt: Date.now()
   };
   window.localStorage.setItem("quizrush-active-user", JSON.stringify(activeUser));
   applyAuthState();
   showView("home", false);
   showToast(`Welcome, ${activeUser.name}`);
+}
+
+function startGuestSession() {
+  activeUser = {
+    name: "Guest",
+    guest: true,
+    signedInAt: Date.now()
+  };
+  currentPlayerName = "";
+  playerName.value = "";
+  applyAuthState();
+  showView("join", false);
+  showToast("Guest mode: join games without an account.");
+}
+
+function canOpenView(viewId) {
+  return !activeUser?.guest || guestViews.includes(viewId);
 }
 
 function normalizeUsername(value) {
@@ -911,13 +933,18 @@ viewLinks.forEach((link) => {
       setAuthMode("login");
       return;
     }
+    if (!canOpenView(link.dataset.viewLink)) {
+      showToast("Sign in to use skins, packs, sets, or hosting.");
+      return;
+    }
     showView(link.dataset.viewLink);
   });
 });
 
 window.addEventListener("hashchange", () => {
   if (!activeUser) return;
-  showView(window.location.hash.replace("#", ""), false);
+  const hashView = window.location.hash.replace("#", "");
+  showView(canOpenView(hashView) ? hashView : "join", false);
 });
 
 showLogin.addEventListener("click", () => setAuthMode("login"));
@@ -966,11 +993,13 @@ signupForm.addEventListener("submit", (event) => {
   signInUser(user);
 });
 
+guestMode.addEventListener("click", startGuestSession);
+
 logoutButton.addEventListener("click", () => {
   activeUser = null;
   currentPlayerName = "";
   window.localStorage.removeItem("quizrush-active-user");
-  document.body.classList.remove("signed-in");
+  document.body.classList.remove("signed-in", "guest-session");
   window.history.replaceState(null, "", window.location.pathname);
   setAuthMode("login");
 });
@@ -1264,6 +1293,7 @@ if (activeUser) {
     updateJoinState();
     showView("join", false);
   } else {
-    showView(window.location.hash.replace("#", ""), false);
+    const startView = window.location.hash.replace("#", "");
+    showView(canOpenView(startView) ? startView : "join", false);
   }
 }

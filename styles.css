@@ -156,6 +156,15 @@ body.signed-in .auth-view {
   border-radius: 8px;
 }
 
+body.guest-session .nav-user {
+  color: #7a3d00;
+  background: rgba(255, 209, 102, 0.38);
+}
+
+body.guest-session .nav-user strong::after {
+  content: " mode";
+}
+
 .topbar {
   position: fixed;
   top: 0;
