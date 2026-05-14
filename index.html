@@ -628,10 +628,25 @@
               </div>
             </div>
             <div class="settings-grid">
+              <div><strong id="settingsUsername">Player</strong><span>Username</span></div>
               <div><strong id="settingsSkins">1</strong><span>Skins owned</span></div>
               <div><strong id="settingsMode">Account</strong><span>Session type</span></div>
               <div><strong id="settingsAdmin">No</strong><span>Admin access</span></div>
+              <div><strong id="settingsPasswordStatus">Protected</strong><span>Password</span></div>
             </div>
+            <form class="password-card" id="settingsPasswordForm">
+              <div>
+                <span class="eyebrow">Password</span>
+                <h3>Change password</h3>
+                <p>Passwords are not shown, but you can replace yours here.</p>
+              </div>
+              <label for="currentPassword">Current password</label>
+              <input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password">
+              <label for="newPassword">New password</label>
+              <input id="newPassword" type="password" autocomplete="new-password" minlength="4" placeholder="New password">
+              <button class="button primary full" type="submit">Update password</button>
+              <p class="hint" id="settingsPasswordStatusText">Use at least 4 characters.</p>
+            </form>
             <button class="button ghost full" type="button" id="settingsLogout">Log out</button>
           </div>
 

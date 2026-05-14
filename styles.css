@@ -1929,6 +1929,34 @@ select {
   font-weight: 900;
 }
 
+.password-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.9rem;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.password-card h3,
+.password-card p {
+  margin: 0;
+}
+
+.password-card p {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.password-card.disabled {
+  opacity: 0.62;
+}
+
+.password-card.disabled input,
+.password-card.disabled button {
+  cursor: not-allowed;
+}
+
 .settings-toggle {
   display: grid;
   grid-template-columns: auto 1fr;

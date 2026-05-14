@@ -157,9 +157,15 @@ const settingsAvatar = document.querySelector("#settingsAvatar");
 const settingsRole = document.querySelector("#settingsRole");
 const settingsName = document.querySelector("#settingsName");
 const settingsStatus = document.querySelector("#settingsStatus");
+const settingsUsername = document.querySelector("#settingsUsername");
 const settingsSkins = document.querySelector("#settingsSkins");
 const settingsMode = document.querySelector("#settingsMode");
 const settingsAdmin = document.querySelector("#settingsAdmin");
+const settingsPasswordStatus = document.querySelector("#settingsPasswordStatus");
+const settingsPasswordForm = document.querySelector("#settingsPasswordForm");
+const currentPassword = document.querySelector("#currentPassword");
+const newPassword = document.querySelector("#newPassword");
+const settingsPasswordStatusText = document.querySelector("#settingsPasswordStatusText");
 const settingsLogout = document.querySelector("#settingsLogout");
 const settingsTabs = document.querySelectorAll("[data-settings-tab]");
 const settingsPanels = document.querySelectorAll("[data-settings-panel]");
@@ -438,9 +444,15 @@ function renderSettings() {
   settingsStatus.textContent = isGuest
     ? "Guest mode can join games without an account."
     : "Signed in and ready to play.";
+  settingsUsername.textContent = name;
   settingsSkins.textContent = String(ownedSkins.length);
   settingsMode.textContent = isGuest ? "Guest" : "Account";
   settingsAdmin.textContent = isAdminUser() ? "Yes" : "No";
+  settingsPasswordStatus.textContent = isGuest ? "None" : "Protected";
+  settingsPasswordForm.classList.toggle("disabled", isGuest);
+  settingsPasswordForm.querySelectorAll("input, button").forEach((element) => {
+    element.disabled = isGuest;
+  });
 }
 
 function applyUiSettings() {
@@ -1319,6 +1331,33 @@ settingsLogout.addEventListener("click", () => {
 
 settingsTabs.forEach((button) => {
   button.addEventListener("click", () => setSettingsTab(button.dataset.settingsTab));
+});
+
+settingsPasswordForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (activeUser?.guest) {
+    settingsPasswordStatusText.textContent = "Guest mode does not have a password.";
+    return;
+  }
+
+  const users = getUsers();
+  const user = users.find((savedUser) => savedUser.name.toLowerCase() === activeUser.name.toLowerCase());
+  if (!user || user.password !== currentPassword.value) {
+    settingsPasswordStatusText.textContent = "Current password is incorrect.";
+    return;
+  }
+
+  if (newPassword.value.length < 4) {
+    settingsPasswordStatusText.textContent = "New password needs at least 4 characters.";
+    return;
+  }
+
+  user.password = newPassword.value;
+  saveUsers(users);
+  currentPassword.value = "";
+  newPassword.value = "";
+  settingsPasswordStatusText.textContent = "Password updated.";
+  showToast("Password updated.");
 });
 
 compactUi.addEventListener("change", () => {
