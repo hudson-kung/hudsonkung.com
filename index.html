@@ -35,6 +35,24 @@
           <input id="loginPassword" type="password" autocomplete="current-password" minlength="4" placeholder="Password">
 
           <button class="button primary full" type="submit">Log in</button>
+          <button class="auth-link" type="button" id="showResetPassword">Forgot password?</button>
+        </form>
+
+        <form class="auth-form" id="resetPasswordForm">
+          <div>
+            <span class="eyebrow">Password reset</span>
+            <h2>Make a new password.</h2>
+            <p>Since Polymath does not use email, this resets accounts saved on this browser.</p>
+          </div>
+
+          <label for="resetName">Username</label>
+          <input id="resetName" autocomplete="username" maxlength="18" placeholder="Your username">
+
+          <label for="resetPassword">New password</label>
+          <input id="resetPassword" type="password" autocomplete="new-password" minlength="4" placeholder="New password">
+
+          <button class="button primary full" type="submit">Reset password</button>
+          <button class="button ghost full" type="button" id="cancelResetPassword">Back to login</button>
         </form>
 
         <form class="auth-form" id="signupForm">

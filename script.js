@@ -52,12 +52,17 @@ const skins = {
 
 const showLogin = document.querySelector("#showLogin");
 const showSignup = document.querySelector("#showSignup");
+const showResetPassword = document.querySelector("#showResetPassword");
+const cancelResetPassword = document.querySelector("#cancelResetPassword");
 const loginForm = document.querySelector("#loginForm");
 const signupForm = document.querySelector("#signupForm");
+const resetPasswordForm = document.querySelector("#resetPasswordForm");
 const loginName = document.querySelector("#loginName");
 const loginPassword = document.querySelector("#loginPassword");
 const signupName = document.querySelector("#signupName");
 const signupPassword = document.querySelector("#signupPassword");
+const resetName = document.querySelector("#resetName");
+const resetPassword = document.querySelector("#resetPassword");
 const guestMode = document.querySelector("#guestMode");
 const authStatus = document.querySelector("#authStatus");
 const logoutButton = document.querySelector("#logoutButton");
@@ -329,11 +334,17 @@ function isAdminUser() {
 
 function setAuthMode(mode) {
   const isSignup = mode === "signup";
-  showLogin.classList.toggle("active", !isSignup);
+  const isReset = mode === "reset";
+  showLogin.classList.toggle("active", !isSignup && !isReset);
   showSignup.classList.toggle("active", isSignup);
-  loginForm.classList.toggle("active", !isSignup);
+  loginForm.classList.toggle("active", !isSignup && !isReset);
   signupForm.classList.toggle("active", isSignup);
-  authStatus.textContent = isSignup ? "Make your Polymath account." : "Log in to keep playing.";
+  resetPasswordForm.classList.toggle("active", isReset);
+  authStatus.textContent = isReset
+    ? "Reset your password for an account on this browser."
+    : isSignup
+      ? "Make your Polymath account."
+      : "Log in to keep playing.";
   authStatus.classList.remove("ready");
 }
 
@@ -1226,6 +1237,12 @@ window.addEventListener("hashchange", () => {
 
 showLogin.addEventListener("click", () => setAuthMode("login"));
 showSignup.addEventListener("click", () => setAuthMode("signup"));
+showResetPassword.addEventListener("click", () => {
+  resetName.value = loginName.value;
+  resetPassword.value = "";
+  setAuthMode("reset");
+});
+cancelResetPassword.addEventListener("click", () => setAuthMode("login"));
 
 loginForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -1266,6 +1283,32 @@ signupForm.addEventListener("submit", (event) => {
   users.push(user);
   saveUsers(users);
   authStatus.textContent = "Account created.";
+  authStatus.classList.add("ready");
+  signInUser(user);
+});
+
+resetPasswordForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = normalizeUsername(resetName.value);
+  const password = resetPassword.value;
+  const users = getUsers();
+  const user = users.find((savedUser) => savedUser.name.toLowerCase() === name.toLowerCase());
+
+  if (!user) {
+    authStatus.textContent = "No account with that username is saved on this browser.";
+    authStatus.classList.remove("ready");
+    return;
+  }
+
+  if (password.length < 4) {
+    authStatus.textContent = "New password needs at least 4 characters.";
+    authStatus.classList.remove("ready");
+    return;
+  }
+
+  user.password = password;
+  saveUsers(users);
+  authStatus.textContent = "Password reset. You are logged in.";
   authStatus.classList.add("ready");
   signInUser(user);
 });
