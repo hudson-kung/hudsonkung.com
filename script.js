@@ -66,6 +66,7 @@ const authStatus = document.querySelector("#authStatus");
 const logoutButton = document.querySelector("#logoutButton");
 const navUserInitial = document.querySelector("#navUserInitial");
 const navUserName = document.querySelector("#navUserName");
+const navCoinBalance = document.querySelector("#navCoinBalance");
 const roomCode = document.querySelector("#roomCode");
 const playerName = document.querySelector("#playerName");
 const previewCode = document.querySelector("#previewCode");
@@ -546,6 +547,9 @@ function renderSettings() {
 }
 
 function renderEconomy() {
+  if (navCoinBalance) {
+    navCoinBalance.textContent = String(accountCoins);
+  }
   if (packCoinBalance) {
     packCoinBalance.textContent = String(accountCoins);
   }

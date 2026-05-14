@@ -193,6 +193,28 @@ body.signed-in .auth-view {
   border-radius: 8px;
 }
 
+.nav-user .nav-user-copy {
+  display: grid;
+  width: auto;
+  height: auto;
+  place-items: start;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background: transparent;
+  border-radius: 0;
+}
+
+.nav-user small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.nav-user small strong {
+  color: var(--ink);
+}
+
 body.guest-session .nav-user {
   color: #7a3d00;
   background: rgba(255, 209, 102, 0.38);
