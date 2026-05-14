@@ -122,6 +122,9 @@ const lobbyModeLabel = document.querySelector("#lobbyModeLabel");
 const hostLobbyStatus = document.querySelector("#hostLobbyStatus");
 const playerCount = document.querySelector("#playerCount");
 const playerGrid = document.querySelector("#playerGrid");
+const hostStatPlayers = document.querySelector("#hostStatPlayers");
+const hostStatFinished = document.querySelector("#hostStatFinished");
+const hostStatTopScore = document.querySelector("#hostStatTopScore");
 const hostLeaderboard = document.querySelector("#hostLeaderboard");
 const hostLogs = document.querySelector("#hostLogs");
 const startGame = document.querySelector("#startGame");
@@ -220,6 +223,7 @@ if (!ownedSkins.includes(selectedPlayerIcon)) {
 let joinedPlayers = [];
 let currentRoomCode = cleanCode(hostCode.textContent);
 let currentPlayerName = "";
+let playerRoomCode = "";
 let roomStream = null;
 let roomPoller = null;
 let gameState = {
@@ -296,7 +300,6 @@ function applyAuthState() {
   navUserInitial.textContent = name.slice(0, 1).toUpperCase();
   logoutButton.title = activeUser.guest ? "Leave guest mode" : "Log out";
   playerName.value = playerName.value || name;
-  currentPlayerName = currentPlayerName || name;
 }
 
 function signInUser(user) {
@@ -318,6 +321,7 @@ function startGuestSession() {
     signedInAt: Date.now()
   };
   currentPlayerName = "";
+  playerRoomCode = "";
   playerName.value = "";
   applyAuthState();
   showView("join", false);
@@ -649,6 +653,9 @@ function setHostGameStarted(started) {
 function renderHostMonitor(room = {}) {
   const scores = room.scores || [];
   const logs = room.logs || [];
+  hostStatPlayers.textContent = String((room.players || []).length);
+  hostStatFinished.textContent = String(scores.length);
+  hostStatTopScore.textContent = String(scores[0]?.score || 0);
 
   if (scores.length === 0) {
     hostLeaderboard.innerHTML = `
@@ -695,6 +702,7 @@ function makePlayerStats(name) {
 function showPlayerLobby(room, name) {
   currentPlayerName = name;
   currentRoomCode = cleanCode(room.code);
+  playerRoomCode = currentRoomCode;
   const stats = makePlayerStats(name);
   waitingName.textContent = name;
   waitingRoom.textContent = room.started
@@ -740,7 +748,7 @@ function applyRoom(room) {
       ? "Waiting for host to start..."
       : "Waiting for players...";
 
-  if (currentPlayerName && cleanCode(room.code) === currentRoomCode) {
+  if (currentPlayerName && playerRoomCode && cleanCode(room.code) === playerRoomCode) {
     waitingRoom.textContent = room.started
       ? "The host started the game. Get ready."
       : "You are in. Hang tight until the host starts the game.";
@@ -1029,6 +1037,7 @@ guestMode.addEventListener("click", startGuestSession);
 logoutButton.addEventListener("click", () => {
   activeUser = null;
   currentPlayerName = "";
+  playerRoomCode = "";
   window.localStorage.removeItem("quizrush-active-user");
   document.body.classList.remove("signed-in", "guest-session");
   window.history.replaceState(null, "", window.location.pathname);
@@ -1286,6 +1295,7 @@ playAgain.addEventListener("click", () => {
 
 resetLobby.addEventListener("click", () => {
   joinedPlayers = [];
+  playerRoomCode = "";
   startGame.textContent = "Start game";
   startGame.disabled = false;
   setHostGameStarted(false);

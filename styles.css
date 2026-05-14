@@ -1319,6 +1319,7 @@ select {
 
 .host-lobby-top,
 .host-lobby-layout,
+.host-game-stats,
 .host-monitor-layout {
   width: min(1180px, 100%);
   margin: 0 auto;
@@ -1389,8 +1390,45 @@ select {
   margin-top: 1rem;
 }
 
+.host-game-stats {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.host-game-stats div {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.host-game-stats span,
+.host-game-stats strong {
+  display: block;
+}
+
+.host-game-stats span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.host-game-stats strong {
+  margin-top: 0.25rem;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+}
+
 .host-lobby-band.game-started .host-lobby-layout {
   display: none;
+}
+
+.host-lobby-band.game-started .host-game-stats {
+  display: grid;
 }
 
 .host-lobby-band.game-started .host-monitor-layout {
@@ -1855,6 +1893,7 @@ select {
   .skin-shop,
   .host-lobby-top,
   .host-lobby-layout,
+  .host-game-stats,
   .host-monitor-layout,
   .game-layout,
   .leaderboard-layout {
