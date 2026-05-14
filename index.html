@@ -401,15 +401,14 @@
           Question set
           <select id="hostSetSelect"></select>
         </label>
-        <label class="host-set-picker" for="hostQuestionTime">
-          Question time
-          <select id="hostQuestionTime">
-            <option value="10">10 seconds</option>
-            <option value="15" selected>15 seconds</option>
-            <option value="20">20 seconds</option>
-            <option value="30">30 seconds</option>
-            <option value="45">45 seconds</option>
-            <option value="60">60 seconds</option>
+        <label class="host-set-picker" for="hostGameTime">
+          Game time
+          <select id="hostGameTime">
+            <option value="60">1 minute</option>
+            <option value="120" selected>2 minutes</option>
+            <option value="180">3 minutes</option>
+            <option value="300">5 minutes</option>
+            <option value="600">10 minutes</option>
           </select>
         </label>
         <button class="button primary" type="button" id="createRoom">Create host lobby</button>

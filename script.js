@@ -114,7 +114,7 @@ const setCount = document.querySelector("#setCount");
 const setQuestionPreview = document.querySelector("#setQuestionPreview");
 const savedSets = document.querySelector("#savedSets");
 const hostSetSelect = document.querySelector("#hostSetSelect");
-const hostQuestionTime = document.querySelector("#hostQuestionTime");
+const hostGameTime = document.querySelector("#hostGameTime");
 const createRoom = document.querySelector("#createRoom");
 const hostLobbyView = document.querySelector("#host-lobby");
 const selectedModeLabel = document.querySelector("#selectedModeLabel");
@@ -228,17 +228,23 @@ let gameState = {
   score: 0,
   streak: 0,
   correct: 0,
+  answered: 0,
   locked: false,
   timer: null,
   seconds: 15,
   questionDuration: 15,
-  questionTime: 15,
+  gameTime: 120,
+  remainingGameTime: 120,
   submitted: false,
   questions: null
 };
 
 function canUseServer() {
   return window.location.protocol === "http:" || window.location.protocol === "https:";
+}
+
+function canUseEventStream() {
+  return ["localhost", "127.0.0.1"].includes(window.location.hostname);
 }
 
 function roomJoinLink(code) {
@@ -498,8 +504,8 @@ function selectedQuestionSet() {
   return index === "" ? null : questionSets[Number(index)];
 }
 
-function selectedHostQuestionTime() {
-  return Math.max(10, Math.min(60, Number(hostQuestionTime.value) || 15));
+function selectedHostGameTime() {
+  return Math.max(60, Math.min(600, Number(hostGameTime.value) || 120));
 }
 
 function choosePackReward(packId) {
@@ -740,7 +746,7 @@ function applyRoom(room) {
       : "You are in. Hang tight until the host starts the game.";
     playerLobbyStatus.textContent = room.started ? "Game started" : "Waiting for host...";
     if (room.started && !document.querySelector("#game").classList.contains("active")) {
-      startQuiz(room.mode, room.questions, room.questionSetTitle, room.questionTime);
+      startQuiz(room.mode, room.questions, room.questionSetTitle, room.gameTime);
     }
   }
 }
@@ -766,19 +772,38 @@ function shuffleAnswers(question) {
   return paired;
 }
 
-function startQuiz(mode = selectedMode, questions = null, title = "", questionTime = 15) {
-  const defaultQuestionTime = Math.max(10, Math.min(60, Number(questionTime) || 15));
+function formatClock(totalSeconds) {
+  const seconds = Math.max(0, Number(totalSeconds) || 0);
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+function endGame(reason = "Game complete") {
+  window.clearInterval(gameState.timer);
+  gameQuestion.textContent = reason;
+  gameProgress.textContent = "Results";
+  gameTimer.textContent = "0";
+  gameAnswers.innerHTML = "";
+  gameFeedback.textContent = `Final score: ${gameState.score}. You got ${gameState.correct} of ${gameState.answered} correct.`;
+  updateGameStats();
+  submitGameScore();
+}
+
+function startQuiz(mode = selectedMode, questions = null, title = "", gameTime = 120) {
+  const totalGameTime = Math.max(60, Math.min(600, Number(gameTime) || 120));
   gameState = {
     mode,
     index: 0,
     score: 0,
     streak: 0,
     correct: 0,
+    answered: 0,
     locked: false,
     timer: null,
-    seconds: defaultQuestionTime,
-    questionDuration: defaultQuestionTime,
-    questionTime: defaultQuestionTime,
+    seconds: 15,
+    questionDuration: 15,
+    gameTime: totalGameTime,
+    remainingGameTime: totalGameTime,
     submitted: false,
     questions: Array.isArray(questions) && questions.length ? questions : null
   };
@@ -792,23 +817,17 @@ function renderQuestion() {
   window.clearInterval(gameState.timer);
   const questions = currentQuestions();
 
-  if (gameState.index >= questions.length) {
-    gameQuestion.textContent = "Game complete";
-    gameProgress.textContent = "Results";
-    gameTimer.textContent = "0";
-    gameAnswers.innerHTML = "";
-    gameFeedback.textContent = `Final score: ${gameState.score}. You got ${gameState.correct} of ${questions.length} correct.`;
-    updateGameStats();
-    submitGameScore();
+  if (gameState.remainingGameTime <= 0) {
+    endGame("Time is up");
     return;
   }
 
-  const question = questions[gameState.index];
+  const question = questions[gameState.index % questions.length];
   gameState.locked = false;
-  gameState.questionDuration = Math.max(5, Math.min(120, Number(gameState.questionTime || question.timeLimit) || 15));
+  gameState.questionDuration = Math.min(15, gameState.remainingGameTime);
   gameState.seconds = gameState.questionDuration;
   gameState.answerMap = shuffleAnswers(question);
-  gameProgress.textContent = `Question ${gameState.index + 1} / ${questions.length}`;
+  gameProgress.textContent = `Question ${gameState.answered + 1} | Game ${formatClock(gameState.remainingGameTime)}`;
   gameQuestion.textContent = question.question;
   gameTimer.textContent = String(gameState.seconds);
   gameFeedback.textContent = "Pick the best answer before time runs out.";
@@ -821,7 +840,13 @@ function renderQuestion() {
   updateGameStats();
   gameState.timer = window.setInterval(() => {
     gameState.seconds -= 1;
+    gameState.remainingGameTime -= 1;
     gameTimer.textContent = String(gameState.seconds);
+    gameProgress.textContent = `Question ${gameState.answered + 1} | Game ${formatClock(gameState.remainingGameTime)}`;
+    if (gameState.remainingGameTime <= 0) {
+      answerQuestion(-1);
+      return;
+    }
     if (gameState.seconds <= 0) {
       answerQuestion(-1);
     }
@@ -833,7 +858,8 @@ function answerQuestion(answerIndex) {
   gameState.locked = true;
   window.clearInterval(gameState.timer);
 
-  const question = currentQuestions()[gameState.index];
+  const questions = currentQuestions();
+  const question = questions[gameState.index % questions.length];
   const answerMap = gameState.answerMap || shuffleAnswers(question);
   const isCorrect = answerIndex >= 0 && answerMap[answerIndex]?.wasCorrect;
   const buttons = gameAnswers.querySelectorAll("button");
@@ -859,8 +885,13 @@ function answerQuestion(answerIndex) {
       : `Not quite. Correct: ${answerMap.filter((item) => item.wasCorrect).map((item) => item.answer).join(", ")}.`;
   }
 
+  gameState.answered += 1;
   updateGameStats();
   window.setTimeout(() => {
+    if (gameState.remainingGameTime <= 0) {
+      endGame("Time is up");
+      return;
+    }
     gameState.index += 1;
     renderQuestion();
   }, 1300);
@@ -884,7 +915,7 @@ async function submitGameScore() {
         name: currentPlayerName,
         score: gameState.score,
         correct: gameState.correct,
-        total: currentQuestions().length
+        total: gameState.answered
       })
     });
   } catch {
@@ -917,7 +948,7 @@ function watchRoom(code) {
   refreshRoom(code);
   roomPoller = window.setInterval(() => refreshRoom(code), 1000);
 
-  if (!window.EventSource) return;
+  if (!window.EventSource || !canUseEventStream()) return;
 
   roomStream = new EventSource(`/api/rooms/${code}/events`);
   roomStream.onmessage = (event) => applyRoom(JSON.parse(event.data));
@@ -1032,10 +1063,7 @@ joinForm.addEventListener("submit", async (event) => {
       });
 
       if (!response.ok) {
-        joinStatus.textContent = "No hosted room found for that code.";
-        joinStatus.classList.remove("ready");
-        showToast("That room code is not active.");
-        return;
+        throw new Error("Room not found");
       }
 
       const room = await response.json();
@@ -1047,16 +1075,16 @@ joinForm.addEventListener("submit", async (event) => {
       showToast("You are in the lobby.");
       return;
     } catch {
-      showToast("Could not reach the lobby server.");
-      return;
+      showToast("Checking this browser for a local room...");
     }
   }
 
-  if (!currentRoomCode || digits === currentRoomCode) {
+  const localRoomCode = currentRoomCode || window.localStorage.getItem("quizrush-active-room") || "";
+  if (localRoomCode && digits === cleanCode(localRoomCode)) {
     addPlayer(name);
     joinStatus.textContent = `${name} joined room ${formatCode(digits)}. Waiting for host...`;
     joinStatus.classList.add("ready");
-    showPlayerLobby({ code: digits, mode: selectedMode, started: false }, name);
+    showPlayerLobby({ code: digits, mode: selectedMode, started: false, gameTime: selectedHostGameTime() }, name);
     showToast("You are in the lobby.");
     return;
   }
@@ -1191,8 +1219,8 @@ document.querySelectorAll(".mode-card").forEach((card) => {
 
 createRoom.addEventListener("click", async () => {
   const set = selectedQuestionSet();
-  const questionTime = selectedHostQuestionTime();
-  window.localStorage.setItem("quizrush-host-question-time", String(questionTime));
+  const gameTime = selectedHostGameTime();
+  window.localStorage.setItem("quizrush-host-game-time", String(gameTime));
   if (canUseServer()) {
     try {
       const response = await fetch("/api/rooms", {
@@ -1201,10 +1229,11 @@ createRoom.addEventListener("click", async () => {
         body: JSON.stringify({
           mode: selectedMode,
           questionSetTitle: set?.title || `Built-in ${modeNames[selectedMode]}`,
-          questionTime,
+          gameTime,
           questions: set?.questions || []
         })
       });
+      if (!response.ok) throw new Error("Room API unavailable");
       const room = await response.json();
       applyRoom(room);
       watchRoom(room.code);
@@ -1252,7 +1281,7 @@ startGame.addEventListener("click", async () => {
 });
 
 playAgain.addEventListener("click", () => {
-  startQuiz(gameState.mode, gameState.questions, gameModeLabel.textContent, gameState.questionTime);
+  startQuiz(gameState.mode, gameState.questions, gameModeLabel.textContent, gameState.gameTime);
 });
 
 resetLobby.addEventListener("click", () => {
@@ -1283,7 +1312,7 @@ selectSkin(window.localStorage.getItem("quizrush-skin") || ownedSkins[0], false)
 selectPlayerIcon(selectedPlayerIcon, false);
 updateJoinState();
 renderPlayers();
-hostQuestionTime.value = window.localStorage.getItem("quizrush-host-question-time") || "15";
+hostGameTime.value = window.localStorage.getItem("quizrush-host-game-time") || "120";
 applyAuthState();
 setAuthMode("login");
 if (activeUser) {
