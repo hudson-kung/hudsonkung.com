@@ -1862,6 +1862,13 @@ select {
   border-radius: 8px;
 }
 
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
 .admin-account-row strong,
 .admin-account-row span {
   display: block;

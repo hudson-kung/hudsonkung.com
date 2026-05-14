@@ -357,6 +357,10 @@ function canOpenView(viewId) {
   return !activeUser?.guest || guestViews.includes(viewId);
 }
 
+function makeTemporaryPassword() {
+  return `Poly-${Math.floor(100000 + Math.random() * 900000)}`;
+}
+
 function renderAdminPanel() {
   if (!adminAccountList || !adminAccountCount) return;
 
@@ -373,7 +377,10 @@ function renderAdminPanel() {
               <strong>${safeName}</strong>
               <span>Created: ${escapeHtml(created)} | Password: ${user.password ? "set" : "missing"}</span>
             </div>
-            <button class="button ghost" type="button" data-delete-account="${index}" ${isCurrent ? "disabled" : ""}>Delete</button>
+            <div class="admin-actions">
+              <button class="button ghost" type="button" data-reset-account="${index}">Reset password</button>
+              <button class="button ghost" type="button" data-delete-account="${index}" ${isCurrent ? "disabled" : ""}>Delete</button>
+            </div>
           </div>
         `;
       }).join("")
@@ -1181,10 +1188,22 @@ logoutButton.addEventListener("click", () => {
 });
 
 adminAccountList.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-delete-account]");
-  if (!button || !isAdminUser()) return;
+  const deleteButton = event.target.closest("[data-delete-account]");
+  const resetButton = event.target.closest("[data-reset-account]");
+  if ((!deleteButton && !resetButton) || !isAdminUser()) return;
 
-  const accountIndex = Number(button.dataset.deleteAccount);
+  if (resetButton) {
+    const accountIndex = Number(resetButton.dataset.resetAccount);
+    const users = getUsers();
+    const newPassword = makeTemporaryPassword();
+    users[accountIndex].password = newPassword;
+    saveUsers(users);
+    renderAdminPanel();
+    showToast(`Temporary password: ${newPassword}`);
+    return;
+  }
+
+  const accountIndex = Number(deleteButton.dataset.deleteAccount);
   const users = getUsers();
   const accountName = users[accountIndex]?.name || "Account";
   users.splice(accountIndex, 1);
