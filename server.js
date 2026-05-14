@@ -54,6 +54,7 @@ function publicRoom(room) {
     code: room.code,
     mode: room.mode,
     questionSetTitle: room.questionSetTitle,
+    questionTime: room.questionTime,
     questions: room.questions,
     started: room.started,
     players: room.players,
@@ -153,10 +154,12 @@ const server = http.createServer(async (request, response) => {
       const body = await readJson(request);
       const code = generateCode();
       const questions = sanitizeQuestions(body.questions);
+      const questionTime = Math.max(10, Math.min(60, Number(body.questionTime) || 15));
       const room = {
         code,
         mode: String(body.mode || "classic"),
         questionSetTitle: String(body.questionSetTitle || "Built-in questions").slice(0, 48),
+        questionTime,
         questions,
         started: false,
         players: [],

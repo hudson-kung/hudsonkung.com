@@ -113,6 +113,7 @@ const setCount = document.querySelector("#setCount");
 const setQuestionPreview = document.querySelector("#setQuestionPreview");
 const savedSets = document.querySelector("#savedSets");
 const hostSetSelect = document.querySelector("#hostSetSelect");
+const hostQuestionTime = document.querySelector("#hostQuestionTime");
 const createRoom = document.querySelector("#createRoom");
 const hostLobbyView = document.querySelector("#host-lobby");
 const selectedModeLabel = document.querySelector("#selectedModeLabel");
@@ -228,6 +229,8 @@ let gameState = {
   locked: false,
   timer: null,
   seconds: 15,
+  questionDuration: 15,
+  questionTime: 15,
   submitted: false,
   questions: null
 };
@@ -473,6 +476,10 @@ function selectedQuestionSet() {
   return index === "" ? null : questionSets[Number(index)];
 }
 
+function selectedHostQuestionTime() {
+  return Math.max(10, Math.min(60, Number(hostQuestionTime.value) || 15));
+}
+
 function choosePackReward(packId) {
   const pool = packPools[packId];
   const weighted = pool.map((entry) => ({
@@ -711,7 +718,7 @@ function applyRoom(room) {
       : "You are in. Hang tight until the host starts the game.";
     playerLobbyStatus.textContent = room.started ? "Game started" : "Waiting for host...";
     if (room.started && !document.querySelector("#game").classList.contains("active")) {
-      startQuiz(room.mode, room.questions, room.questionSetTitle);
+      startQuiz(room.mode, room.questions, room.questionSetTitle, room.questionTime);
     }
   }
 }
@@ -737,7 +744,8 @@ function shuffleAnswers(question) {
   return paired;
 }
 
-function startQuiz(mode = selectedMode, questions = null, title = "") {
+function startQuiz(mode = selectedMode, questions = null, title = "", questionTime = 15) {
+  const defaultQuestionTime = Math.max(10, Math.min(60, Number(questionTime) || 15));
   gameState = {
     mode,
     index: 0,
@@ -746,7 +754,9 @@ function startQuiz(mode = selectedMode, questions = null, title = "") {
     correct: 0,
     locked: false,
     timer: null,
-    seconds: mode === "speed" ? 10 : 15,
+    seconds: defaultQuestionTime,
+    questionDuration: defaultQuestionTime,
+    questionTime: defaultQuestionTime,
     submitted: false,
     questions: Array.isArray(questions) && questions.length ? questions : null
   };
@@ -773,7 +783,8 @@ function renderQuestion() {
 
   const question = questions[gameState.index];
   gameState.locked = false;
-  gameState.seconds = question.timeLimit || (gameState.mode === "speed" ? 10 : 15);
+  gameState.questionDuration = Math.max(5, Math.min(120, Number(gameState.questionTime || question.timeLimit) || 15));
+  gameState.seconds = gameState.questionDuration;
   gameState.answerMap = shuffleAnswers(question);
   gameProgress.textContent = `Question ${gameState.index + 1} / ${questions.length}`;
   gameQuestion.textContent = question.question;
@@ -813,8 +824,12 @@ function answerQuestion(answerIndex) {
   if (isCorrect) {
     gameState.streak += 1;
     gameState.correct += 1;
-    gameState.score += 500 + (gameState.streak * 100) + (gameState.seconds * 10);
-    gameFeedback.textContent = `Correct. Streak x${gameState.streak}.`;
+    const speedRatio = gameState.questionDuration ? gameState.seconds / gameState.questionDuration : 0;
+    const speedPoints = Math.round(500 * speedRatio);
+    const streakBonus = Math.min(gameState.streak * 50, 250);
+    const earnedPoints = 500 + speedPoints + streakBonus;
+    gameState.score += earnedPoints;
+    gameFeedback.textContent = `Correct. +${earnedPoints} points. Streak x${gameState.streak}.`;
   } else {
     gameState.streak = 0;
     gameFeedback.textContent = answerIndex === -1
@@ -1147,6 +1162,8 @@ document.querySelectorAll(".mode-card").forEach((card) => {
 
 createRoom.addEventListener("click", async () => {
   const set = selectedQuestionSet();
+  const questionTime = selectedHostQuestionTime();
+  window.localStorage.setItem("quizrush-host-question-time", String(questionTime));
   if (canUseServer()) {
     try {
       const response = await fetch("/api/rooms", {
@@ -1155,6 +1172,7 @@ createRoom.addEventListener("click", async () => {
         body: JSON.stringify({
           mode: selectedMode,
           questionSetTitle: set?.title || `Built-in ${modeNames[selectedMode]}`,
+          questionTime,
           questions: set?.questions || []
         })
       });
@@ -1205,7 +1223,7 @@ startGame.addEventListener("click", async () => {
 });
 
 playAgain.addEventListener("click", () => {
-  startQuiz(gameState.mode);
+  startQuiz(gameState.mode, gameState.questions, gameModeLabel.textContent, gameState.questionTime);
 });
 
 resetLobby.addEventListener("click", () => {
@@ -1236,6 +1254,7 @@ selectSkin(window.localStorage.getItem("quizrush-skin") || ownedSkins[0], false)
 selectPlayerIcon(selectedPlayerIcon, false);
 updateJoinState();
 renderPlayers();
+hostQuestionTime.value = window.localStorage.getItem("quizrush-host-question-time") || "15";
 applyAuthState();
 setAuthMode("login");
 if (activeUser) {
