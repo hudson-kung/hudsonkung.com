@@ -106,6 +106,7 @@ const questionRandomOrder = document.querySelector("#questionRandomOrder");
 const questionType = document.querySelector("#questionType");
 const setsView = document.querySelector("#sets");
 const createSetToggle = document.querySelector("#createSetToggle");
+const closeSetCreator = document.querySelector("#closeSetCreator");
 const addQuestion = document.querySelector("#addQuestion");
 const setStatus = document.querySelector("#setStatus");
 const setCount = document.querySelector("#setCount");
@@ -603,7 +604,7 @@ function renderPlayers() {
 
 function setSetCreatorOpen(open) {
   setsView.classList.toggle("creating", Boolean(open));
-  createSetToggle.textContent = open ? "Back to sets" : "Create set";
+  createSetToggle.textContent = "Create set";
 }
 
 function setHostGameStarted(started) {
@@ -1079,7 +1080,11 @@ setForm.addEventListener("submit", (event) => {
 });
 
 createSetToggle.addEventListener("click", () => {
-  setSetCreatorOpen(!setsView.classList.contains("creating"));
+  setSetCreatorOpen(true);
+});
+
+closeSetCreator.addEventListener("click", () => {
+  setSetCreatorOpen(false);
 });
 
 openPack.addEventListener("click", () => {
