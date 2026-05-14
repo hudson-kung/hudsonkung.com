@@ -65,6 +65,7 @@
         <a href="#sets" data-view-link="sets">Sets</a>
         <a href="#host" data-view-link="host">Host</a>
         <a href="#leaderboard" data-view-link="leaderboard">Leaderboard</a>
+        <a href="#admin" data-view-link="admin" class="admin-link">Admin</a>
         <button class="nav-user" type="button" id="logoutButton" title="Log out">
           <span id="navUserInitial">?</span>
           <strong id="navUserName">Player</strong>
@@ -565,6 +566,25 @@
           <h3>Unlock neon trails by winning 3 more games.</h3>
           <div class="progress-track"><span></span></div>
           <button class="button primary" type="button" data-view-link="join">Play next match</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin" class="admin-band app-view">
+      <div class="section-heading">
+        <span class="eyebrow">Admin panel</span>
+        <h2>Account controls</h2>
+      </div>
+      <div class="admin-layout">
+        <div class="admin-card">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">Local accounts</span>
+              <h2 id="adminAccountCount">0 accounts</h2>
+            </div>
+          </div>
+          <p class="hint">Passwords are protected from being displayed. You can remove accounts from this browser.</p>
+          <div class="admin-account-list" id="adminAccountList"></div>
         </div>
       </div>
     </section>

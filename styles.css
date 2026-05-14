@@ -165,6 +165,14 @@ body.guest-session .nav-user strong::after {
   content: " mode";
 }
 
+.admin-link {
+  display: none;
+}
+
+body.admin-session .admin-link {
+  display: flex;
+}
+
 .topbar {
   position: fixed;
   top: 0;
@@ -1817,6 +1825,54 @@ select {
   background: rgba(255, 255, 255, 0.46);
 }
 
+.admin-band {
+  background:
+    linear-gradient(135deg, rgba(22, 32, 51, 0.9), rgba(116, 103, 240, 0.72)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 22px);
+}
+
+.admin-layout {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.admin-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.admin-account-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.admin-account-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.85rem;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.admin-account-row strong,
+.admin-account-row span {
+  display: block;
+}
+
+.admin-account-row span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
 .leaderboard-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
@@ -2017,6 +2073,7 @@ select {
   .skin-grid,
   .host-grid,
   .player-grid,
+  .admin-account-row,
   .score-row,
   .rank-row {
     grid-template-columns: 1fr;

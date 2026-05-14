@@ -146,10 +146,12 @@ const towerWave = document.querySelector("#towerWave");
 const towerEnemy = document.querySelector("#towerEnemy");
 const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
+const adminAccountCount = document.querySelector("#adminAccountCount");
+const adminAccountList = document.querySelector("#adminAccountList");
 const playAgain = document.querySelector("#playAgain");
 const viewLinks = document.querySelectorAll("[data-view-link]");
 const views = document.querySelectorAll(".app-view");
-const validViews = ["home", "join", "player-lobby", "skins", "packs", "sets", "host", "host-lobby", "game", "leaderboard"];
+const validViews = ["home", "join", "player-lobby", "skins", "packs", "sets", "host", "host-lobby", "game", "leaderboard", "admin"];
 const guestViews = ["home", "join", "player-lobby", "game", "leaderboard"];
 const modeNames = {
   classic: "Classic",
@@ -295,6 +297,10 @@ function saveUsers(users) {
   window.localStorage.setItem("quizrush-users", JSON.stringify(users));
 }
 
+function isAdminUser() {
+  return activeUser?.name?.trim().toLowerCase() === "hudson kung" && !activeUser.guest;
+}
+
 function setAuthMode(mode) {
   const isSignup = mode === "signup";
   showLogin.classList.toggle("active", !isSignup);
@@ -308,6 +314,7 @@ function setAuthMode(mode) {
 function applyAuthState() {
   document.body.classList.toggle("signed-in", Boolean(activeUser));
   document.body.classList.toggle("guest-session", activeUser?.guest === true);
+  document.body.classList.toggle("admin-session", isAdminUser());
 
   if (!activeUser) return;
 
@@ -316,6 +323,7 @@ function applyAuthState() {
   navUserInitial.textContent = name.slice(0, 1).toUpperCase();
   logoutButton.title = activeUser.guest ? "Leave guest mode" : "Log out";
   playerName.value = playerName.value || name;
+  renderAdminPanel();
 }
 
 function signInUser(user) {
@@ -345,7 +353,31 @@ function startGuestSession() {
 }
 
 function canOpenView(viewId) {
+  if (viewId === "admin") return isAdminUser();
   return !activeUser?.guest || guestViews.includes(viewId);
+}
+
+function renderAdminPanel() {
+  if (!adminAccountList || !adminAccountCount) return;
+
+  const users = getUsers();
+  adminAccountCount.textContent = `${users.length} account${users.length === 1 ? "" : "s"}`;
+  adminAccountList.innerHTML = users.length
+    ? users.map((user, index) => {
+        const safeName = escapeHtml(user.name || "Unnamed");
+        const created = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Unknown";
+        const isCurrent = activeUser?.name?.toLowerCase() === String(user.name || "").toLowerCase();
+        return `
+          <div class="admin-account-row">
+            <div>
+              <strong>${safeName}</strong>
+              <span>Created: ${escapeHtml(created)} | Password: ${user.password ? "set" : "missing"}</span>
+            </div>
+            <button class="button ghost" type="button" data-delete-account="${index}" ${isCurrent ? "disabled" : ""}>Delete</button>
+          </div>
+        `;
+      }).join("")
+    : `<div class="empty-lobby"><strong>No accounts yet</strong><span>Created accounts on this browser will appear here.</span></div>`;
 }
 
 function normalizeUsername(value) {
@@ -604,6 +636,10 @@ function showView(viewId, updateHash = true) {
 
   if (updateHash) {
     window.history.replaceState(null, "", `#${nextView}`);
+  }
+
+  if (nextView === "admin") {
+    renderAdminPanel();
   }
 
   if (nextView === "host-lobby" && currentRoomCode) {
@@ -1073,7 +1109,7 @@ viewLinks.forEach((link) => {
       return;
     }
     if (!canOpenView(link.dataset.viewLink)) {
-      showToast("Sign in to use skins, packs, sets, or hosting.");
+      showToast(link.dataset.viewLink === "admin" ? "Hudson Kung admin only." : "Sign in to use skins, packs, sets, or hosting.");
       return;
     }
     showView(link.dataset.viewLink);
@@ -1139,9 +1175,22 @@ logoutButton.addEventListener("click", () => {
   currentPlayerName = "";
   playerRoomCode = "";
   window.localStorage.removeItem("quizrush-active-user");
-  document.body.classList.remove("signed-in", "guest-session");
+  document.body.classList.remove("signed-in", "guest-session", "admin-session");
   window.history.replaceState(null, "", window.location.pathname);
   setAuthMode("login");
+});
+
+adminAccountList.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-delete-account]");
+  if (!button || !isAdminUser()) return;
+
+  const accountIndex = Number(button.dataset.deleteAccount);
+  const users = getUsers();
+  const accountName = users[accountIndex]?.name || "Account";
+  users.splice(accountIndex, 1);
+  saveUsers(users);
+  renderAdminPanel();
+  showToast(`${accountName} removed.`);
 });
 
 roomCode.addEventListener("input", updateJoinState);
