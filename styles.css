@@ -31,7 +31,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -1897,6 +1898,8 @@ select {
 }
 
 .admin-layout {
+  display: grid;
+  gap: 1rem;
   width: min(1180px, 100%);
   margin: 0 auto;
 }
@@ -1943,6 +1946,16 @@ select {
   color: var(--muted);
   font-size: 0.85rem;
   font-weight: 800;
+}
+
+textarea {
+  min-height: 7rem;
+  padding: 0.8rem;
+  color: var(--ink);
+  resize: vertical;
+  background: #f7fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .leaderboard-layout {
@@ -2058,6 +2071,26 @@ select {
   transform: translateY(0);
 }
 
+.global-message {
+  position: fixed;
+  left: calc(17rem + 1rem);
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 19;
+  display: none;
+  padding: 0.9rem 1rem;
+  color: #162033;
+  font-weight: 900;
+  background: #ffd166;
+  border: 2px solid white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.global-message.show {
+  display: block;
+}
+
 @media (max-width: 880px) {
   body.signed-in .shell {
     padding-left: 0;
@@ -2072,6 +2105,10 @@ select {
     padding: 0.75rem;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+  }
+
+  .global-message {
+    left: 1rem;
   }
 
   .brand {

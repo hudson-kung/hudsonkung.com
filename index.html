@@ -580,11 +580,27 @@
         <div class="admin-card">
           <div class="panel-header">
             <div>
+              <span class="eyebrow">Global message</span>
+              <h2>Broadcast</h2>
+            </div>
+          </div>
+          <label for="globalMessageInput">Message</label>
+          <textarea id="globalMessageInput" maxlength="160" placeholder="Type a site-wide message..."></textarea>
+          <div class="admin-actions">
+            <button class="button primary" type="button" id="sendGlobalMessage">Send message</button>
+            <button class="button ghost" type="button" id="clearGlobalMessage">Clear</button>
+          </div>
+          <p class="hint" id="globalMessagePreview">No global message is active.</p>
+        </div>
+
+        <div class="admin-card">
+          <div class="panel-header">
+            <div>
               <span class="eyebrow">Local accounts</span>
               <h2 id="adminAccountCount">0 accounts</h2>
             </div>
           </div>
-          <p class="hint">Passwords are protected from being displayed. You can reset or remove accounts from this browser.</p>
+          <p class="hint">You can remove accounts from this browser.</p>
           <div class="admin-account-list" id="adminAccountList"></div>
         </div>
       </div>
@@ -617,6 +633,7 @@
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="global-message" id="globalMessage" role="status" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
 </html>

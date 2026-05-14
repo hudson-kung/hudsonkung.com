@@ -1,4 +1,5 @@
 const globalStore = globalThis.__polymathRooms || {
+  globalMessage: "",
   rooms: new Map()
 };
 
@@ -71,5 +72,6 @@ module.exports = {
   getBody,
   publicRoom,
   rooms: globalStore.rooms,
-  sanitizeQuestions
+  sanitizeQuestions,
+  store: globalStore
 };

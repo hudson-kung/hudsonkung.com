@@ -148,6 +148,11 @@ const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
 const adminAccountCount = document.querySelector("#adminAccountCount");
 const adminAccountList = document.querySelector("#adminAccountList");
+const globalMessageInput = document.querySelector("#globalMessageInput");
+const sendGlobalMessage = document.querySelector("#sendGlobalMessage");
+const clearGlobalMessage = document.querySelector("#clearGlobalMessage");
+const globalMessagePreview = document.querySelector("#globalMessagePreview");
+const globalMessage = document.querySelector("#globalMessage");
 const settingsAvatar = document.querySelector("#settingsAvatar");
 const settingsRole = document.querySelector("#settingsRole");
 const settingsName = document.querySelector("#settingsName");
@@ -234,6 +239,7 @@ const quizQuestions = {
 };
 
 let toastTimeout;
+let globalMessagePoller;
 let selectedMode = "classic";
 let selectedPack = "starter";
 let packOpening = false;
@@ -366,10 +372,6 @@ function canOpenView(viewId) {
   return !activeUser?.guest || guestViews.includes(viewId);
 }
 
-function makeTemporaryPassword() {
-  return `Poly-${Math.floor(100000 + Math.random() * 900000)}`;
-}
-
 function renderAdminPanel() {
   if (!adminAccountList || !adminAccountCount) return;
 
@@ -384,16 +386,40 @@ function renderAdminPanel() {
           <div class="admin-account-row">
             <div>
               <strong>${safeName}</strong>
-              <span>Created: ${escapeHtml(created)} | Password: ${user.password ? "set" : "missing"}</span>
+              <span>Created: ${escapeHtml(created)}</span>
             </div>
             <div class="admin-actions">
-              <button class="button ghost" type="button" data-reset-account="${index}">Reset password</button>
               <button class="button ghost" type="button" data-delete-account="${index}" ${isCurrent ? "disabled" : ""}>Delete</button>
             </div>
           </div>
         `;
       }).join("")
     : `<div class="empty-lobby"><strong>No accounts yet</strong><span>Created accounts on this browser will appear here.</span></div>`;
+}
+
+function renderGlobalMessage(message = window.localStorage.getItem("polymath-global-message") || "") {
+  globalMessage.classList.toggle("show", Boolean(message));
+  globalMessage.textContent = message;
+  if (globalMessagePreview) {
+    globalMessagePreview.textContent = message ? `Active message: ${message}` : "No global message is active.";
+  }
+}
+
+async function refreshGlobalMessage() {
+  if (!canUseServer()) {
+    renderGlobalMessage();
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/global-message", { cache: "no-store" });
+    if (!response.ok) throw new Error("Global message unavailable");
+    const data = await response.json();
+    window.localStorage.setItem("polymath-global-message", data.message || "");
+    renderGlobalMessage(data.message || "");
+  } catch {
+    renderGlobalMessage();
+  }
 }
 
 function renderSettings() {
@@ -672,6 +698,7 @@ function showView(viewId, updateHash = true) {
 
   if (nextView === "admin") {
     renderAdminPanel();
+    renderGlobalMessage();
   }
 
   if (nextView === "settings") {
@@ -1218,19 +1245,7 @@ logoutButton.addEventListener("click", () => {
 
 adminAccountList.addEventListener("click", (event) => {
   const deleteButton = event.target.closest("[data-delete-account]");
-  const resetButton = event.target.closest("[data-reset-account]");
-  if ((!deleteButton && !resetButton) || !isAdminUser()) return;
-
-  if (resetButton) {
-    const accountIndex = Number(resetButton.dataset.resetAccount);
-    const users = getUsers();
-    const newPassword = makeTemporaryPassword();
-    users[accountIndex].password = newPassword;
-    saveUsers(users);
-    renderAdminPanel();
-    showToast(`Temporary password: ${newPassword}`);
-    return;
-  }
+  if (!deleteButton || !isAdminUser()) return;
 
   const accountIndex = Number(deleteButton.dataset.deleteAccount);
   const users = getUsers();
@@ -1239,6 +1254,37 @@ adminAccountList.addEventListener("click", (event) => {
   saveUsers(users);
   renderAdminPanel();
   showToast(`${accountName} removed.`);
+});
+
+sendGlobalMessage.addEventListener("click", () => {
+  if (!isAdminUser()) return;
+  const message = globalMessageInput.value.trim().slice(0, 160);
+  if (!message) {
+    showToast("Type a message first.");
+    return;
+  }
+
+  window.localStorage.setItem("polymath-global-message", message);
+  globalMessageInput.value = "";
+  renderGlobalMessage();
+  if (canUseServer()) {
+    fetch("/api/global-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    }).catch(() => showToast("Saved locally, but server broadcast failed."));
+  }
+  showToast("Global message sent.");
+});
+
+clearGlobalMessage.addEventListener("click", () => {
+  if (!isAdminUser()) return;
+  window.localStorage.removeItem("polymath-global-message");
+  renderGlobalMessage();
+  if (canUseServer()) {
+    fetch("/api/global-message", { method: "DELETE" }).catch(() => showToast("Cleared locally, but server clear failed."));
+  }
+  showToast("Global message cleared.");
 });
 
 settingsLogout.addEventListener("click", () => {
@@ -1528,6 +1574,8 @@ selectPlayerIcon(selectedPlayerIcon, false);
 updateJoinState();
 renderPlayers();
 hostGameTime.value = window.localStorage.getItem("quizrush-host-game-time") || "120";
+refreshGlobalMessage();
+globalMessagePoller = window.setInterval(refreshGlobalMessage, 5000);
 applyAuthState();
 setAuthMode("login");
 if (activeUser) {

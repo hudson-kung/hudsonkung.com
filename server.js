@@ -5,6 +5,7 @@ const path = require("path");
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
 const rooms = new Map();
+let globalMessage = "";
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -174,6 +175,30 @@ const server = http.createServer(async (request, response) => {
       sendJson(response, 400, { error: "Invalid room request" });
     }
     return;
+  }
+
+  if (url.pathname === "/api/global-message") {
+    if (request.method === "GET") {
+      sendJson(response, 200, { message: globalMessage });
+      return;
+    }
+
+    if (request.method === "POST") {
+      try {
+        const body = await readJson(request);
+        globalMessage = String(body.message || "").trim().slice(0, 160);
+        sendJson(response, 200, { message: globalMessage });
+      } catch {
+        sendJson(response, 400, { error: "Invalid message request" });
+      }
+      return;
+    }
+
+    if (request.method === "DELETE") {
+      globalMessage = "";
+      sendJson(response, 200, { message: "" });
+      return;
+    }
   }
 
   if (request.method === "POST" && /^\/api\/rooms\/\d{6}\/join$/.test(url.pathname)) {
