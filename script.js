@@ -449,7 +449,7 @@ function renderSettings() {
   settingsSkins.textContent = String(ownedSkins.length);
   settingsMode.textContent = isGuest ? "Guest" : "Account";
   settingsAdmin.textContent = isAdminUser() ? "Yes" : "No";
-  settingsPasswordStatus.textContent = isGuest ? "None" : "Protected";
+  settingsPasswordStatus.textContent = isGuest ? "None" : "Hidden";
   settingsPasswordForm.classList.toggle("disabled", isGuest);
   settingsPasswordForm.querySelectorAll("input, button").forEach((element) => {
     element.disabled = isGuest;
