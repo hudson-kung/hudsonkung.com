@@ -100,6 +100,7 @@ const packRewardRarity = document.querySelector("#packRewardRarity");
 const packRewardName = document.querySelector("#packRewardName");
 const packRewardText = document.querySelector("#packRewardText");
 const openPack = document.querySelector("#openPack");
+const packCoinBalance = document.querySelector("#packCoinBalance");
 const setForm = document.querySelector("#setForm");
 const setTitle = document.querySelector("#setTitle");
 const setQuestion = document.querySelector("#setQuestion");
@@ -199,26 +200,38 @@ const packNames = {
   mystic: "Rare Pack",
   legend: "Legendary Pack"
 };
+const packCosts = {
+  starter: 50,
+  mystic: 150,
+  legend: 400
+};
 const packPools = {
   starter: [
-    { skin: "blaze", odds: 2 },
-    { skin: "candy", odds: 4 },
-    { skin: "mint", odds: 8 },
-    { skin: "frost", odds: 18 },
-    { skin: "glitch", odds: 45 }
+    { skin: "candy", odds: 3 },
+    { skin: "blaze", odds: 14 },
+    { skin: "frost", odds: 20 },
+    { skin: "mint", odds: 65 },
+    { skin: "glitch", odds: 80 },
+    { skin: "shadow", odds: 220 },
+    { skin: "solar", odds: 350 }
   ],
   mystic: [
-    { skin: "candy", odds: 3 },
-    { skin: "mint", odds: 6 },
-    { skin: "frost", odds: 14 },
-    { skin: "glitch", odds: 35 },
-    { skin: "shadow", odds: 100 }
+    { skin: "candy", odds: 5 },
+    { skin: "blaze", odds: 10 },
+    { skin: "frost", odds: 12 },
+    { skin: "mint", odds: 25 },
+    { skin: "glitch", odds: 30 },
+    { skin: "shadow", odds: 100 },
+    { skin: "solar", odds: 150 }
   ],
   legend: [
+    { skin: "candy", odds: 8 },
+    { skin: "blaze", odds: 8 },
     { skin: "frost", odds: 8 },
-    { skin: "glitch", odds: 25 },
-    { skin: "shadow", odds: 85 },
-    { skin: "solar", odds: 250 }
+    { skin: "mint", odds: 12 },
+    { skin: "glitch", odds: 14 },
+    { skin: "shadow", odds: 40 },
+    { skin: "solar", odds: 50 }
   ]
 };
 const quizQuestions = {
@@ -271,6 +284,7 @@ let questionSets = JSON.parse(window.localStorage.getItem("quizrush-question-set
 let selectedPlayerIcon = window.localStorage.getItem("quizrush-player-icon") || "blaze";
 let ownedSkins = JSON.parse(window.localStorage.getItem("quizrush-owned-skins") || "[\"blaze\"]");
 let accountCoins = Number(window.localStorage.getItem("polymath-coins") || "0");
+if (!Number.isFinite(accountCoins)) accountCoins = 0;
 if (!ownedSkins.includes(selectedPlayerIcon)) {
   selectedPlayerIcon = ownedSkins[0] || "blaze";
 }
@@ -346,6 +360,7 @@ function findUserIndex(users, name) {
 function saveActiveUserRewards() {
   window.localStorage.setItem("quizrush-owned-skins", JSON.stringify(ownedSkins));
   window.localStorage.setItem("polymath-coins", String(accountCoins));
+  renderEconomy();
 
   if (!activeUser || activeUser.guest) return;
   const users = getUsers();
@@ -354,6 +369,7 @@ function saveActiveUserRewards() {
   users[userIndex].ownedSkins = cleanOwnedSkins(ownedSkins);
   users[userIndex].coins = accountCoins;
   saveUsers(users);
+  if (isAdminUser()) renderAdminPanel();
 }
 
 function loadAccountRewards(user) {
@@ -529,6 +545,20 @@ function renderSettings() {
   });
 }
 
+function renderEconomy() {
+  if (packCoinBalance) {
+    packCoinBalance.textContent = String(accountCoins);
+  }
+  if (settingsCoins) {
+    settingsCoins.textContent = String(accountCoins);
+  }
+  if (openPack) {
+    const cost = packCosts[selectedPack] || 0;
+    openPack.textContent = `Open pack - ${cost} coins`;
+    openPack.disabled = packOpening || accountCoins < cost;
+  }
+}
+
 function applyUiSettings() {
   document.body.classList.toggle("compact-ui", Boolean(uiSettings.compact));
   document.body.classList.toggle("reduced-motion", Boolean(uiSettings.reduceMotion));
@@ -613,6 +643,12 @@ function selectPlayerIcon(iconId, notify = true) {
 
 function saveOwnedSkins() {
   window.localStorage.setItem("quizrush-owned-skins", JSON.stringify(ownedSkins));
+  saveActiveUserRewards();
+}
+
+function addAccountCoins(amount) {
+  if (!activeUser || activeUser.guest) return;
+  accountCoins = Math.max(0, accountCoins + amount);
   saveActiveUserRewards();
 }
 
@@ -751,7 +787,7 @@ function choosePackReward(packId) {
 function showPackFlash(entry) {
   const skin = skins[entry.skin];
   packRewardAvatar.className = `avatar large ${skin.className}`;
-  packRewardRarity.textContent = `${skin.rarity} | 1 in ${entry.odds}`;
+  packRewardRarity.textContent = `${packNames[selectedPack]} | ${skin.rarity} | 1 in ${entry.odds}`;
   packRewardName.textContent = `${skin.name}: 1 in ${entry.odds}`;
   packRewardText.textContent = "Rolling...";
 }
@@ -1195,8 +1231,10 @@ function answerQuestion(answerIndex) {
     const speedPoints = Math.round(500 * speedRatio);
     const streakBonus = Math.min(gameState.streak * 50, 250);
     const earnedPoints = 500 + speedPoints + streakBonus;
+    const earnedCoins = 10 + Math.min(gameState.streak * 2, 20);
     gameState.score += earnedPoints;
-    gameFeedback.textContent = `Correct. +${earnedPoints} points. Streak x${gameState.streak}.`;
+    addAccountCoins(earnedCoins);
+    gameFeedback.textContent = `Correct. +${earnedPoints} points, +${earnedCoins} coins. Streak x${gameState.streak}.`;
   } else {
     gameState.streak = 0;
     gameFeedback.textContent = answerIndex === -1
@@ -1338,7 +1376,7 @@ signupForm.addEventListener("submit", (event) => {
     return;
   }
 
-  const user = { name, password, createdAt: Date.now(), coins: 0, ownedSkins: cleanOwnedSkins(ownedSkins) };
+  const user = { name, password, createdAt: Date.now(), coins: 250, ownedSkins: cleanOwnedSkins(ownedSkins) };
   users.push(user);
   saveUsers(users);
   authStatus.textContent = "Account created.";
@@ -1570,6 +1608,7 @@ packCards.forEach((card) => {
     selectedPack = card.dataset.pack;
     packCards.forEach((packCard) => packCard.classList.toggle("selected", packCard === card));
     packLabel.textContent = packNames[selectedPack];
+    renderEconomy();
     showToast(`${packNames[selectedPack]} selected`);
   });
 });
@@ -1632,11 +1671,21 @@ closeSetCreator.addEventListener("click", () => {
 
 openPack.addEventListener("click", () => {
   const pool = packPools[selectedPack];
+  const cost = packCosts[selectedPack] || 0;
   const rewardEntry = choosePackReward(selectedPack);
   const rewardId = rewardEntry.skin;
   const reward = skins[rewardId];
 
   if (packOpening) return;
+  if (accountCoins < cost) {
+    packRewardText.textContent = `You need ${cost - accountCoins} more coins for a ${packNames[selectedPack]}.`;
+    showToast("Not enough coins.");
+    renderEconomy();
+    return;
+  }
+
+  accountCoins -= cost;
+  saveActiveUserRewards();
   packOpening = true;
   openPack.disabled = true;
 
@@ -1663,8 +1712,8 @@ openPack.addEventListener("click", () => {
         : `Duplicate pull. ${reward.name} is already in your locker.`;
       showToast(isNew ? `${reward.name} unlocked` : "Duplicate skin pulled");
       packOpening = false;
-      openPack.disabled = false;
       packLabel.textContent = packNames[selectedPack];
+      renderEconomy();
       return;
     }
 
@@ -1786,6 +1835,7 @@ setSetCreatorOpen(false);
 syncQuestionTypeFields();
 selectSkin(window.localStorage.getItem("quizrush-skin") || ownedSkins[0], false);
 selectPlayerIcon(selectedPlayerIcon, false);
+renderEconomy();
 updateJoinState();
 renderPlayers();
 hostGameTime.value = window.localStorage.getItem("quizrush-host-game-time") || "120";
