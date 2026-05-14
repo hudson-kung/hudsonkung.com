@@ -206,6 +206,15 @@ const packCosts = {
   mystic: 150,
   legend: 400
 };
+const skinDisplayOdds = {
+  candy: 3,
+  blaze: 12,
+  frost: 12,
+  mint: 35,
+  glitch: 35,
+  shadow: 100,
+  solar: 100
+};
 const packPools = {
   starter: [
     { skin: "candy", odds: 3 },
@@ -790,9 +799,10 @@ function choosePackReward(packId) {
 
 function showPackFlash(entry) {
   const skin = skins[entry.skin];
+  const displayOdds = skinDisplayOdds[entry.skin] || entry.odds;
   packRewardAvatar.className = `avatar large ${skin.className}`;
-  packRewardRarity.textContent = `${packNames[selectedPack]} | ${skin.rarity} | 1 in ${entry.odds}`;
-  packRewardName.textContent = `${skin.name}: 1 in ${entry.odds}`;
+  packRewardRarity.textContent = `${skin.rarity} | 1 in ${displayOdds}`;
+  packRewardName.textContent = `${skin.name}: 1 in ${displayOdds}`;
   packRewardText.textContent = "Rolling...";
 }
 
