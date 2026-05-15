@@ -2389,7 +2389,7 @@ textarea {
 }
 
 .verified-check {
-  color: #1d9bf0;
+  color: inherit;
   -webkit-text-stroke: 1px #000;
 }
 
