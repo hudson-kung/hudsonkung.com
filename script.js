@@ -82,6 +82,13 @@ const skins = {
     bio: "An elite shadow champion with a bright gold winning streak.",
     trait: "Eclipse +15",
     rarity: "Elite"
+  },
+  sophyra: {
+    className: "skin-sophyra",
+    name: "Sophyra",
+    bio: "A radiant elite guardian with black-gold power and perfect timing.",
+    trait: "Sophyra +20",
+    rarity: "Elite"
   }
 };
 
@@ -250,11 +257,12 @@ const skinDisplayOdds = {
   glitch: 35,
   shadow: 100,
   solar: 100,
-  obsidian: 250,
-  eclipse: 250,
   inferno: 500,
   nebula: 500,
-  ruby: 500
+  ruby: 500,
+  obsidian: 1000,
+  eclipse: 1000,
+  sophyra: 1000
 };
 const packPools = {
   starter: [
@@ -265,11 +273,12 @@ const packPools = {
     { skin: "glitch", odds: 80 },
     { skin: "shadow", odds: 220 },
     { skin: "solar", odds: 350 },
-    { skin: "obsidian", odds: 650 },
-    { skin: "eclipse", odds: 650 },
     { skin: "inferno", odds: 1200 },
     { skin: "nebula", odds: 1200 },
-    { skin: "ruby", odds: 1200 }
+    { skin: "ruby", odds: 1200 },
+    { skin: "obsidian", odds: 2400 },
+    { skin: "eclipse", odds: 2400 },
+    { skin: "sophyra", odds: 2400 }
   ],
   mystic: [
     { skin: "candy", odds: 5 },
@@ -279,11 +288,12 @@ const packPools = {
     { skin: "glitch", odds: 30 },
     { skin: "shadow", odds: 100 },
     { skin: "solar", odds: 150 },
-    { skin: "obsidian", odds: 375 },
-    { skin: "eclipse", odds: 375 },
     { skin: "inferno", odds: 700 },
     { skin: "nebula", odds: 700 },
-    { skin: "ruby", odds: 700 }
+    { skin: "ruby", odds: 700 },
+    { skin: "obsidian", odds: 1500 },
+    { skin: "eclipse", odds: 1500 },
+    { skin: "sophyra", odds: 1500 }
   ],
   legend: [
     { skin: "candy", odds: 8 },
@@ -293,11 +303,12 @@ const packPools = {
     { skin: "glitch", odds: 14 },
     { skin: "shadow", odds: 40 },
     { skin: "solar", odds: 50 },
-    { skin: "obsidian", odds: 160 },
-    { skin: "eclipse", odds: 160 },
     { skin: "inferno", odds: 300 },
     { skin: "nebula", odds: 300 },
-    { skin: "ruby", odds: 300 }
+    { skin: "ruby", odds: 300 },
+    { skin: "obsidian", odds: 850 },
+    { skin: "eclipse", odds: 850 },
+    { skin: "sophyra", odds: 850 }
   ]
 };
 const quizQuestions = {

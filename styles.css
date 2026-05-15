@@ -643,6 +643,14 @@ h2 {
     conic-gradient(from 45deg, #050507, #ffd166, #11131a, #f2b705, #050507);
 }
 
+.skin-sophyra {
+  background:
+    radial-gradient(circle at 38% 43%, #050507 0 5%, transparent 6%),
+    radial-gradient(circle at 63% 43%, #050507 0 5%, transparent 6%),
+    radial-gradient(circle at 50% 27%, #fff7c2 0 11%, transparent 12%),
+    linear-gradient(135deg, #ffd166 0 22%, #050507 22% 48%, #f2b705 48% 72%, #11131a 72% 100%);
+}
+
 .rarity-common {
   color: #98a2b3 !important;
 }
