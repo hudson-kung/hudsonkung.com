@@ -2361,18 +2361,20 @@ textarea {
 
 .global-message {
   position: fixed;
-  left: calc(17rem + 1rem);
-  right: 1rem;
-  bottom: 1rem;
+  top: 1rem;
+  left: calc(17rem + 50%);
   z-index: 19;
   display: none;
+  width: min(42rem, calc(100vw - 19rem));
   padding: 0.9rem 1rem;
   color: #162033;
   font-weight: 900;
-  background: #ffd166;
-  border: 2px solid white;
+  text-align: center;
+  background: white;
+  border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+  transform: translateX(-50%);
 }
 
 .global-message.show {
@@ -2396,7 +2398,9 @@ textarea {
   }
 
   .global-message {
-    left: 1rem;
+    top: 5.5rem;
+    left: 50%;
+    width: min(42rem, calc(100vw - 2rem));
   }
 
   .brand {
