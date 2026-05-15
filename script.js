@@ -558,7 +558,7 @@ function renderAdminPanel() {
 function renderGlobalMessage(message = window.localStorage.getItem("polymath-global-message") || "") {
   globalMessage.classList.toggle("show", Boolean(message));
   globalMessage.innerHTML = message
-    ? `Hudson <span class="verified-check" aria-label="verified">✓</span> [Admin]: ${escapeHtml(message)}`
+    ? `Hudson <span class="verified-check" aria-label="verified">☑️</span> [Admin]: ${escapeHtml(message)}`
     : "";
   if (globalMessagePreview) {
     globalMessagePreview.textContent = message ? `Active message: Hudson verified [Admin]: ${message}` : "No global message is active.";
