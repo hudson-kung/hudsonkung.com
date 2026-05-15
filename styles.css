@@ -605,6 +605,53 @@ h2 {
     linear-gradient(145deg, #eaf8ff 0 45%, #37a2ff 45% 65%, #7467f0 65% 100%);
 }
 
+.skin-inferno {
+  background:
+    radial-gradient(circle at 40% 43%, #fff 0 5%, transparent 6%),
+    radial-gradient(circle at 62% 43%, #fff 0 5%, transparent 6%),
+    radial-gradient(circle at 50% 30%, #ffd166 0 12%, transparent 13%),
+    conic-gradient(from 10deg, #7a0d12, #ff1f3d, #ff8a3d, #7a0d12);
+}
+
+.skin-nebula {
+  background:
+    radial-gradient(circle at 36% 44%, #fff 0 5%, transparent 6%),
+    radial-gradient(circle at 64% 44%, #fff 0 5%, transparent 6%),
+    radial-gradient(circle at 70% 24%, #ffd166 0 7%, transparent 8%),
+    linear-gradient(145deg, #23001e 0 35%, #c1121f 35% 62%, #ff4b3e 62% 100%);
+}
+
+.skin-ruby {
+  background:
+    radial-gradient(circle at 38% 45%, #162033 0 5%, transparent 6%),
+    radial-gradient(circle at 62% 45%, #162033 0 5%, transparent 6%),
+    repeating-linear-gradient(135deg, #5f000f 0 14px, #c1121f 14px 28px, #ff5c5c 28px 42px);
+}
+
+.rarity-common {
+  color: #98a2b3 !important;
+}
+
+.rarity-uncommon {
+  color: #12b76a !important;
+}
+
+.rarity-rare {
+  color: #37a2ff !important;
+}
+
+.rarity-epic {
+  color: #7467f0 !important;
+}
+
+.rarity-legendary {
+  color: #f2b705 !important;
+}
+
+.rarity-mythical {
+  color: #e11d48 !important;
+}
+
 .score-chip {
   position: absolute;
   left: 1.4rem;

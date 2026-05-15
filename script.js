@@ -47,6 +47,27 @@ const skins = {
     bio: "A cool quiz specialist that freezes under pressure never.",
     trait: "Calm +7",
     rarity: "Rare"
+  },
+  inferno: {
+    className: "skin-inferno",
+    name: "Inferno Rex",
+    bio: "A red-hot mythical ruler that turns streaks into eruptions.",
+    trait: "Mythic +18",
+    rarity: "Mythical"
+  },
+  nebula: {
+    className: "skin-nebula",
+    name: "Nebula Warden",
+    bio: "A cosmic mythical skin that bends tough questions into orbit.",
+    trait: "Galaxy +18",
+    rarity: "Mythical"
+  },
+  ruby: {
+    className: "skin-ruby",
+    name: "Ruby Phantom",
+    bio: "A crimson mythical phantom built for perfect-score runs.",
+    trait: "Phantom +18",
+    rarity: "Mythical"
   }
 };
 
@@ -214,7 +235,10 @@ const skinDisplayOdds = {
   mint: 35,
   glitch: 35,
   shadow: 100,
-  solar: 100
+  solar: 100,
+  inferno: 500,
+  nebula: 500,
+  ruby: 500
 };
 const packPools = {
   starter: [
@@ -224,7 +248,10 @@ const packPools = {
     { skin: "mint", odds: 65 },
     { skin: "glitch", odds: 80 },
     { skin: "shadow", odds: 220 },
-    { skin: "solar", odds: 350 }
+    { skin: "solar", odds: 350 },
+    { skin: "inferno", odds: 1200 },
+    { skin: "nebula", odds: 1200 },
+    { skin: "ruby", odds: 1200 }
   ],
   mystic: [
     { skin: "candy", odds: 5 },
@@ -233,7 +260,10 @@ const packPools = {
     { skin: "mint", odds: 25 },
     { skin: "glitch", odds: 30 },
     { skin: "shadow", odds: 100 },
-    { skin: "solar", odds: 150 }
+    { skin: "solar", odds: 150 },
+    { skin: "inferno", odds: 700 },
+    { skin: "nebula", odds: 700 },
+    { skin: "ruby", odds: 700 }
   ],
   legend: [
     { skin: "candy", odds: 8 },
@@ -242,7 +272,10 @@ const packPools = {
     { skin: "mint", odds: 12 },
     { skin: "glitch", odds: 14 },
     { skin: "shadow", odds: 40 },
-    { skin: "solar", odds: 50 }
+    { skin: "solar", odds: 50 },
+    { skin: "inferno", odds: 300 },
+    { skin: "nebula", odds: 300 },
+    { skin: "ruby", odds: 300 }
   ]
 };
 const quizQuestions = {
@@ -628,6 +661,10 @@ function generateCode() {
   return String(Math.floor(100000 + Math.random() * 900000));
 }
 
+function rarityClass(rarity) {
+  return `rarity-${String(rarity || "common").toLowerCase()}`;
+}
+
 function selectSkin(skinId, notify = true) {
   const skin = skins[skinId];
   if (!skin) return;
@@ -637,6 +674,7 @@ function selectSkin(skinId, notify = true) {
   skinBio.textContent = skin.bio;
   skinTrait.textContent = skin.trait;
   skinRarity.textContent = skin.rarity;
+  skinRarity.className = rarityClass(skin.rarity);
 
   document.querySelectorAll(".skin-card").forEach((card) => {
     card.classList.toggle("active", card.dataset.skin === skinId);
@@ -814,6 +852,7 @@ function showPackFlash(entry) {
   const displayOdds = skinDisplayOdds[entry.skin] || entry.odds;
   packRewardAvatar.className = `avatar large ${skin.className}`;
   packRewardRarity.textContent = `${skin.rarity} | 1 in ${displayOdds}`;
+  packRewardRarity.className = `eyebrow ${rarityClass(skin.rarity)}`;
   packRewardName.textContent = `${skin.name}: 1 in ${displayOdds}`;
   packRewardText.textContent = "Rolling...";
 }
@@ -828,7 +867,7 @@ function renderSkinCollections() {
       <button class="skin-card${skinId === window.localStorage.getItem("quizrush-skin") ? " active" : ""}" type="button" data-skin="${skinId}">
         <span class="avatar ${skin.className}"></span>
         <strong>${skin.name}</strong>
-        <small>${skin.rarity}</small>
+        <small class="${rarityClass(skin.rarity)}">${skin.rarity}</small>
       </button>
     `;
   }).join("");
