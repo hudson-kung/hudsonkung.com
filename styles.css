@@ -2367,15 +2367,18 @@ textarea {
   display: none;
   width: min(42rem, calc(100vw - 2rem));
   padding: 0.9rem 1rem;
-  color: #162033;
+  color: #fff;
   font-weight: 900;
   text-align: center;
   background: transparent;
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  -webkit-text-stroke: 1px #000;
   text-shadow:
+    2px 0 0 #000,
+    -2px 0 0 #000,
+    0 2px 0 #000,
+    0 -2px 0 #000,
     1px 1px 0 #000,
     -1px 1px 0 #000,
     1px -1px 0 #000,
@@ -2390,8 +2393,11 @@ textarea {
 
 .verified-check {
   color: #1d9bf0;
-  -webkit-text-stroke: 1px #000;
   text-shadow:
+    2px 0 0 #000,
+    -2px 0 0 #000,
+    0 2px 0 #000,
+    0 -2px 0 #000,
     1px 1px 0 #000,
     -1px 1px 0 #000,
     1px -1px 0 #000,
