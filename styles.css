@@ -535,12 +535,40 @@ h2 {
 
 .mini-avatar,
 .avatar {
+  position: relative;
   display: inline-block;
   width: 4.6rem;
   height: 4.6rem;
+  overflow: hidden;
   border: 4px solid white;
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(22, 32, 51, 0.18);
+}
+
+.mini-avatar::before,
+.avatar::before {
+  position: absolute;
+  inset: 9%;
+  content: "";
+  background:
+    radial-gradient(circle at 35% 41%, var(--eye, #162033) 0 5%, transparent 5.8%),
+    radial-gradient(circle at 65% 41%, var(--eye, #162033) 0 5%, transparent 5.8%),
+    radial-gradient(ellipse at 50% 66%, var(--mouth, rgba(22, 32, 51, 0.34)) 0 13%, transparent 14%);
+  border-radius: 6px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mini-avatar::after,
+.avatar::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.55), transparent 18%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 38%);
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
 .mini-avatar {
@@ -555,99 +583,121 @@ h2 {
 }
 
 .skin-blaze {
+  --eye: #fff7d1;
+  --mouth: rgba(86, 15, 22, 0.55);
   background:
-    radial-gradient(circle at 50% 33%, #162033 0 8%, transparent 9%),
-    radial-gradient(circle at 36% 45%, white 0 6%, transparent 7%),
-    radial-gradient(circle at 64% 45%, white 0 6%, transparent 7%),
-    linear-gradient(145deg, #ff5c5c 0 52%, #ffd166 52% 100%);
+    radial-gradient(circle at 50% 15%, #fff2a8 0 7%, transparent 8%),
+    radial-gradient(circle at 26% 25%, #ff9f1c 0 13%, transparent 14%),
+    radial-gradient(circle at 78% 34%, #ff2d55 0 18%, transparent 19%),
+    linear-gradient(145deg, #ff3b30 0 38%, #ff7a18 38% 63%, #ffd166 63% 100%);
 }
 
 .skin-mint {
+  --eye: #073b4c;
+  --mouth: rgba(7, 59, 76, 0.38);
   background:
-    radial-gradient(circle at 42% 44%, #162033 0 6%, transparent 7%),
-    radial-gradient(circle at 62% 44%, #162033 0 6%, transparent 7%),
-    linear-gradient(145deg, #28d6a3 0 55%, #37a2ff 55% 100%);
+    radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.8) 0 8%, transparent 9%),
+    radial-gradient(circle at 72% 72%, #0ead69 0 17%, transparent 18%),
+    linear-gradient(145deg, #36f1cd 0 36%, #22c55e 36% 60%, #37a2ff 60% 100%);
 }
 
 .skin-candy {
+  --eye: #fff;
+  --mouth: rgba(199, 21, 133, 0.58);
   background:
-    radial-gradient(circle at 38% 45%, white 0 6%, transparent 7%),
-    radial-gradient(circle at 62% 45%, white 0 6%, transparent 7%),
-    repeating-linear-gradient(135deg, #ff7ab6 0 16px, #ffd166 16px 32px, #fff 32px 48px);
+    radial-gradient(circle at 72% 23%, #fff 0 8%, transparent 9%),
+    radial-gradient(circle at 26% 70%, #ffd166 0 12%, transparent 13%),
+    repeating-linear-gradient(135deg, #ff5ba7 0 14px, #ffd166 14px 28px, #fff7f7 28px 42px, #37a2ff 42px 56px);
 }
 
 .skin-shadow {
+  --eye: #ffd166;
+  --mouth: rgba(255, 209, 102, 0.45);
   background:
-    radial-gradient(circle at 40% 43%, #ffd166 0 6%, transparent 7%),
-    radial-gradient(circle at 63% 43%, #ffd166 0 6%, transparent 7%),
-    linear-gradient(145deg, #162033 0 52%, #7467f0 52% 100%);
+    radial-gradient(circle at 50% 18%, #7467f0 0 10%, transparent 11%),
+    radial-gradient(circle at 82% 70%, rgba(255, 209, 102, 0.9) 0 10%, transparent 11%),
+    linear-gradient(145deg, #080b14 0 43%, #2f275f 43% 66%, #7467f0 66% 100%);
 }
 
 .skin-glitch {
+  --eye: #ffffff;
+  --mouth: rgba(22, 32, 51, 0.6);
   background:
-    radial-gradient(circle at 38% 45%, #162033 0 5%, transparent 6%),
-    radial-gradient(circle at 64% 45%, white 0 6%, transparent 7%),
-    linear-gradient(90deg, #37a2ff 0 34%, #ff5c5c 34% 40%, #28d6a3 40% 72%, #ffd166 72% 100%);
+    linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, 0.9) 18% 21%, transparent 21% 100%),
+    linear-gradient(0deg, transparent 0 58%, rgba(255, 92, 92, 0.95) 58% 62%, transparent 62% 100%),
+    repeating-linear-gradient(90deg, #37a2ff 0 15px, #ff5c5c 15px 22px, #28d6a3 22px 42px, #ffd166 42px 56px);
 }
 
 .skin-solar {
+  --eye: #162033;
+  --mouth: rgba(122, 61, 0, 0.45);
   background:
-    radial-gradient(circle at 50% 42%, #fff 0 8%, transparent 9%),
-    radial-gradient(circle at 35% 45%, #162033 0 5%, transparent 6%),
-    radial-gradient(circle at 66% 45%, #162033 0 5%, transparent 6%),
-    conic-gradient(from 30deg, #ffd166, #ff8a3d, #ff5c5c, #ffd166);
+    radial-gradient(circle at 50% 28%, #fff7c2 0 9%, transparent 10%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.34) 0 20%, transparent 21%),
+    conic-gradient(from 30deg, #fff4a3, #ffd166, #ff8a3d, #ff5c5c, #ffd166, #fff4a3);
 }
 
 .skin-frost {
+  --eye: #102a43;
+  --mouth: rgba(16, 42, 67, 0.38);
   background:
-    radial-gradient(circle at 38% 45%, #162033 0 5%, transparent 6%),
-    radial-gradient(circle at 63% 45%, #162033 0 5%, transparent 6%),
-    linear-gradient(145deg, #eaf8ff 0 45%, #37a2ff 45% 65%, #7467f0 65% 100%);
+    radial-gradient(circle at 50% 15%, #ffffff 0 8%, transparent 9%),
+    linear-gradient(45deg, transparent 0 44%, rgba(255, 255, 255, 0.8) 44% 49%, transparent 49% 100%),
+    linear-gradient(145deg, #f8fdff 0 34%, #94dfff 34% 58%, #37a2ff 58% 76%, #7467f0 76% 100%);
 }
 
 .skin-inferno {
+  --eye: #fff7d1;
+  --mouth: rgba(255, 255, 255, 0.5);
   background:
-    radial-gradient(circle at 40% 43%, #fff 0 5%, transparent 6%),
-    radial-gradient(circle at 62% 43%, #fff 0 5%, transparent 6%),
-    radial-gradient(circle at 50% 30%, #ffd166 0 12%, transparent 13%),
-    conic-gradient(from 10deg, #7a0d12, #ff1f3d, #ff8a3d, #7a0d12);
+    radial-gradient(circle at 50% 20%, #ffd166 0 11%, transparent 12%),
+    radial-gradient(circle at 80% 22%, rgba(255, 255, 255, 0.55) 0 8%, transparent 9%),
+    conic-gradient(from 10deg, #350008, #9f1239, #ff1f3d, #ff8a3d, #350008);
 }
 
 .skin-nebula {
+  --eye: #fff;
+  --mouth: rgba(255, 255, 255, 0.42);
   background:
-    radial-gradient(circle at 36% 44%, #fff 0 5%, transparent 6%),
-    radial-gradient(circle at 64% 44%, #fff 0 5%, transparent 6%),
-    radial-gradient(circle at 70% 24%, #ffd166 0 7%, transparent 8%),
-    linear-gradient(145deg, #23001e 0 35%, #c1121f 35% 62%, #ff4b3e 62% 100%);
+    radial-gradient(circle at 73% 22%, #ffd166 0 5%, transparent 6%),
+    radial-gradient(circle at 23% 72%, #ffffff 0 4%, transparent 5%),
+    radial-gradient(circle at 50% 50%, #c1121f 0 16%, transparent 17%),
+    linear-gradient(145deg, #15001d 0 35%, #4c0519 35% 60%, #c1121f 60% 100%);
 }
 
 .skin-ruby {
+  --eye: #fff1f2;
+  --mouth: rgba(255, 241, 242, 0.4);
   background:
-    radial-gradient(circle at 38% 45%, #162033 0 5%, transparent 6%),
-    radial-gradient(circle at 62% 45%, #162033 0 5%, transparent 6%),
-    repeating-linear-gradient(135deg, #5f000f 0 14px, #c1121f 14px 28px, #ff5c5c 28px 42px);
+    radial-gradient(circle at 50% 23%, #ffccd5 0 8%, transparent 9%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.35) 0 16%, transparent 16% 100%),
+    repeating-linear-gradient(135deg, #3d0008 0 12px, #9f1239 12px 26px, #ff4b5c 26px 40px);
 }
 
 .skin-obsidian {
+  --eye: #ffd166;
+  --mouth: rgba(255, 209, 102, 0.48);
   background:
-    radial-gradient(circle at 38% 44%, #ffd166 0 6%, transparent 7%),
-    radial-gradient(circle at 63% 44%, #ffd166 0 6%, transparent 7%),
-    radial-gradient(circle at 50% 25%, #fff7c2 0 9%, transparent 10%),
-    linear-gradient(145deg, #08090d 0 48%, #ffd166 48% 66%, #14151c 66% 100%);
+    radial-gradient(circle at 50% 20%, #fff7c2 0 10%, transparent 11%),
+    linear-gradient(45deg, transparent 0 43%, #ffd166 43% 51%, transparent 51% 100%),
+    linear-gradient(145deg, #030407 0 45%, #ffd166 45% 62%, #11131a 62% 100%);
 }
 
 .skin-eclipse {
+  --eye: #fff7c2;
+  --mouth: rgba(255, 209, 102, 0.48);
   background:
-    radial-gradient(circle at 39% 44%, #fff7c2 0 5%, transparent 6%),
-    radial-gradient(circle at 63% 44%, #fff7c2 0 5%, transparent 6%),
+    radial-gradient(circle at 50% 50%, #050507 0 22%, transparent 23%),
+    radial-gradient(circle at 68% 24%, #fff7c2 0 7%, transparent 8%),
     conic-gradient(from 45deg, #050507, #ffd166, #11131a, #f2b705, #050507);
 }
 
 .skin-sophyra {
+  --eye: #050507;
+  --mouth: rgba(5, 5, 7, 0.52);
   background:
-    radial-gradient(circle at 38% 43%, #050507 0 5%, transparent 6%),
-    radial-gradient(circle at 63% 43%, #050507 0 5%, transparent 6%),
-    radial-gradient(circle at 50% 27%, #fff7c2 0 11%, transparent 12%),
+    radial-gradient(circle at 50% 21%, #fff7c2 0 12%, transparent 13%),
+    linear-gradient(90deg, transparent 0 22%, rgba(5, 5, 7, 0.9) 22% 28%, transparent 28% 72%, rgba(5, 5, 7, 0.9) 72% 78%, transparent 78% 100%),
     linear-gradient(135deg, #ffd166 0 22%, #050507 22% 48%, #f2b705 48% 72%, #11131a 72% 100%);
 }
 
