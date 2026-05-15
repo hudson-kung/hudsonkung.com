@@ -1713,8 +1713,10 @@ select {
 
 .tower-panel {
   display: none;
-  gap: 0.75rem;
+  grid-template-columns: minmax(18rem, 1fr) minmax(13rem, 0.38fr);
+  gap: 0.85rem;
   padding: 0.85rem;
+  margin-top: 1rem;
   background: #f7fbff;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1724,41 +1726,89 @@ select {
   display: grid;
 }
 
-.tower-track {
-  position: relative;
-  height: 4.5rem;
-  overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(40, 214, 163, 0.26), rgba(255, 209, 102, 0.26), rgba(255, 92, 92, 0.28)),
-    repeating-linear-gradient(90deg, rgba(22, 32, 51, 0.1) 0 1px, transparent 1px 24px);
+.tower-board-card,
+.tower-control-card {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.tower-board-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tower-board {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 3px;
+  width: min(100%, 32rem);
+  aspect-ratio: 1;
+  padding: 0.45rem;
+  background: #7bbd5b;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.24);
+}
+
+.tower-cell {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  color: #162033;
+  font-size: clamp(0.68rem, 1.7vw, 1.15rem);
+  font-weight: 900;
+  background: #3fc46d;
+  border-radius: 4px;
+  box-shadow: inset 0 -2px rgba(0, 0, 0, 0.08);
+}
+
+.tower-cell.path {
+  background: #bd8544;
+}
+
+.tower-cell.spot {
+  background: #f7d93d;
+}
+
+.tower-cell.placed {
+  background: #f4f7ff;
+}
+
+.tower-cell.enemy {
+  color: white;
+  background: #ff4b3e;
+  transform: scale(1.08);
+}
+
+.tower-cell.base {
+  background: #37a2ff;
+}
+
+.tower-cell.start {
+  background: #28d6a3;
+}
+
+.tower-enemy-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.7rem;
+  background: white;
   border: 1px solid var(--line);
   border-radius: 8px;
 }
 
-.tower-base,
-.tower-enemy {
-  position: absolute;
-  top: 50%;
+.tower-enemy-avatar {
   display: grid;
-  min-width: 4.4rem;
-  min-height: 2.3rem;
+  width: 3rem;
+  height: 3rem;
   place-items: center;
-  color: white;
-  font-size: 0.78rem;
-  font-weight: 900;
+  font-size: 1.5rem;
+  background: #fff4df;
   border-radius: 8px;
-  transform: translateY(-50%);
-}
-
-.tower-base {
-  left: 0.55rem;
-  background: var(--green);
-}
-
-.tower-enemy {
-  left: 82%;
-  background: var(--coral);
-  transition: left 220ms ease;
 }
 
 .tower-stats {
@@ -2340,6 +2390,7 @@ textarea {
   .host-game-stats,
   .host-monitor-layout,
   .game-layout,
+  .tower-panel,
   .leaderboard-layout {
     grid-template-columns: 1fr;
   }
@@ -2375,6 +2426,7 @@ textarea {
   .player-grid,
   .settings-layout,
   .settings-grid,
+  .tower-stats,
   .admin-account-row,
   .score-row,
   .rank-row {

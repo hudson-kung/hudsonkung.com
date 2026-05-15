@@ -258,7 +258,6 @@
       <div class="section-heading">
         <span class="eyebrow">Packs</span>
         <h2>Open packs for skins</h2>
-        <p class="hint">Coins: <strong id="packCoinBalance">0</strong></p>
       </div>
       <div class="packs-layout">
         <div class="pack-grid">
@@ -536,6 +535,33 @@
             <div class="game-answer-grid" id="gameAnswers"></div>
           </div>
           <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
+          <div class="tower-panel" id="towerPanel">
+            <div class="tower-board-card">
+              <div class="tower-board-top">
+                <span class="eyebrow">Tower Defense</span>
+                <strong>Round <span id="towerWave">1</span></strong>
+              </div>
+              <div class="tower-board" id="towerBoard" aria-label="Tower defense map"></div>
+            </div>
+            <aside class="tower-control-card">
+              <div class="tower-enemy-card">
+                <div class="tower-enemy-avatar" id="towerEnemyAvatar">😈</div>
+                <div>
+                  <strong id="towerEnemy">HP 70/70</strong>
+                  <span>Incoming enemy</span>
+                </div>
+              </div>
+              <div class="tower-stats">
+                <div><strong id="towerCoins">0</strong><span>Coins</span></div>
+                <div><strong id="towerBase">10</strong><span>Base HP</span></div>
+              </div>
+              <div class="tower-shop">
+                <button class="button ghost full" type="button" data-tower="bolt">Mini Jester - 40</button>
+                <button class="button ghost full" type="button" data-tower="cannon">Mad Hatter - 75</button>
+              </div>
+              <p id="towerStatus">Answer correctly to earn coins.</p>
+            </aside>
+          </div>
         </div>
 
         <aside class="game-score-panel">
@@ -545,23 +571,6 @@
             <div><strong id="gameScore">0</strong><span>Score</span></div>
             <div><strong id="gameStreak">0</strong><span>Streak</span></div>
             <div><strong id="gameCorrect">0</strong><span>Correct</span></div>
-          </div>
-          <div class="tower-panel" id="towerPanel">
-            <span class="eyebrow">Defense</span>
-            <div class="tower-track">
-              <div class="tower-base">Base</div>
-              <div class="tower-enemy" id="towerEnemy">Wave 1</div>
-            </div>
-            <div class="tower-stats">
-              <div><strong id="towerCoins">0</strong><span>Coins</span></div>
-              <div><strong id="towerBase">10</strong><span>Base HP</span></div>
-              <div><strong id="towerWave">1</strong><span>Wave</span></div>
-            </div>
-            <div class="tower-shop">
-              <button class="button ghost full" type="button" data-tower="bolt">Bolt tower - 40</button>
-              <button class="button ghost full" type="button" data-tower="cannon">Cannon tower - 75</button>
-            </div>
-            <p id="towerStatus">Answer correctly to earn coins.</p>
           </div>
           <button class="button ghost full" type="button" id="playAgain">Play again</button>
         </aside>

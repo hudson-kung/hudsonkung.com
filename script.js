@@ -101,7 +101,6 @@ const packRewardRarity = document.querySelector("#packRewardRarity");
 const packRewardName = document.querySelector("#packRewardName");
 const packRewardText = document.querySelector("#packRewardText");
 const openPack = document.querySelector("#openPack");
-const packCoinBalance = document.querySelector("#packCoinBalance");
 const setForm = document.querySelector("#setForm");
 const setTitle = document.querySelector("#setTitle");
 const setQuestion = document.querySelector("#setQuestion");
@@ -145,10 +144,12 @@ const gameScore = document.querySelector("#gameScore");
 const gameStreak = document.querySelector("#gameStreak");
 const gameCorrect = document.querySelector("#gameCorrect");
 const towerPanel = document.querySelector("#towerPanel");
+const towerBoard = document.querySelector("#towerBoard");
 const towerCoins = document.querySelector("#towerCoins");
 const towerBase = document.querySelector("#towerBase");
 const towerWave = document.querySelector("#towerWave");
 const towerEnemy = document.querySelector("#towerEnemy");
+const towerEnemyAvatar = document.querySelector("#towerEnemyAvatar");
 const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
 const adminAccountCount = document.querySelector("#adminAccountCount");
@@ -280,6 +281,20 @@ const quizQuestions = {
     { question: "What happens when an enemy reaches the base?", answers: ["Base loses HP", "Coins double", "Timer stops", "All towers sell"], correct: 0 },
     { question: "Best strategy after earning coins?", answers: ["Buy towers", "Ignore waves", "Skip answers", "Close shop"], correct: 0 }
   ]
+};
+const towerPathCells = [
+  1, 2, 3, 4, 5, 6, 7,
+  16, 25, 34, 43, 52,
+  53, 54, 55, 56, 57, 58, 59,
+  68, 77, 86, 95, 104,
+  103, 102, 101, 100, 99, 98,
+  107, 116, 125, 134,
+  135, 136, 137, 138, 139, 140, 141
+];
+const towerSpotCells = [10, 12, 14, 19, 21, 23, 28, 30, 32, 37, 39, 41, 46, 48, 50, 64, 66, 70, 73, 75, 82, 84, 88, 91, 93, 109, 111, 113, 118, 120, 122, 127, 129, 131, 145, 147, 149, 151];
+const towerTypes = {
+  bolt: { name: "Mini Jester", icon: "⚡", cost: 40, damage: 18 },
+  cannon: { name: "Mad Hatter", icon: "🎩", cost: 75, damage: 42 }
 };
 
 let toastTimeout;
@@ -558,9 +573,6 @@ function renderSettings() {
 function renderEconomy() {
   if (navCoinBalance) {
     navCoinBalance.textContent = String(accountCoins);
-  }
-  if (packCoinBalance) {
-    packCoinBalance.textContent = String(accountCoins);
   }
   if (settingsCoins) {
     settingsCoins.textContent = String(accountCoins);
@@ -1048,10 +1060,12 @@ function makeTowerState() {
     wave: 1,
     enemyHp: 70,
     enemyMaxHp: 70,
+    enemyStep: 0,
     towers: {
       bolt: 0,
       cannon: 0
-    }
+    },
+    placements: []
   };
 }
 
@@ -1065,13 +1079,41 @@ function renderTowerDefense() {
   towerBase.textContent = String(tower.baseHp);
   towerWave.textContent = String(tower.wave);
   towerEnemy.textContent = `HP ${tower.enemyHp}/${tower.enemyMaxHp}`;
-  towerEnemy.style.left = `${Math.max(8, 82 - (tower.enemyHp / tower.enemyMaxHp) * 64)}%`;
+  if (towerEnemyAvatar) {
+    towerEnemyAvatar.textContent = tower.wave % 3 === 0 ? "🔥" : tower.wave % 2 === 0 ? "👾" : "😈";
+  }
+  renderTowerBoard(tower);
   towerButtons.forEach((button) => {
-    const cost = button.dataset.tower === "bolt" ? 40 : 75;
+    const towerType = towerTypes[button.dataset.tower];
+    const cost = towerType.cost;
     const count = tower.towers[button.dataset.tower] || 0;
     button.disabled = tower.coins < cost || tower.baseHp <= 0;
-    button.textContent = `${button.dataset.tower === "bolt" ? "Bolt tower" : "Cannon tower"} - ${cost} (${count})`;
+    button.textContent = `${towerType.icon} ${towerType.name} - ${cost} (${count})`;
   });
+}
+
+function renderTowerBoard(tower) {
+  if (!towerBoard) return;
+  const enemyCell = towerPathCells[Math.min(tower.enemyStep, towerPathCells.length - 1)];
+  towerBoard.innerHTML = Array.from({ length: 153 }, (_, index) => {
+    const isPath = towerPathCells.includes(index);
+    const isSpot = towerSpotCells.includes(index);
+    const placement = tower.placements.find((towerPlacement) => towerPlacement.cell === index);
+    const isStart = index === towerPathCells[0];
+    const isBase = index === towerPathCells[towerPathCells.length - 1];
+    const isEnemy = index === enemyCell;
+    const classes = [
+      "tower-cell",
+      isPath ? "path" : "",
+      isSpot ? "spot" : "",
+      isStart ? "start" : "",
+      isBase ? "base" : "",
+      isEnemy ? "enemy" : "",
+      placement ? "placed" : ""
+    ].filter(Boolean).join(" ");
+    const label = placement ? towerTypes[placement.type].icon : isEnemy ? "👾" : isBase ? "🏰" : isStart ? "▶" : "";
+    return `<div class="${classes}">${label}</div>`;
+  }).join("");
 }
 
 function runTowerDefenseTurn(wasCorrect) {
@@ -1084,7 +1126,8 @@ function runTowerDefenseTurn(wasCorrect) {
     tower.baseHp -= 1;
   }
 
-  const damage = (tower.towers.bolt * 18) + (tower.towers.cannon * 42);
+  tower.enemyStep = Math.min(towerPathCells.length - 1, tower.enemyStep + (wasCorrect ? 1 : 4));
+  const damage = (tower.towers.bolt * towerTypes.bolt.damage) + (tower.towers.cannon * towerTypes.cannon.damage);
   tower.enemyHp -= damage;
 
   if (tower.enemyHp <= 0) {
@@ -1092,7 +1135,12 @@ function runTowerDefenseTurn(wasCorrect) {
     tower.coins += 25;
     tower.enemyMaxHp = 70 + (tower.wave * 28);
     tower.enemyHp = tower.enemyMaxHp;
+    tower.enemyStep = 0;
     towerStatus.textContent = `Wave cleared. +25 coins. Wave ${tower.wave} incoming.`;
+  } else if (tower.enemyStep >= towerPathCells.length - 1) {
+    tower.baseHp -= 2;
+    tower.enemyStep = 0;
+    towerStatus.textContent = "Enemy reached your base. -2 HP.";
   } else if (damage > 0) {
     towerStatus.textContent = `Towers dealt ${damage} damage.`;
   } else {
@@ -1110,7 +1158,9 @@ function runTowerDefenseTurn(wasCorrect) {
 
 function buyTower(type) {
   if (gameState.mode !== "tower" || !gameState.tower) return;
-  const cost = type === "bolt" ? 40 : 75;
+  const towerType = towerTypes[type];
+  if (!towerType) return;
+  const cost = towerType.cost;
   if (gameState.tower.coins < cost) {
     showToast("Not enough coins yet.");
     return;
@@ -1118,7 +1168,12 @@ function buyTower(type) {
 
   gameState.tower.coins -= cost;
   gameState.tower.towers[type] += 1;
-  towerStatus.textContent = `${type === "bolt" ? "Bolt" : "Cannon"} tower placed.`;
+  const filledCells = gameState.tower.placements.map((placement) => placement.cell);
+  const nextCell = towerSpotCells.find((cell) => !filledCells.includes(cell));
+  if (nextCell !== undefined) {
+    gameState.tower.placements.push({ type, cell: nextCell });
+  }
+  towerStatus.textContent = `${towerType.name} placed.`;
   renderTowerDefense();
 }
 
