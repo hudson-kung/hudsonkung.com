@@ -1370,13 +1370,24 @@ select {
 }
 
 .skin-card strong,
-.skin-card small {
+.skin-card small,
+.skin-odds {
   display: block;
 }
 
 .skin-card small {
-  color: var(--muted);
   font-weight: 800;
+}
+
+.skin-odds {
+  width: fit-content;
+  padding: 0.22rem 0.45rem;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  background: #eef6ff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .mode-card {

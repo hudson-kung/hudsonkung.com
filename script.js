@@ -667,6 +667,10 @@ function rarityClass(rarity) {
   return `rarity-${String(rarity || "common").toLowerCase()}`;
 }
 
+function skinOddsText(skinId) {
+  return `1 in ${skinDisplayOdds[skinId] || "?"}`;
+}
+
 function selectSkin(skinId, notify = true) {
   const skin = skins[skinId];
   if (!skin) return;
@@ -675,7 +679,7 @@ function selectSkin(skinId, notify = true) {
   skinName.textContent = skin.name;
   skinBio.textContent = skin.bio;
   skinTrait.textContent = skin.trait;
-  skinRarity.textContent = skin.rarity;
+  skinRarity.textContent = `${skin.rarity} | ${skinOddsText(skinId)}`;
   skinRarity.className = rarityClass(skin.rarity);
 
   document.querySelectorAll(".skin-card").forEach((card) => {
@@ -870,6 +874,7 @@ function renderSkinCollections() {
         <span class="avatar ${skin.className}"></span>
         <strong>${skin.name}</strong>
         <small class="${rarityClass(skin.rarity)}">${skin.rarity}</small>
+        <span class="skin-odds">${skinOddsText(skinId)}</span>
       </button>
     `;
   }).join("");
