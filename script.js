@@ -68,6 +68,20 @@ const skins = {
     bio: "A crimson mythical phantom built for perfect-score runs.",
     trait: "Phantom +18",
     rarity: "Mythical"
+  },
+  obsidian: {
+    className: "skin-obsidian",
+    name: "Obsidian King",
+    bio: "A black-and-gold elite skin for players who rule the final round.",
+    trait: "Crown +15",
+    rarity: "Elite"
+  },
+  eclipse: {
+    className: "skin-eclipse",
+    name: "Eclipse Striker",
+    bio: "An elite shadow champion with a bright gold winning streak.",
+    trait: "Eclipse +15",
+    rarity: "Elite"
   }
 };
 
@@ -236,6 +250,8 @@ const skinDisplayOdds = {
   glitch: 35,
   shadow: 100,
   solar: 100,
+  obsidian: 250,
+  eclipse: 250,
   inferno: 500,
   nebula: 500,
   ruby: 500
@@ -249,6 +265,8 @@ const packPools = {
     { skin: "glitch", odds: 80 },
     { skin: "shadow", odds: 220 },
     { skin: "solar", odds: 350 },
+    { skin: "obsidian", odds: 650 },
+    { skin: "eclipse", odds: 650 },
     { skin: "inferno", odds: 1200 },
     { skin: "nebula", odds: 1200 },
     { skin: "ruby", odds: 1200 }
@@ -261,6 +279,8 @@ const packPools = {
     { skin: "glitch", odds: 30 },
     { skin: "shadow", odds: 100 },
     { skin: "solar", odds: 150 },
+    { skin: "obsidian", odds: 375 },
+    { skin: "eclipse", odds: 375 },
     { skin: "inferno", odds: 700 },
     { skin: "nebula", odds: 700 },
     { skin: "ruby", odds: 700 }
@@ -273,6 +293,8 @@ const packPools = {
     { skin: "glitch", odds: 14 },
     { skin: "shadow", odds: 40 },
     { skin: "solar", odds: 50 },
+    { skin: "obsidian", odds: 160 },
+    { skin: "eclipse", odds: 160 },
     { skin: "inferno", odds: 300 },
     { skin: "nebula", odds: 300 },
     { skin: "ruby", odds: 300 }

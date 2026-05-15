@@ -628,6 +628,21 @@ h2 {
     repeating-linear-gradient(135deg, #5f000f 0 14px, #c1121f 14px 28px, #ff5c5c 28px 42px);
 }
 
+.skin-obsidian {
+  background:
+    radial-gradient(circle at 38% 44%, #ffd166 0 6%, transparent 7%),
+    radial-gradient(circle at 63% 44%, #ffd166 0 6%, transparent 7%),
+    radial-gradient(circle at 50% 25%, #fff7c2 0 9%, transparent 10%),
+    linear-gradient(145deg, #08090d 0 48%, #ffd166 48% 66%, #14151c 66% 100%);
+}
+
+.skin-eclipse {
+  background:
+    radial-gradient(circle at 39% 44%, #fff7c2 0 5%, transparent 6%),
+    radial-gradient(circle at 63% 44%, #fff7c2 0 5%, transparent 6%),
+    conic-gradient(from 45deg, #050507, #ffd166, #11131a, #f2b705, #050507);
+}
+
 .rarity-common {
   color: #98a2b3 !important;
 }
@@ -646,6 +661,15 @@ h2 {
 
 .rarity-legendary {
   color: #f2b705 !important;
+}
+
+.rarity-elite {
+  width: fit-content;
+  padding: 0.08rem 0.35rem;
+  color: #050507 !important;
+  background: linear-gradient(135deg, #ffd166, #f2b705);
+  border: 1px solid #050507;
+  border-radius: 6px;
 }
 
 .rarity-mythical {
