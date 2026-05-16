@@ -675,12 +675,15 @@ h2 {
 }
 
 .skin-sophyra {
-  --eye: #111827;
-  --mouth: rgba(17, 24, 39, 0.48);
+  --eye: #fef9c3;
+  --mouth: rgba(165, 180, 252, 0.5);
   background:
-    radial-gradient(circle at 50% 21%, #fef3c7 0 12%, transparent 13%),
-    linear-gradient(90deg, transparent 0 22%, rgba(17, 24, 39, 0.86) 22% 28%, transparent 28% 72%, rgba(17, 24, 39, 0.86) 72% 78%, transparent 78% 100%),
-    linear-gradient(135deg, #f8fafc 0 22%, #facc15 22% 46%, #fef3c7 46% 72%, #111827 72% 100%);
+    radial-gradient(circle at 50% 21%, #fef9c3 0 9%, transparent 10%),
+    radial-gradient(circle at 78% 18%, #67e8f9 0 5%, transparent 6%),
+    radial-gradient(circle at 22% 74%, #f0abfc 0 5%, transparent 6%),
+    radial-gradient(circle at 66% 70%, #ffffff 0 3%, transparent 4%),
+    linear-gradient(45deg, transparent 0 43%, rgba(250, 204, 21, 0.92) 43% 50%, transparent 50% 100%),
+    conic-gradient(from 210deg, #020617, #312e81, #7c3aed, #06b6d4, #facc15, #020617);
 }
 
 .rarity-common {

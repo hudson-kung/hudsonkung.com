@@ -72,8 +72,8 @@ const skins = {
   sophyra: {
     className: "skin-sophyra",
     name: "Sophyra",
-    bio: "A radiant elite guardian with black-gold power and perfect timing.",
-    trait: "Sophyra +20",
+    bio: "An interstellar elite guardian forged from starlight, nebula dust, and perfect timing.",
+    trait: "Cosmic +20",
     rarity: "Elite"
   }
 };
