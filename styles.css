@@ -1838,7 +1838,6 @@ select {
 
 .tower-panel {
   display: none;
-  grid-template-columns: minmax(18rem, 1fr) minmax(13rem, 0.38fr);
   gap: 0.85rem;
   padding: 0.85rem;
   margin-top: 1rem;
@@ -1849,6 +1848,42 @@ select {
 
 .tower-panel.active {
   display: grid;
+}
+
+.tower-playfield.active {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.78fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.tower-playfield:not(.active) .tower-board-card {
+  display: none;
+}
+
+.game-main.tower-mode .game-question-card {
+  min-height: 32rem;
+}
+
+.game-main.defense-phase .tower-playfield {
+  grid-template-columns: minmax(16rem, 0.54fr) minmax(0, 1fr);
+}
+
+.game-main.defense-phase .game-question-card {
+  min-height: 0;
+  opacity: 0.54;
+}
+
+.game-main.defense-phase .game-answer-grid button {
+  min-height: 3.2rem;
+}
+
+.game-main.defense-phase .tower-board {
+  width: min(100%, 38rem);
+}
+
+.game-main.question-phase .tower-board-card {
+  opacity: 0.78;
 }
 
 .tower-board-card,
@@ -1926,6 +1961,17 @@ select {
   border-radius: 8px;
 }
 
+.tower-panel-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tower-panel-head .button:disabled {
+  opacity: 0.45;
+}
+
 .tower-enemy-avatar {
   display: grid;
   width: 3rem;
@@ -1938,7 +1984,7 @@ select {
 
 .tower-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
@@ -2542,6 +2588,8 @@ textarea {
   .host-monitor-layout,
   .game-layout,
   .tower-panel,
+  .tower-playfield.active,
+  .game-main.defense-phase .tower-playfield,
   .leaderboard-layout {
     grid-template-columns: 1fr;
   }

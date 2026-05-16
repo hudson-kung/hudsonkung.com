@@ -167,10 +167,12 @@ const gameTimer = document.querySelector("#gameTimer");
 const gameQuestion = document.querySelector("#gameQuestion");
 const gameAnswers = document.querySelector("#gameAnswers");
 const gameFeedback = document.querySelector("#gameFeedback");
+const gameMain = document.querySelector(".game-main");
 const gameAvatar = document.querySelector("#gameAvatar");
 const gameScore = document.querySelector("#gameScore");
 const gameStreak = document.querySelector("#gameStreak");
 const gameCorrect = document.querySelector("#gameCorrect");
+const towerPlayfield = document.querySelector("#towerPlayfield");
 const towerPanel = document.querySelector("#towerPanel");
 const towerBoard = document.querySelector("#towerBoard");
 const towerCoins = document.querySelector("#towerCoins");
@@ -180,6 +182,7 @@ const towerEnemy = document.querySelector("#towerEnemy");
 const towerEnemyAvatar = document.querySelector("#towerEnemyAvatar");
 const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
+const nextTowerQuestion = document.querySelector("#nextTowerQuestion");
 const adminAccountCount = document.querySelector("#adminAccountCount");
 const adminAccountList = document.querySelector("#adminAccountList");
 const adminGrantUser = document.querySelector("#adminGrantUser");
@@ -1129,7 +1132,12 @@ function makeTowerState() {
 function renderTowerDefense() {
   const active = gameState.mode === "tower";
   towerPanel.classList.toggle("active", active);
-  if (!active || !gameState.tower) return;
+  towerPlayfield.classList.toggle("active", active);
+  gameMain.classList.toggle("tower-mode", active);
+  if (!active || !gameState.tower) {
+    gameMain.classList.remove("defense-phase", "question-phase");
+    return;
+  }
 
   const tower = gameState.tower;
   towerCoins.textContent = String(tower.coins);
@@ -1147,6 +1155,23 @@ function renderTowerDefense() {
     button.disabled = tower.coins < cost || tower.baseHp <= 0;
     button.textContent = `${towerType.icon} ${towerType.name} - ${cost} (${count})`;
   });
+}
+
+function setTowerPhase(phase) {
+  if (gameState.mode !== "tower") return;
+  gameState.phase = phase;
+  gameMain.classList.toggle("defense-phase", phase === "defense");
+  gameMain.classList.toggle("question-phase", phase !== "defense");
+  nextTowerQuestion.disabled = phase !== "defense";
+}
+
+function continueAfterQuestion() {
+  if (gameState.remainingGameTime <= 0) {
+    endGame(gameState.tower?.baseHp === 0 ? "Base destroyed" : "Time is up");
+    return;
+  }
+  gameState.index += 1;
+  renderQuestion();
 }
 
 function renderTowerBoard(tower) {
@@ -1278,6 +1303,7 @@ function startQuiz(mode = selectedMode, questions = null, title = "", gameTime =
     correct: 0,
     answered: 0,
     locked: false,
+    phase: "question",
     timer: null,
     seconds: 15,
     questionDuration: 15,
@@ -1308,6 +1334,7 @@ function renderQuestion() {
   gameState.questionDuration = Math.min(15, gameState.remainingGameTime);
   gameState.seconds = gameState.questionDuration;
   gameState.answerMap = shuffleAnswers(question);
+  setTowerPhase("question");
   gameProgress.textContent = `Question ${gameState.answered + 1} | Game ${formatClock(gameState.remainingGameTime)}`;
   gameQuestion.textContent = question.question;
   gameTimer.textContent = String(gameState.seconds);
@@ -1371,14 +1398,13 @@ function answerQuestion(answerIndex) {
   runTowerDefenseTurn(isCorrect);
   gameState.answered += 1;
   updateGameStats();
-  window.setTimeout(() => {
-    if (gameState.remainingGameTime <= 0) {
-      endGame(gameState.tower?.baseHp === 0 ? "Base destroyed" : "Time is up");
-      return;
-    }
-    gameState.index += 1;
-    renderQuestion();
-  }, 1300);
+  if (gameState.mode === "tower") {
+    setTowerPhase("defense");
+    gameFeedback.textContent = `${gameFeedback.textContent} Place towers, then continue.`;
+    return;
+  }
+
+  window.setTimeout(continueAfterQuestion, 1300);
 }
 
 function updateGameStats() {
@@ -1932,6 +1958,11 @@ playAgain.addEventListener("click", () => {
 
 towerButtons.forEach((button) => {
   button.addEventListener("click", () => buyTower(button.dataset.tower));
+});
+
+nextTowerQuestion.addEventListener("click", () => {
+  if (gameState.mode !== "tower" || gameState.phase !== "defense") return;
+  continueAfterQuestion();
 });
 
 resetLobby.addEventListener("click", () => {

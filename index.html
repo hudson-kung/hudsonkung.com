@@ -529,13 +529,12 @@
             <span class="eyebrow" id="gameModeLabel">Classic</span>
             <strong id="gameProgress">Question 1 / 5</strong>
           </div>
-          <div class="game-question-card">
+          <div class="tower-playfield" id="towerPlayfield">
+            <div class="game-question-card">
             <span class="timer-ring" id="gameTimer">15</span>
             <h2 id="gameQuestion">Ready?</h2>
             <div class="game-answer-grid" id="gameAnswers"></div>
           </div>
-          <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
-          <div class="tower-panel" id="towerPanel">
             <div class="tower-board-card">
               <div class="tower-board-top">
                 <span class="eyebrow">Tower Defense</span>
@@ -543,13 +542,19 @@
               </div>
               <div class="tower-board" id="towerBoard" aria-label="Tower defense map"></div>
             </div>
+          </div>
+          <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
+          <div class="tower-panel" id="towerPanel">
             <aside class="tower-control-card">
+              <div class="tower-panel-head">
               <div class="tower-enemy-card">
                 <div class="tower-enemy-avatar" id="towerEnemyAvatar">😈</div>
                 <div>
                   <strong id="towerEnemy">HP 70/70</strong>
                   <span>Incoming enemy</span>
                 </div>
+              </div>
+              <button class="button primary" type="button" id="nextTowerQuestion">Next question</button>
               </div>
               <div class="tower-stats">
                 <div><strong id="towerCoins">0</strong><span>Coins</span></div>
