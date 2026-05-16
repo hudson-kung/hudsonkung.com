@@ -409,11 +409,6 @@
           <h3>Risk points for treasure</h3>
           <p>Players earn coins, buy boosts, and make comeback plays.</p>
         </article>
-        <article class="mode-card" data-mode="tower">
-          <span>Tower Defense</span>
-          <h3>Answer, earn, defend</h3>
-          <p>Correct answers give coins to buy towers and stop incoming waves.</p>
-        </article>
         <article class="mode-card" data-mode="battle">
           <span>Battle Royale</span>
           <h3>Outlast the arena</h3>
@@ -534,19 +529,10 @@
             <span class="eyebrow" id="gameModeLabel">Classic</span>
             <strong id="gameProgress">Question 1 / 5</strong>
           </div>
-          <div class="tower-playfield" id="towerPlayfield">
-            <div class="game-question-card">
+          <div class="game-question-card">
             <span class="timer-ring" id="gameTimer">15</span>
             <h2 id="gameQuestion">Ready?</h2>
             <div class="game-answer-grid" id="gameAnswers"></div>
-          </div>
-            <div class="tower-board-card">
-              <div class="tower-board-top">
-                <span class="eyebrow">Tower Defense</span>
-                <strong>Round <span id="towerWave">1</span></strong>
-              </div>
-              <div class="tower-board" id="towerBoard" aria-label="Tower defense map"></div>
-            </div>
           </div>
           <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
           <div class="battle-panel" id="battlePanel">
@@ -574,29 +560,6 @@
                 <div><strong id="battleThreat">0</strong><span>Threat</span></div>
               </div>
               <div class="battle-log" id="battleLog">Answer correctly to attack the arena.</div>
-            </aside>
-          </div>
-          <div class="tower-panel" id="towerPanel">
-            <aside class="tower-control-card">
-              <div class="tower-panel-head">
-              <div class="tower-enemy-card">
-                <div class="tower-enemy-avatar" id="towerEnemyAvatar">😈</div>
-                <div>
-                  <strong id="towerEnemy">HP 70/70</strong>
-                  <span>Incoming enemy</span>
-                </div>
-              </div>
-              <button class="button primary" type="button" id="nextTowerQuestion">Next question</button>
-              </div>
-              <div class="tower-stats">
-                <div><strong id="towerCoins">0</strong><span>Coins</span></div>
-                <div><strong id="towerBase">10</strong><span>Base HP</span></div>
-              </div>
-              <div class="tower-shop">
-                <button class="button ghost full" type="button" data-tower="bolt">Mini Jester - 40</button>
-                <button class="button ghost full" type="button" data-tower="cannon">Mad Hatter - 75</button>
-              </div>
-              <p id="towerStatus">Answer correctly to earn coins.</p>
             </aside>
           </div>
         </div>

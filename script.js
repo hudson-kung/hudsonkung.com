@@ -172,17 +172,6 @@ const gameAvatar = document.querySelector("#gameAvatar");
 const gameScore = document.querySelector("#gameScore");
 const gameStreak = document.querySelector("#gameStreak");
 const gameCorrect = document.querySelector("#gameCorrect");
-const towerPlayfield = document.querySelector("#towerPlayfield");
-const towerPanel = document.querySelector("#towerPanel");
-const towerBoard = document.querySelector("#towerBoard");
-const towerCoins = document.querySelector("#towerCoins");
-const towerBase = document.querySelector("#towerBase");
-const towerWave = document.querySelector("#towerWave");
-const towerEnemy = document.querySelector("#towerEnemy");
-const towerEnemyAvatar = document.querySelector("#towerEnemyAvatar");
-const towerStatus = document.querySelector("#towerStatus");
-const towerButtons = document.querySelectorAll("[data-tower]");
-const nextTowerQuestion = document.querySelector("#nextTowerQuestion");
 const battlePanel = document.querySelector("#battlePanel");
 const battleArena = document.querySelector("#battleArena");
 const battleRound = document.querySelector("#battleRound");
@@ -237,7 +226,6 @@ const modeNames = {
   speed: "Speed Run",
   team: "Teams",
   gold: "Gold Quest",
-  tower: "Tower Defense",
   battle: "Battle Royale"
 };
 const packNames = {
@@ -333,13 +321,6 @@ const quizQuestions = {
     { question: "Which is worth more?", answers: ["10", "50", "25", "5"], correct: 1 },
     { question: "A treasure chest usually holds...", answers: ["Rewards", "Homework", "Rain", "Passwords"], correct: 0 }
   ],
-  tower: [
-    { question: "What resource buys towers?", answers: ["Coins", "Smoke", "Clouds", "Keys"], correct: 0 },
-    { question: "What should towers protect?", answers: ["The base", "The enemy", "The shop", "The timer"], correct: 0 },
-    { question: "Which tower sounds strongest?", answers: ["Cannon", "Leaf", "Blanket", "Bubble"], correct: 0 },
-    { question: "What happens when an enemy reaches the base?", answers: ["Base loses HP", "Coins double", "Timer stops", "All towers sell"], correct: 0 },
-    { question: "Best strategy after earning coins?", answers: ["Buy towers", "Ignore waves", "Skip answers", "Close shop"], correct: 0 }
-  ],
   battle: [
     { question: "In a battle royale, what matters most?", answers: ["Survive", "Stand still", "Ignore threats", "Drop shields"], correct: 0 },
     { question: "What does armor help block?", answers: ["Damage", "Points", "Questions", "Names"], correct: 0 },
@@ -350,21 +331,6 @@ const quizQuestions = {
 };
 const battleEnemyNames = ["Byte", "Nova", "Pixel", "Cipher", "Rift", "Vex"];
 const battleMonsterNames = ["Slime Brute", "Crystal Crawler", "Void Imp", "Storm Beast"];
-const towerPathCells = [
-  1, 2, 3, 4, 5, 6, 7,
-  16, 25, 34, 43, 52,
-  53, 54, 55, 56, 57, 58, 59,
-  68, 77, 86, 95, 104,
-  103, 102, 101, 100, 99, 98,
-  107, 116, 125, 134,
-  135, 136, 137, 138, 139, 140, 141
-];
-const towerSpotCells = [10, 12, 14, 19, 21, 23, 28, 30, 32, 37, 39, 41, 46, 48, 50, 64, 66, 70, 73, 75, 82, 84, 88, 91, 93, 109, 111, 113, 118, 120, 122, 127, 129, 131, 145, 147, 149, 151];
-const towerTypes = {
-  bolt: { name: "Mini Jester", icon: "⚡", cost: 40, damage: 18 },
-  cannon: { name: "Mad Hatter", icon: "🎩", cost: 75, damage: 42 }
-};
-
 let toastTimeout;
 let globalMessagePoller;
 let uiSettings = JSON.parse(window.localStorage.getItem("polymath-ui-settings") || "{\"compact\":false,\"reduceMotion\":false}");
@@ -400,7 +366,6 @@ let gameState = {
   questionDuration: 15,
   gameTime: 120,
   remainingGameTime: 120,
-  tower: null,
   battle: null,
   submitted: false,
   questions: null
@@ -1135,150 +1100,13 @@ function currentQuestions() {
   return gameState.questions?.length ? gameState.questions : (quizQuestions[gameState.mode] || quizQuestions.classic);
 }
 
-function makeTowerState() {
-  return {
-    coins: 25,
-    baseHp: 10,
-    wave: 1,
-    enemyHp: 70,
-    enemyMaxHp: 70,
-    enemyStep: 0,
-    towers: {
-      bolt: 0,
-      cannon: 0
-    },
-    placements: []
-  };
-}
-
-function renderTowerDefense() {
-  const active = gameState.mode === "tower";
-  towerPanel.classList.toggle("active", active);
-  towerPlayfield.classList.toggle("active", active);
-  gameMain.classList.toggle("tower-mode", active);
-  if (!active || !gameState.tower) {
-    gameMain.classList.remove("defense-phase", "question-phase");
-    return;
-  }
-
-  const tower = gameState.tower;
-  towerCoins.textContent = String(tower.coins);
-  towerBase.textContent = String(tower.baseHp);
-  towerWave.textContent = String(tower.wave);
-  towerEnemy.textContent = `HP ${tower.enemyHp}/${tower.enemyMaxHp}`;
-  if (towerEnemyAvatar) {
-    towerEnemyAvatar.textContent = tower.wave % 3 === 0 ? "🔥" : tower.wave % 2 === 0 ? "👾" : "😈";
-  }
-  renderTowerBoard(tower);
-  towerButtons.forEach((button) => {
-    const towerType = towerTypes[button.dataset.tower];
-    const cost = towerType.cost;
-    const count = tower.towers[button.dataset.tower] || 0;
-    button.disabled = tower.coins < cost || tower.baseHp <= 0;
-    button.textContent = `${towerType.icon} ${towerType.name} - ${cost} (${count})`;
-  });
-}
-
-function setTowerPhase(phase) {
-  if (gameState.mode !== "tower") return;
-  gameState.phase = phase;
-  gameMain.classList.toggle("defense-phase", phase === "defense");
-  gameMain.classList.toggle("question-phase", phase !== "defense");
-  nextTowerQuestion.disabled = phase !== "defense";
-}
-
 function continueAfterQuestion() {
   if (gameState.remainingGameTime <= 0) {
-    endGame(gameState.tower?.baseHp === 0 ? "Base destroyed" : "Time is up");
+    endGame("Time is up");
     return;
   }
   gameState.index += 1;
   renderQuestion();
-}
-
-function renderTowerBoard(tower) {
-  if (!towerBoard) return;
-  const enemyCell = towerPathCells[Math.min(tower.enemyStep, towerPathCells.length - 1)];
-  towerBoard.innerHTML = Array.from({ length: 153 }, (_, index) => {
-    const isPath = towerPathCells.includes(index);
-    const isSpot = towerSpotCells.includes(index);
-    const placement = tower.placements.find((towerPlacement) => towerPlacement.cell === index);
-    const isStart = index === towerPathCells[0];
-    const isBase = index === towerPathCells[towerPathCells.length - 1];
-    const isEnemy = index === enemyCell;
-    const classes = [
-      "tower-cell",
-      isPath ? "path" : "",
-      isSpot ? "spot" : "",
-      isStart ? "start" : "",
-      isBase ? "base" : "",
-      isEnemy ? "enemy" : "",
-      placement ? "placed" : ""
-    ].filter(Boolean).join(" ");
-    const label = placement ? towerTypes[placement.type].icon : isEnemy ? "👾" : isBase ? "🏰" : isStart ? "▶" : "";
-    return `<div class="${classes}">${label}</div>`;
-  }).join("");
-}
-
-function runTowerDefenseTurn(wasCorrect) {
-  if (gameState.mode !== "tower" || !gameState.tower) return;
-
-  const tower = gameState.tower;
-  if (wasCorrect) {
-    tower.coins += 35 + (gameState.streak * 5);
-  } else {
-    tower.baseHp -= 1;
-  }
-
-  tower.enemyStep = Math.min(towerPathCells.length - 1, tower.enemyStep + (wasCorrect ? 1 : 4));
-  const damage = (tower.towers.bolt * towerTypes.bolt.damage) + (tower.towers.cannon * towerTypes.cannon.damage);
-  tower.enemyHp -= damage;
-
-  if (tower.enemyHp <= 0) {
-    tower.wave += 1;
-    tower.coins += 25;
-    tower.enemyMaxHp = 70 + (tower.wave * 28);
-    tower.enemyHp = tower.enemyMaxHp;
-    tower.enemyStep = 0;
-    towerStatus.textContent = `Wave cleared. +25 coins. Wave ${tower.wave} incoming.`;
-  } else if (tower.enemyStep >= towerPathCells.length - 1) {
-    tower.baseHp -= 2;
-    tower.enemyStep = 0;
-    towerStatus.textContent = "Enemy reached your base. -2 HP.";
-  } else if (damage > 0) {
-    towerStatus.textContent = `Towers dealt ${damage} damage.`;
-  } else {
-    towerStatus.textContent = wasCorrect ? "Coins earned. Buy a tower." : "Enemy hit your base.";
-  }
-
-  if (tower.baseHp <= 0) {
-    tower.baseHp = 0;
-    gameState.remainingGameTime = 0;
-    towerStatus.textContent = "Base destroyed.";
-  }
-
-  renderTowerDefense();
-}
-
-function buyTower(type) {
-  if (gameState.mode !== "tower" || !gameState.tower) return;
-  const towerType = towerTypes[type];
-  if (!towerType) return;
-  const cost = towerType.cost;
-  if (gameState.tower.coins < cost) {
-    showToast("Not enough coins yet.");
-    return;
-  }
-
-  gameState.tower.coins -= cost;
-  gameState.tower.towers[type] += 1;
-  const filledCells = gameState.tower.placements.map((placement) => placement.cell);
-  const nextCell = towerSpotCells.find((cell) => !filledCells.includes(cell));
-  if (nextCell !== undefined) {
-    gameState.tower.placements.push({ type, cell: nextCell });
-  }
-  towerStatus.textContent = `${towerType.name} placed.`;
-  renderTowerDefense();
 }
 
 function makeBattleState() {
@@ -1460,14 +1288,12 @@ function startQuiz(mode = selectedMode, questions = null, title = "", gameTime =
     questionDuration: 15,
     gameTime: totalGameTime,
     remainingGameTime: totalGameTime,
-    tower: mode === "tower" ? makeTowerState() : null,
     battle: mode === "battle" ? makeBattleState() : null,
     submitted: false,
     questions: Array.isArray(questions) && questions.length ? questions : null
   };
   gameModeLabel.textContent = title || modeNames[mode] || "Classic";
   gameAvatar.className = `avatar large ${skins[selectedPlayerIcon]?.className || skins.blaze.className}`;
-  renderTowerDefense();
   renderBattleRoyale();
   showView("game");
   renderQuestion();
@@ -1487,7 +1313,6 @@ function renderQuestion() {
   gameState.questionDuration = Math.min(15, gameState.remainingGameTime);
   gameState.seconds = gameState.questionDuration;
   gameState.answerMap = shuffleAnswers(question);
-  setTowerPhase("question");
   gameProgress.textContent = `Question ${gameState.answered + 1} | Game ${formatClock(gameState.remainingGameTime)}`;
   gameQuestion.textContent = question.question;
   gameTimer.textContent = String(gameState.seconds);
@@ -1549,15 +1374,9 @@ function answerQuestion(answerIndex) {
       : `Not quite. Correct: ${answerMap.filter((item) => item.wasCorrect).map((item) => item.answer).join(", ")}.`;
   }
 
-  runTowerDefenseTurn(isCorrect);
   runBattleRoyaleTurn(isCorrect);
   gameState.answered += 1;
   updateGameStats();
-  if (gameState.mode === "tower") {
-    setTowerPhase("defense");
-    gameFeedback.textContent = `${gameFeedback.textContent} Place towers, then continue.`;
-    return;
-  }
 
   if (gameState.mode === "battle" && gameState.battle) {
     if (gameState.battle.hp <= 0) {
@@ -2123,15 +1942,6 @@ startGame.addEventListener("click", async () => {
 
 playAgain.addEventListener("click", () => {
   startQuiz(gameState.mode, gameState.questions, gameModeLabel.textContent, gameState.gameTime);
-});
-
-towerButtons.forEach((button) => {
-  button.addEventListener("click", () => buyTower(button.dataset.tower));
-});
-
-nextTowerQuestion.addEventListener("click", () => {
-  if (gameState.mode !== "tower" || gameState.phase !== "defense") return;
-  continueAfterQuestion();
 });
 
 resetLobby.addEventListener("click", () => {
