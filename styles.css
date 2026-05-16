@@ -2020,6 +2020,174 @@ select {
   margin: 0;
 }
 
+.battle-panel {
+  display: none;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.38fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.battle-panel.active {
+  display: grid;
+}
+
+.game-main.battle-mode .game-question-card {
+  min-height: 20rem;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 206, 82, 0.24), transparent 24%),
+    radial-gradient(circle at 86% 18%, rgba(255, 66, 120, 0.28), transparent 26%),
+    linear-gradient(145deg, #141827, #2d244f 56%, #172d42);
+}
+
+.battle-arena-card,
+.battle-control-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.battle-topline,
+.battle-player-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.battle-topline strong,
+.battle-player-card strong {
+  display: block;
+  color: #162033;
+  font-size: 1rem;
+}
+
+.battle-survivors {
+  display: grid;
+  min-width: 4.5rem;
+  padding: 0.65rem;
+  place-items: center;
+  color: white;
+  background: linear-gradient(145deg, #ff463a, #7a35ff);
+  border-radius: 8px;
+}
+
+.battle-survivors strong {
+  color: white;
+  font-size: 1.45rem;
+}
+
+.battle-survivors span,
+.battle-player-card span,
+.battle-log,
+.battle-stats span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.battle-arena {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.battle-combatant {
+  display: grid;
+  min-height: 7.2rem;
+  gap: 0.35rem;
+  align-content: center;
+  padding: 0.75rem;
+  color: #162033;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: inset 0 -3px rgba(0, 0, 0, 0.05);
+}
+
+.battle-combatant.you {
+  color: white;
+  background: linear-gradient(145deg, #2f7cff, #00b894);
+}
+
+.battle-combatant.player {
+  background: linear-gradient(145deg, #fff, #edf4ff);
+}
+
+.battle-combatant.monster {
+  background: linear-gradient(145deg, #fff3f3, #fff);
+  border-color: rgba(255, 73, 55, 0.25);
+}
+
+.battle-combatant.knocked {
+  opacity: 0.46;
+  filter: grayscale(0.8);
+}
+
+.battle-combatant strong,
+.battle-combatant span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.battle-mark {
+  width: fit-content;
+  padding: 0.22rem 0.45rem;
+  color: white;
+  background: #162033;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.battle-health {
+  overflow: hidden;
+  height: 0.45rem;
+  background: rgba(22, 32, 51, 0.12);
+  border-radius: 999px;
+}
+
+.battle-health i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #00c875, #ffcf35, #ff473d);
+  border-radius: inherit;
+}
+
+.battle-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.battle-stats div {
+  padding: 0.65rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.battle-stats strong,
+.battle-stats span {
+  display: block;
+}
+
+.battle-stats strong {
+  color: #162033;
+  font-size: 1.25rem;
+}
+
+.battle-log {
+  min-height: 4.25rem;
+  padding: 0.8rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .game-topline {
   display: flex;
   justify-content: space-between;
@@ -2590,6 +2758,7 @@ textarea {
   .tower-panel,
   .tower-playfield.active,
   .game-main.defense-phase .tower-playfield,
+  .battle-panel,
   .leaderboard-layout {
     grid-template-columns: 1fr;
   }
@@ -2626,6 +2795,8 @@ textarea {
   .settings-layout,
   .settings-grid,
   .tower-stats,
+  .battle-arena,
+  .battle-stats,
   .admin-account-row,
   .score-row,
   .rank-row {

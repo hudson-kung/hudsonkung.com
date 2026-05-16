@@ -183,6 +183,17 @@ const towerEnemyAvatar = document.querySelector("#towerEnemyAvatar");
 const towerStatus = document.querySelector("#towerStatus");
 const towerButtons = document.querySelectorAll("[data-tower]");
 const nextTowerQuestion = document.querySelector("#nextTowerQuestion");
+const battlePanel = document.querySelector("#battlePanel");
+const battleArena = document.querySelector("#battleArena");
+const battleRound = document.querySelector("#battleRound");
+const battleSurvivors = document.querySelector("#battleSurvivors");
+const battleAvatar = document.querySelector("#battleAvatar");
+const battlePlayerName = document.querySelector("#battlePlayerName");
+const battlePlayerStats = document.querySelector("#battlePlayerStats");
+const battleKnockouts = document.querySelector("#battleKnockouts");
+const battleDamage = document.querySelector("#battleDamage");
+const battleThreat = document.querySelector("#battleThreat");
+const battleLog = document.querySelector("#battleLog");
 const adminAccountCount = document.querySelector("#adminAccountCount");
 const adminAccountList = document.querySelector("#adminAccountList");
 const adminGrantUser = document.querySelector("#adminGrantUser");
@@ -226,7 +237,8 @@ const modeNames = {
   speed: "Speed Run",
   team: "Teams",
   gold: "Gold Quest",
-  tower: "Tower Defense"
+  tower: "Tower Defense",
+  battle: "Battle Royale"
 };
 const packNames = {
   starter: "Common Pack",
@@ -327,8 +339,17 @@ const quizQuestions = {
     { question: "Which tower sounds strongest?", answers: ["Cannon", "Leaf", "Blanket", "Bubble"], correct: 0 },
     { question: "What happens when an enemy reaches the base?", answers: ["Base loses HP", "Coins double", "Timer stops", "All towers sell"], correct: 0 },
     { question: "Best strategy after earning coins?", answers: ["Buy towers", "Ignore waves", "Skip answers", "Close shop"], correct: 0 }
+  ],
+  battle: [
+    { question: "In a battle royale, what matters most?", answers: ["Survive", "Stand still", "Ignore threats", "Drop shields"], correct: 0 },
+    { question: "What does armor help block?", answers: ["Damage", "Points", "Questions", "Names"], correct: 0 },
+    { question: "Which target should you clear first?", answers: ["Weak monster", "Empty wall", "Safe zone", "Scoreboard"], correct: 0 },
+    { question: "What happens when HP reaches zero?", answers: ["You are knocked out", "You level up", "You get full shield", "The timer resets"], correct: 0 },
+    { question: "Best move after a correct answer?", answers: ["Attack", "Hide forever", "Lose coins", "Close the game"], correct: 0 }
   ]
 };
+const battleEnemyNames = ["Byte", "Nova", "Pixel", "Cipher", "Rift", "Vex"];
+const battleMonsterNames = ["Slime Brute", "Crystal Crawler", "Void Imp", "Storm Beast"];
 const towerPathCells = [
   1, 2, 3, 4, 5, 6, 7,
   16, 25, 34, 43, 52,
@@ -380,6 +401,7 @@ let gameState = {
   gameTime: 120,
   remainingGameTime: 120,
   tower: null,
+  battle: null,
   submitted: false,
   questions: null
 };
@@ -1259,6 +1281,135 @@ function buyTower(type) {
   renderTowerDefense();
 }
 
+function makeBattleState() {
+  const realPlayers = joinedPlayers
+    .filter((player) => player.name && player.name !== currentPlayerName)
+    .slice(0, 4)
+    .map((player, index) => ({
+      id: `player-${index}`,
+      name: player.name,
+      type: "player",
+      hp: 70,
+      maxHp: 70,
+      power: 12 + (index * 2),
+      alive: true
+    }));
+  const fillerPlayers = battleEnemyNames.slice(0, Math.max(0, 4 - realPlayers.length)).map((name, index) => ({
+    id: `bot-${index}`,
+    name,
+    type: "player",
+    hp: 62,
+    maxHp: 62,
+    power: 10 + index,
+    alive: true
+  }));
+  const monsters = battleMonsterNames.map((name, index) => ({
+    id: `monster-${index}`,
+    name,
+    type: "monster",
+    hp: 48 + (index * 16),
+    maxHp: 48 + (index * 16),
+    power: 9 + (index * 3),
+    alive: true
+  }));
+
+  return {
+    hp: 100,
+    shield: 20,
+    round: 1,
+    knockouts: 0,
+    damage: 0,
+    threat: 1,
+    enemies: [...realPlayers, ...fillerPlayers, ...monsters],
+    log: "Drop in. Correct answers attack enemies and charge shields."
+  };
+}
+
+function liveBattleEnemies() {
+  return gameState.battle?.enemies.filter((enemy) => enemy.alive) || [];
+}
+
+function renderBattleRoyale() {
+  const active = gameState.mode === "battle";
+  battlePanel.classList.toggle("active", active);
+  gameMain.classList.toggle("battle-mode", active);
+  if (!active || !gameState.battle) return;
+
+  const battle = gameState.battle;
+  const liveEnemies = liveBattleEnemies();
+  battleAvatar.className = `avatar ${skins[selectedPlayerIcon]?.className || skins.blaze.className}`;
+  battlePlayerName.textContent = currentPlayerName || activeUser?.name || "You";
+  battlePlayerStats.textContent = `${battle.hp} HP | ${battle.shield} shield`;
+  battleRound.textContent = `Round ${battle.round}`;
+  battleSurvivors.textContent = String(liveEnemies.length + 1);
+  battleKnockouts.textContent = String(battle.knockouts);
+  battleDamage.textContent = String(battle.damage);
+  battleThreat.textContent = String(battle.threat);
+  battleLog.textContent = battle.log;
+  battleArena.innerHTML = [
+    `<div class="battle-combatant you"><div class="avatar tiny ${skins[selectedPlayerIcon]?.className || skins.blaze.className}"></div><strong>You</strong><span>${battle.hp} HP</span></div>`,
+    ...battle.enemies.map((enemy) => {
+      const hpPercent = Math.max(0, Math.round((enemy.hp / enemy.maxHp) * 100));
+      const classes = ["battle-combatant", enemy.type, enemy.alive ? "" : "knocked"].filter(Boolean).join(" ");
+      return `
+        <div class="${classes}">
+          <div class="battle-mark">${enemy.type === "monster" ? "NPC" : "PVP"}</div>
+          <strong>${escapeHtml(enemy.name)}</strong>
+          <span>${enemy.alive ? `${enemy.hp} HP` : "Knocked"}</span>
+          <div class="battle-health"><i style="width:${hpPercent}%"></i></div>
+        </div>
+      `;
+    })
+  ].join("");
+}
+
+function runBattleRoyaleTurn(wasCorrect) {
+  if (gameState.mode !== "battle" || !gameState.battle) return;
+
+  const battle = gameState.battle;
+  const liveEnemies = liveBattleEnemies();
+  if (!liveEnemies.length) return;
+
+  battle.round += 1;
+  if (wasCorrect) {
+    const target = liveEnemies.reduce((lowest, enemy) => enemy.hp < lowest.hp ? enemy : lowest, liveEnemies[0]);
+    const damage = 26 + Math.min(gameState.streak * 7, 35) + Math.floor(Math.random() * 10);
+    target.hp = Math.max(0, target.hp - damage);
+    battle.damage += damage;
+    battle.shield = Math.min(60, battle.shield + 8 + gameState.streak);
+    if (target.hp <= 0) {
+      target.alive = false;
+      battle.knockouts += 1;
+      battle.log = `${target.name} got knocked. +1 KO, shield charged.`;
+      addAccountCoins(15);
+    } else {
+      battle.log = `${target.name} took ${damage} damage. Shield charged.`;
+    }
+  } else {
+    battle.threat += 1;
+    battle.log = "Missed answer. The arena collapses in.";
+  }
+
+  const attackers = liveBattleEnemies().slice(0, Math.min(3, liveBattleEnemies().length));
+  const incoming = attackers.reduce((total, enemy) => total + Math.max(4, Math.round(enemy.power / 2)), wasCorrect ? 0 : 8 + battle.threat);
+  const blocked = Math.min(battle.shield, incoming);
+  battle.shield -= blocked;
+  battle.hp = Math.max(0, battle.hp - (incoming - blocked));
+  if (incoming > 0) {
+    battle.log = `${battle.log} Incoming ${incoming}, shield blocked ${blocked}.`;
+  }
+
+  if (battle.hp <= 0) {
+    gameState.remainingGameTime = 0;
+    battle.log = "You were knocked out of the arena.";
+  } else if (!liveBattleEnemies().length) {
+    gameState.remainingGameTime = 0;
+    battle.log = "Victory royale. You cleared every player and monster.";
+  }
+
+  renderBattleRoyale();
+}
+
 function shuffleAnswers(question) {
   const correctAnswers = question.correctAnswers || [question.correct ?? 0];
   const paired = question.answers.map((answer, index) => ({
@@ -1310,12 +1461,14 @@ function startQuiz(mode = selectedMode, questions = null, title = "", gameTime =
     gameTime: totalGameTime,
     remainingGameTime: totalGameTime,
     tower: mode === "tower" ? makeTowerState() : null,
+    battle: mode === "battle" ? makeBattleState() : null,
     submitted: false,
     questions: Array.isArray(questions) && questions.length ? questions : null
   };
   gameModeLabel.textContent = title || modeNames[mode] || "Classic";
   gameAvatar.className = `avatar large ${skins[selectedPlayerIcon]?.className || skins.blaze.className}`;
   renderTowerDefense();
+  renderBattleRoyale();
   showView("game");
   renderQuestion();
 }
@@ -1339,6 +1492,7 @@ function renderQuestion() {
   gameQuestion.textContent = question.question;
   gameTimer.textContent = String(gameState.seconds);
   gameFeedback.textContent = "Pick the best answer before time runs out.";
+  renderBattleRoyale();
   gameAnswers.innerHTML = gameState.answerMap.map((item, index) => (
     `<button type="button" data-answer="${index}">${item.answer}</button>`
   )).join("");
@@ -1396,12 +1550,27 @@ function answerQuestion(answerIndex) {
   }
 
   runTowerDefenseTurn(isCorrect);
+  runBattleRoyaleTurn(isCorrect);
   gameState.answered += 1;
   updateGameStats();
   if (gameState.mode === "tower") {
     setTowerPhase("defense");
     gameFeedback.textContent = `${gameFeedback.textContent} Place towers, then continue.`;
     return;
+  }
+
+  if (gameState.mode === "battle" && gameState.battle) {
+    if (gameState.battle.hp <= 0) {
+      endGame("Knocked out");
+      return;
+    }
+    if (!liveBattleEnemies().length) {
+      gameState.score += 1000;
+      updateGameStats();
+      endGame("Victory royale");
+      return;
+    }
+    gameFeedback.textContent = `${gameFeedback.textContent} ${gameState.battle.log}`;
   }
 
   window.setTimeout(continueAfterQuestion, 1300);

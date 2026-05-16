@@ -414,6 +414,11 @@
           <h3>Answer, earn, defend</h3>
           <p>Correct answers give coins to buy towers and stop incoming waves.</p>
         </article>
+        <article class="mode-card" data-mode="battle">
+          <span>Battle Royale</span>
+          <h3>Outlast the arena</h3>
+          <p>Fight rival players and NPC monsters while answers power your attacks.</p>
+        </article>
       </div>
 
       <div class="launch-strip">
@@ -544,6 +549,33 @@
             </div>
           </div>
           <p class="game-feedback" id="gameFeedback">Pick the best answer before time runs out.</p>
+          <div class="battle-panel" id="battlePanel">
+            <div class="battle-arena-card">
+              <div class="battle-topline">
+                <div>
+                  <span class="eyebrow">Battle Royale</span>
+                  <strong id="battleRound">Round 1</strong>
+                </div>
+                <div class="battle-survivors"><strong id="battleSurvivors">8</strong><span>left</span></div>
+              </div>
+              <div class="battle-arena" id="battleArena" aria-label="Battle royale arena"></div>
+            </div>
+            <aside class="battle-control-card">
+              <div class="battle-player-card">
+                <div class="avatar skin-blaze" id="battleAvatar"></div>
+                <div>
+                  <strong id="battlePlayerName">You</strong>
+                  <span id="battlePlayerStats">100 HP | 0 shield</span>
+                </div>
+              </div>
+              <div class="battle-stats">
+                <div><strong id="battleKnockouts">0</strong><span>KOs</span></div>
+                <div><strong id="battleDamage">0</strong><span>Damage</span></div>
+                <div><strong id="battleThreat">0</strong><span>Threat</span></div>
+              </div>
+              <div class="battle-log" id="battleLog">Answer correctly to attack the arena.</div>
+            </aside>
+          </div>
           <div class="tower-panel" id="towerPanel">
             <aside class="tower-control-card">
               <div class="tower-panel-head">
