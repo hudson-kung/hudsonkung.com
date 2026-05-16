@@ -674,24 +674,6 @@ h2 {
     repeating-linear-gradient(135deg, #831843 0 12px, #db2777 12px 26px, #fb7185 26px 40px);
 }
 
-.skin-obsidian {
-  --eye: #facc15;
-  --mouth: rgba(250, 204, 21, 0.48);
-  background:
-    radial-gradient(circle at 50% 20%, #fef08a 0 10%, transparent 11%),
-    linear-gradient(45deg, transparent 0 43%, #eab308 43% 51%, transparent 51% 100%),
-    linear-gradient(145deg, #030407 0 45%, #facc15 45% 62%, #1f2937 62% 100%);
-}
-
-.skin-eclipse {
-  --eye: #bfdbfe;
-  --mouth: rgba(191, 219, 254, 0.46);
-  background:
-    radial-gradient(circle at 50% 50%, #020617 0 22%, transparent 23%),
-    radial-gradient(circle at 68% 24%, #bfdbfe 0 7%, transparent 8%),
-    conic-gradient(from 45deg, #020617, #3b82f6, #111827, #facc15, #020617);
-}
-
 .skin-sophyra {
   --eye: #111827;
   --mouth: rgba(17, 24, 39, 0.48);

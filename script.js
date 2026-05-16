@@ -69,20 +69,6 @@ const skins = {
     trait: "Phantom +18",
     rarity: "Mythical"
   },
-  obsidian: {
-    className: "skin-obsidian",
-    name: "Obsidian King",
-    bio: "A black-and-gold elite skin for players who rule the final round.",
-    trait: "Crown +15",
-    rarity: "Elite"
-  },
-  eclipse: {
-    className: "skin-eclipse",
-    name: "Eclipse Striker",
-    bio: "An elite shadow champion with a bright gold winning streak.",
-    trait: "Eclipse +15",
-    rarity: "Elite"
-  },
   sophyra: {
     className: "skin-sophyra",
     name: "Sophyra",
@@ -260,8 +246,6 @@ const skinDisplayOdds = {
   inferno: 500,
   nebula: 500,
   ruby: 500,
-  obsidian: 1000,
-  eclipse: 1000,
   sophyra: 1000
 };
 const packPools = {
@@ -276,8 +260,6 @@ const packPools = {
     { skin: "inferno", odds: 1200 },
     { skin: "nebula", odds: 1200 },
     { skin: "ruby", odds: 1200 },
-    { skin: "obsidian", odds: 2400 },
-    { skin: "eclipse", odds: 2400 },
     { skin: "sophyra", odds: 2400 }
   ],
   mystic: [
@@ -291,8 +273,6 @@ const packPools = {
     { skin: "inferno", odds: 700 },
     { skin: "nebula", odds: 700 },
     { skin: "ruby", odds: 700 },
-    { skin: "obsidian", odds: 1500 },
-    { skin: "eclipse", odds: 1500 },
     { skin: "sophyra", odds: 1500 }
   ],
   legend: [
@@ -306,8 +286,6 @@ const packPools = {
     { skin: "inferno", odds: 300 },
     { skin: "nebula", odds: 300 },
     { skin: "ruby", odds: 300 },
-    { skin: "obsidian", odds: 850 },
-    { skin: "eclipse", odds: 850 },
     { skin: "sophyra", odds: 850 }
   ]
 };
