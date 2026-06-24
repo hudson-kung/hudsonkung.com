@@ -186,10 +186,15 @@ const state = {
   ranked: [],
   liveTrends: [],
   lastPrompt: "",
-  hasAsked: false
+  hasAsked: false,
+  isAuthed: false
 };
 
 const elements = {
+  authShell: document.querySelector("#authShell"),
+  authMount: document.querySelector("#authMount"),
+  appShell: document.querySelector("#appShell"),
+  userMenu: document.querySelector("#userMenu"),
   budget: document.querySelector("#budget"),
   skill: document.querySelector("#skill"),
   hours: document.querySelector("#hours"),
@@ -214,6 +219,98 @@ const elements = {
   trendBars: document.querySelector("#trendBars"),
   trendSource: document.querySelector("#trendSource")
 };
+
+function setAuthNote(message) {
+  elements.authMount.innerHTML = `<p class="auth-note">${escapeHtml(message)}</p>`;
+}
+
+function clerkDomainFromKey(publishableKey) {
+  try {
+    return atob(publishableKey.split("_")[2]).slice(0, -1);
+  } catch (error) {
+    return "";
+  }
+}
+
+function loadScript(src, attributes = {}) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener("load", resolve, { once: true });
+      resolve();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+    Object.entries(attributes).forEach(([key, value]) => {
+      script.setAttribute(key, value);
+    });
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+function showAuthedApp() {
+  state.isAuthed = true;
+  elements.authShell.classList.add("hidden");
+  elements.appShell.classList.remove("hidden");
+  update();
+  loadLiveTrends();
+}
+
+async function initClerkAuth() {
+  let publishableKey = "";
+  try {
+    const response = await fetch("/api/config");
+    const config = await response.json();
+    publishableKey = config.clerkPublishableKey || "";
+  } catch (error) {
+    setAuthNote("Could not load auth config.");
+    return;
+  }
+
+  if (!publishableKey) {
+    setAuthNote("Set CLERK_PUBLISHABLE_KEY in Vercel or your local .env to enable sign in.");
+    return;
+  }
+
+  const domain = clerkDomainFromKey(publishableKey);
+  if (!domain) {
+    setAuthNote("Your Clerk publishable key looks invalid.");
+    return;
+  }
+
+  try {
+    await loadScript(`https://${domain}/npm/@clerk/ui@1/dist/ui.browser.js`);
+    await loadScript(`https://${domain}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`, {
+      "data-clerk-publishable-key": publishableKey
+    });
+    await window.Clerk.load({
+      ui: { ClerkUI: window.__internal_ClerkUICtor }
+    });
+
+    if (window.Clerk.isSignedIn) {
+      window.Clerk.mountUserButton(elements.userMenu);
+      showAuthedApp();
+      return;
+    }
+
+    elements.authMount.innerHTML = '<div id="signInMount"></div>';
+    window.Clerk.mountSignIn(document.querySelector("#signInMount"));
+    window.Clerk.addListener(({ user }) => {
+      if (user) {
+        window.Clerk.mountUserButton(elements.userMenu);
+        showAuthedApp();
+      }
+    });
+  } catch (error) {
+    setAuthNote("Clerk could not load. Check your Clerk allowed domains and publishable key.");
+  }
+}
 
 function getInputs() {
   return {
@@ -643,5 +740,4 @@ elements.aiPrompt.addEventListener("keydown", (event) => {
   }
 });
 
-update();
-loadLiveTrends();
+initClerkAuth();

@@ -254,6 +254,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (urlPath === "/api/config") {
+    sendJson(res, 200, {
+      clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || ""
+    });
+    return;
+  }
+
   if (urlPath === "/api/trends") {
     fetchGoogleTrends()
       .then((trends) => {

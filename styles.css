@@ -39,6 +39,37 @@ button {
   padding: 36px 0 48px;
 }
 
+.auth-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card {
+  display: grid;
+  gap: 22px;
+  width: min(460px, 100%);
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.auth-note {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.user-menu {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 36px;
+  margin-bottom: 8px;
+}
+
 .search-home {
   display: grid;
   min-height: 70vh;
