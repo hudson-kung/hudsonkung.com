@@ -71,14 +71,83 @@ function extractOutputText(payload) {
     .trim();
 }
 
-async function callOpenAi({ message, context }) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    const error = new Error("Missing OPENAI_API_KEY");
-    error.statusCode = 401;
+function postJson(url, headers, payload) {
+  return new Promise((resolve, reject) => {
+    const target = new URL(url);
+    const body = JSON.stringify(payload);
+    const request = https.request(
+      {
+        hostname: target.hostname,
+        path: `${target.pathname}${target.search}`,
+        method: "POST",
+        headers: {
+          ...headers,
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(body)
+        }
+      },
+      (response) => {
+        let responseBody = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          responseBody += chunk;
+        });
+        response.on("end", () => {
+          let parsed = {};
+          try {
+            parsed = responseBody ? JSON.parse(responseBody) : {};
+          } catch (error) {
+            reject(new Error("AI provider returned invalid JSON"));
+            return;
+          }
+          resolve({ ok: response.statusCode >= 200 && response.statusCode < 300, status: response.statusCode, body: parsed });
+        });
+      }
+    );
+
+    request.on("error", reject);
+    request.setTimeout(30000, () => {
+      request.destroy(new Error("AI provider request timed out"));
+    });
+    request.write(body);
+    request.end();
+  });
+}
+
+function systemPrompt() {
+  return "You are a practical AI business coach inside an app called TrendSearcher. Reply conversationally, directly, and briefly. Help users choose or improve business ideas using their budget, skills, risk, and trend signals. Do not pretend trend data is guaranteed current. Give concrete next steps.";
+}
+
+async function callNvidia({ message, context }) {
+  const result = await postJson(
+    "https://integrate.api.nvidia.com/v1/chat/completions",
+    {
+      Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
+    },
+    {
+      model: process.env.NVIDIA_MODEL || "meta/llama-3.1-8b-instruct",
+      max_tokens: 420,
+      temperature: 0.4,
+      messages: [
+        { role: "system", content: systemPrompt() },
+        {
+          role: "user",
+          content: `User message: ${message}\n\nApp context JSON:\n${JSON.stringify(context || {}, null, 2)}`
+        }
+      ]
+    }
+  );
+
+  if (!result.ok) {
+    const error = new Error(result.body.error?.message || "NVIDIA request failed");
+    error.statusCode = result.status;
     throw error;
   }
 
+  return result.body.choices?.[0]?.message?.content?.trim() || "";
+}
+
+async function callOpenAi({ message, context }) {
   const model = process.env.OPENAI_MODEL || "gpt-5.5";
   const payload = {
     model,
@@ -87,8 +156,7 @@ async function callOpenAi({ message, context }) {
     input: [
       {
         role: "developer",
-        content:
-          "You are a practical AI business coach inside an app called TrendSearcher. Reply conversationally, directly, and briefly. Help users choose or improve business ideas using their budget, skills, risk, and trend signals. Do not pretend trend data is guaranteed current. Give concrete next steps."
+        content: systemPrompt()
       },
       {
         role: "user",
@@ -100,7 +168,7 @@ async function callOpenAi({ message, context }) {
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify(payload)
@@ -114,6 +182,15 @@ async function callOpenAi({ message, context }) {
   }
 
   return extractOutputText(result) || "I could not produce a response. Try asking again with a little more detail.";
+}
+
+async function callAi({ message, context }) {
+  if (process.env.NVIDIA_API_KEY) return callNvidia({ message, context });
+  if (process.env.OPENAI_API_KEY) return callOpenAi({ message, context });
+
+  const error = new Error("Missing NVIDIA_API_KEY or OPENAI_API_KEY");
+  error.statusCode = 401;
+  throw error;
 }
 
 function readTag(xml, tag) {
@@ -166,7 +243,7 @@ const server = http.createServer((req, res) => {
           sendJson(res, 400, { error: "Message is required" });
           return null;
         }
-        return callOpenAi({ message: body.message.slice(0, 2000), context: body.context });
+        return callAi({ message: body.message.slice(0, 2000), context: body.context });
       })
       .then((reply) => {
         if (reply) sendJson(res, 200, { reply });
