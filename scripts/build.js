@@ -11,7 +11,8 @@ const files = [
   "about.html",
   "styles.css",
   "app.js",
-  "dashboard.js"
+  "dashboard.js",
+  "favicon.svg"
 ];
 
 fs.rmSync(outDir, { recursive: true, force: true });

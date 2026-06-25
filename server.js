@@ -60,6 +60,7 @@ const server = http.createServer((request, response) => {
 
     response.writeHead(200, {
       "Content-Type": types[path.extname(filePath)] || "application/octet-stream",
+      "Cache-Control": path.basename(filePath) === "favicon.svg" ? "no-store" : "public, max-age=0",
     });
     response.end(content);
   });
