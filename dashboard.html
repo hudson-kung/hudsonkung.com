@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | SiteForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dashboard-body">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="SiteForge AI home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span>SiteForge AI</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a aria-current="page" href="dashboard.html">Dashboard</a>
+        <a href="builder.html">Builder</a>
+      </nav>
+      <a class="header-button" href="builder.html">New site</a>
+    </header>
+
+    <main class="dashboard-page">
+      <section class="dashboard-hero">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h1>Your sites</h1>
+          <p>Every generated draft appears here so you can jump back into ideas without losing the thread.</p>
+        </div>
+        <div class="dashboard-actions">
+          <button type="button" id="clearSites" class="secondary-button">Clear all</button>
+          <a class="primary-button" href="builder.html">Create site</a>
+        </div>
+      </section>
+
+      <section class="site-list-panel">
+        <div class="site-list-head">
+          <span>Project</span>
+          <span>Type</span>
+          <span>Updated</span>
+          <span>Actions</span>
+        </div>
+        <div id="siteList" class="site-list"></div>
+      </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+  </body>
+</html>

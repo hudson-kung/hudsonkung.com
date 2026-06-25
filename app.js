@@ -1,743 +1,557 @@
-const trendData = [
-  {
-    name: "AI workflow setup",
-    description: "Build automations, chatbots, and document workflows for small businesses.",
-    category: "technical",
-    budget: "low",
-    risk: "balanced",
-    region: ["us", "global", "urban", "suburban"],
-    trend: [48, 52, 57, 66, 71, 79, 88],
-    demand: 94,
-    competition: 62,
-    startupCost: 450,
-    firstSaleDays: 14,
-    tags: ["B2B", "AI", "service"],
-    plan: [
-      "Pick one niche, like realtors, dentists, or contractors.",
-      "Make a one-page offer with three fixed packages.",
-      "Audit ten local businesses and send custom improvement videos.",
-      "Turn the first project into a repeatable checklist."
-    ]
-  },
-  {
-    name: "Short-form content studio",
-    description: "Create clips, hooks, captions, and posting systems for founders and local brands.",
-    category: "creative",
-    budget: "low",
-    risk: "balanced",
-    region: ["us", "global", "urban"],
-    trend: [54, 60, 63, 68, 72, 76, 82],
-    demand: 87,
-    competition: 71,
-    startupCost: 700,
-    firstSaleDays: 10,
-    tags: ["creator economy", "retainers", "marketing"],
-    plan: [
-      "Choose a vertical with money behind it, like fitness, home services, or finance.",
-      "Create three sample edits from public footage or your own demos.",
-      "Sell a monthly batch of clips instead of one-off posts.",
-      "Track leads generated so clients see business value."
-    ]
-  },
-  {
-    name: "Home energy tune-ups",
-    description: "Help homeowners lower bills with insulation checks, smart thermostats, and rebates.",
-    category: "local",
-    budget: "medium",
-    risk: "safe",
-    region: ["us", "suburban"],
-    trend: [39, 43, 51, 55, 61, 69, 77],
-    demand: 81,
-    competition: 48,
-    startupCost: 2400,
-    firstSaleDays: 28,
-    tags: ["local", "savings", "sustainability"],
-    plan: [
-      "Research utility rebates in your county.",
-      "Offer a fixed-price home efficiency report.",
-      "Partner with HVAC and insulation installers for referrals.",
-      "Add seasonal packages before summer and winter."
-    ]
-  },
-  {
-    name: "Micro learning products",
-    description: "Sell focused templates, courses, and coaching for one painful skill gap.",
-    category: "education",
-    budget: "low",
-    risk: "bold",
-    region: ["us", "global"],
-    trend: [44, 47, 50, 58, 65, 68, 73],
-    demand: 78,
-    competition: 69,
-    startupCost: 300,
-    firstSaleDays: 21,
-    tags: ["digital product", "education", "scalable"],
-    plan: [
-      "Find one repeat problem people already pay to solve.",
-      "Pre-sell a workshop before recording a full course.",
-      "Bundle worksheets, prompts, and examples.",
-      "Use buyer questions to build the next module."
-    ]
-  },
-  {
-    name: "Niche lead generation",
-    description: "Generate booked calls for specific service businesses using search and social ads.",
-    category: "sales",
-    budget: "medium",
-    risk: "bold",
-    region: ["us", "urban", "suburban"],
-    trend: [51, 49, 55, 60, 67, 74, 80],
-    demand: 89,
-    competition: 74,
-    startupCost: 1800,
-    firstSaleDays: 18,
-    tags: ["sales", "ads", "B2B"],
-    plan: [
-      "Choose a service with high customer lifetime value.",
-      "Build one landing page and one simple ad funnel.",
-      "Offer pay-per-qualified-lead after a setup fee.",
-      "Use call tracking to prove attribution."
-    ]
-  },
-  {
-    name: "Personalized meal prep",
-    description: "Make health-specific weekly meals for busy people with clear dietary goals.",
-    category: "local",
-    budget: "medium",
-    risk: "safe",
-    region: ["us", "urban", "suburban"],
-    trend: [46, 50, 56, 61, 63, 70, 75],
-    demand: 82,
-    competition: 58,
-    startupCost: 3200,
-    firstSaleDays: 20,
-    tags: ["local", "health", "subscription"],
-    plan: [
-      "Start with two diet lanes, such as high-protein and diabetic-friendly.",
-      "Sell five beta subscriptions before buying equipment.",
-      "Standardize ingredients to keep margins predictable.",
-      "Add corporate lunch drops once reviews are strong."
-    ]
-  },
-  {
-    name: "Mobile car detailing",
-    description: "Clean and detail cars at customers' homes using simple booking, before-after photos, and local search demand.",
-    category: "local",
-    budget: "low",
-    risk: "safe",
-    region: ["us", "urban", "suburban"],
-    trend: [42, 46, 52, 57, 64, 71, 79],
-    demand: 84,
-    competition: 52,
-    startupCost: 350,
-    firstSaleDays: 7,
-    tags: ["cars", "cleaning", "local"],
-    plan: [
-      "Buy only the basic cleaning kit and towels first.",
-      "Offer five discounted details to neighbors for before-after photos.",
-      "Post results in local Facebook groups and Google Business Profile.",
-      "Add monthly maintenance plans after the first ten customers."
-    ]
-  },
-  {
-    name: "Local errand service",
-    description: "Run errands, pickups, and simple tasks for busy families, seniors, and local professionals.",
-    category: "local",
-    budget: "low",
-    risk: "safe",
-    region: ["us", "urban", "suburban"],
-    trend: [35, 40, 46, 50, 56, 61, 67],
-    demand: 73,
-    competition: 39,
-    startupCost: 120,
-    firstSaleDays: 5,
-    tags: ["local", "services", "low cost"],
-    plan: [
-      "Pick a small service area you can reach quickly.",
-      "Make a simple menu: pickups, returns, grocery runs, and admin tasks.",
-      "Post a local intro offer with clear prices.",
-      "Ask every customer for one referral."
-    ]
-  },
-  {
-    name: "AI resume and job kit",
-    description: "Use AI to help job seekers rewrite resumes, cover letters, LinkedIn profiles, and interview answers.",
-    category: "technical",
-    budget: "low",
-    risk: "balanced",
-    region: ["us", "global"],
-    trend: [50, 54, 61, 69, 75, 82, 90],
-    demand: 88,
-    competition: 66,
-    startupCost: 80,
-    firstSaleDays: 8,
-    tags: ["AI", "jobs", "templates"],
-    plan: [
-      "Create one strong sample resume makeover.",
-      "Sell a fixed package with resume, LinkedIn, and interview prep.",
-      "Find customers in student groups and job search communities.",
-      "Turn repeated edits into templates."
-    ]
-  }
-];
-
-const state = {
-  risk: "safe",
-  ranked: [],
-  liveTrends: [],
-  lastPrompt: "",
-  hasAsked: false,
-  isAuthed: false
+const examples = {
+  fitness:
+    "A high-energy website for a personal fitness coach in Denver. The audience is busy professionals who want strength training, nutrition guidance, proof from clients, and a clear way to book a free consultation.",
+  saas:
+    "A clean launch page for a SaaS product that helps small teams automate customer support. It should feel trustworthy, modern, and conversion-focused with features, metrics, pricing, and a trial call to action.",
+  cafe:
+    "A warm website for a neighborhood cafe and bakery. Highlight seasonal drinks, fresh pastries, cozy seating, opening hours, a simple menu, and directions for local customers.",
 };
 
-const elements = {
-  authShell: document.querySelector("#authShell"),
-  authMount: document.querySelector("#authMount"),
-  appShell: document.querySelector("#appShell"),
-  userMenu: document.querySelector("#userMenu"),
-  budget: document.querySelector("#budget"),
-  skill: document.querySelector("#skill"),
-  hours: document.querySelector("#hours"),
-  hoursValue: document.querySelector("#hoursValue"),
-  region: document.querySelector("#region"),
-  segments: document.querySelectorAll(".segment"),
-  generate: document.querySelector("#generate"),
-  ideaList: document.querySelector("#ideaList"),
-  marketScore: document.querySelector("#marketScore"),
-  aiSearchForm: document.querySelector("#aiSearchForm"),
-  aiPrompt: document.querySelector("#aiPrompt"),
-  aiAskButton: document.querySelector("#aiAskButton"),
-  chatThread: document.querySelector("#chatThread"),
-  resultsPanel: document.querySelector("#resultsPanel"),
-  aiPick: document.querySelector("#aiPick"),
-  aiReason: document.querySelector("#aiReason"),
-  startupCost: document.querySelector("#startupCost"),
-  firstSale: document.querySelector("#firstSale"),
-  launchPlan: document.querySelector("#launchPlan"),
-  trendHeadline: document.querySelector("#trendHeadline"),
-  canvas: document.querySelector("#trendCanvas"),
-  trendBars: document.querySelector("#trendBars"),
-  trendSource: document.querySelector("#trendSource")
+const palettes = {
+  clean: {
+    bg: "#f7faf8",
+    text: "#16211b",
+    muted: "#65736b",
+    accent: "#168352",
+    soft: "#d9f5e6",
+    contrast: "#ffffff",
+  },
+  bold: {
+    bg: "#fff8f0",
+    text: "#16100d",
+    muted: "#6d6057",
+    accent: "#e8503f",
+    soft: "#ffd66b",
+    contrast: "#ffffff",
+  },
+  warm: {
+    bg: "#fffaf2",
+    text: "#211912",
+    muted: "#725f4d",
+    accent: "#b75f36",
+    soft: "#f3d7a6",
+    contrast: "#ffffff",
+  },
+  editorial: {
+    bg: "#f6f3ee",
+    text: "#171717",
+    muted: "#64605a",
+    accent: "#1f5c73",
+    soft: "#d7eaf0",
+    contrast: "#ffffff",
+  },
 };
 
-function setAuthNote(message) {
-  elements.authMount.innerHTML = `<p class="auth-note">${escapeHtml(message)}</p>`;
+const typeDefaults = {
+  startup: {
+    sections: ["Problem", "Features", "Results"],
+    cta: "Start your free trial",
+    heroImage:
+      "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=80",
+  },
+  portfolio: {
+    sections: ["Selected Work", "Process", "Availability"],
+    cta: "View the work",
+    heroImage:
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
+  },
+  restaurant: {
+    sections: ["Menu", "Atmosphere", "Visit"],
+    cta: "Reserve a table",
+    heroImage:
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+  },
+  agency: {
+    sections: ["Strategy", "Creative", "Growth"],
+    cta: "Book a strategy call",
+    heroImage:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
+  },
+  event: {
+    sections: ["Schedule", "Speakers", "Tickets"],
+    cta: "Get tickets",
+    heroImage:
+      "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+  },
+};
+
+const form = document.querySelector("#builderForm");
+const promptInput = document.querySelector("#sitePrompt");
+const typeInput = document.querySelector("#siteType");
+const moodInput = document.querySelector("#siteMood");
+const preview = document.querySelector("#sitePreview");
+const codeOutput = document.querySelector("#codeOutput");
+const previewTitle = document.querySelector("#previewTitle");
+const copyButton = document.querySelector("#copyCode");
+const downloadButton = document.querySelector("#downloadCode");
+const openFullPageButton = document.querySelector("#openFullPage");
+const generateButton = document.querySelector("#builderForm .primary-button");
+const projectName = document.querySelector("#projectName");
+
+let currentHtml = "";
+
+if (form) {
+  initializeBuilder();
 }
 
-function clerkDomainFromKey(publishableKey) {
-  try {
-    return atob(publishableKey.split("_")[2]).slice(0, -1);
-  } catch (error) {
-    return "";
-  }
+function getStoredSites() {
+  return JSON.parse(localStorage.getItem("siteforge-sites") || "[]");
 }
 
-function loadScript(src, attributes = {}) {
-  return new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${src}"]`);
-    if (existing) {
-      existing.addEventListener("load", resolve, { once: true });
-      resolve();
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = src;
-    script.defer = true;
-    script.crossOrigin = "anonymous";
-    Object.entries(attributes).forEach(([key, value]) => {
-      script.setAttribute(key, value);
-    });
-    script.onload = resolve;
-    script.onerror = () => reject(new Error(`Failed to load ${src}`));
-    document.head.appendChild(script);
-  });
-}
-
-function showAuthedApp() {
-  state.isAuthed = true;
-  elements.authShell.classList.add("hidden");
-  elements.appShell.classList.remove("hidden");
-  update();
-  loadLiveTrends();
-}
-
-async function initClerkAuth() {
-  let publishableKey = "";
-  try {
-    const response = await fetch("/api/config");
-    const config = await response.json();
-    publishableKey = config.clerkPublishableKey || "";
-  } catch (error) {
-    setAuthNote("Could not load auth config.");
-    return;
-  }
-
-  if (!publishableKey) {
-    setAuthNote("Set CLERK_PUBLISHABLE_KEY in Vercel or your local .env to enable sign in.");
-    return;
-  }
-
-  const domain = clerkDomainFromKey(publishableKey);
-  if (!domain) {
-    setAuthNote("Your Clerk publishable key looks invalid.");
-    return;
-  }
-
-  try {
-    await loadScript(`https://${domain}/npm/@clerk/ui@1/dist/ui.browser.js`);
-    await loadScript(`https://${domain}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`, {
-      "data-clerk-publishable-key": publishableKey
-    });
-    await window.Clerk.load({
-      ui: { ClerkUI: window.__internal_ClerkUICtor }
-    });
-
-    if (window.Clerk.isSignedIn) {
-      window.Clerk.mountUserButton(elements.userMenu);
-      showAuthedApp();
-      return;
-    }
-
-    elements.authMount.innerHTML = '<div id="signInMount"></div>';
-    window.Clerk.mountSignIn(document.querySelector("#signInMount"));
-    window.Clerk.addListener(({ user }) => {
-      if (user) {
-        window.Clerk.mountUserButton(elements.userMenu);
-        showAuthedApp();
-      }
-    });
-  } catch (error) {
-    setAuthNote("Clerk could not load. Check your Clerk allowed domains and publishable key.");
-  }
-}
-
-function getInputs() {
-  return {
-    budget: elements.budget.value,
-    skill: elements.skill.value,
-    hours: Number(elements.hours.value),
-    risk: state.risk,
-    region: elements.region.value
-  };
-}
-
-function scoreIdea(idea, inputs) {
-  const trendGrowth = idea.trend.at(-1) - idea.trend[0];
-  let score = 28 + idea.demand * 0.34 + idea.trend.at(-1) * 0.18 + trendGrowth * 0.38 - idea.competition * 0.22;
-
-  if (idea.category === inputs.skill) score += 20;
-  if (idea.budget === inputs.budget) score += 13;
-  if (idea.risk === inputs.risk) score += 11;
-  if (idea.region.includes(inputs.region)) score += 8;
-  if (inputs.hours >= 25 && idea.risk !== "safe") score += 7;
-  if (inputs.hours < 15 && idea.startupCost < 1000) score += 6;
-  if (inputs.budget === "low" && idea.startupCost > 1500) score -= 22;
-  if (inputs.risk === "safe" && idea.competition > 68) score -= 8;
-
-  return Math.max(1, Math.min(99, Math.round(score)));
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function readPromptProfile(prompt) {
-  const text = prompt.toLowerCase();
-  const budgetMatch = text.match(/\$?\b(\d{2,6})\b|\b(\d{2,6})\s*(dollars|bucks|usd)\b/);
-  const budgetAmount = budgetMatch ? Number(budgetMatch[1] || budgetMatch[2]) : null;
-  const profile = {
-    budget: budgetAmount && budgetAmount < 1000 ? "low" : budgetAmount && budgetAmount <= 10000 ? "medium" : budgetAmount ? "high" : null,
-    skill: null,
-    region: null,
-    risk: null,
-    hours: null,
-    budgetAmount,
-    themes: []
-  };
-
-  const skillSignals = [
-    { skill: "creative", words: ["video", "editing", "design", "content", "tiktok", "youtube", "photo", "brand"] },
-    { skill: "technical", words: ["ai", "code", "software", "automation", "website", "bot", "app", "data"] },
-    { skill: "sales", words: ["sales", "marketing", "ads", "leads", "sell", "clients", "outreach"] },
-    { skill: "local", words: ["local", "cleaning", "cars", "lawn", "home", "dog", "house", "neighborhood"] },
-    { skill: "education", words: ["teach", "course", "coach", "school", "tutor", "learn", "training"] }
-  ];
-
-  for (const signal of skillSignals) {
-    if (signal.words.some((word) => text.includes(word))) {
-      profile.skill = signal.skill;
-      profile.themes.push(...signal.words.filter((word) => text.includes(word)).slice(0, 2));
-      break;
-    }
-  }
-
-  if (text.includes("safe") || text.includes("easy") || text.includes("low risk")) profile.risk = "safe";
-  if (text.includes("scale") || text.includes("big") || text.includes("risky")) profile.risk = "bold";
-  if (text.includes("online") || text.includes("global")) profile.region = "global";
-  if (text.includes("city")) profile.region = "urban";
-  if (text.includes("suburb") || text.includes("near me")) profile.region = "suburban";
-  if (text.includes("local")) profile.region = "suburban";
-
-  const hourMatch = text.match(/\b(\d{1,2})\s*(hours|hrs)\b/);
-  if (hourMatch) profile.hours = Number(hourMatch[1]);
-
-  return profile;
-}
-
-function promptScoreIdea(idea, prompt, baseInputs) {
-  const profile = readPromptProfile(prompt);
-  const text = prompt.toLowerCase();
-  const haystack = [idea.name, idea.description, idea.category, idea.budget, idea.risk, ...idea.tags].join(" ").toLowerCase();
-  const words = text.split(/[^a-z0-9]+/).filter((word) => word.length > 2);
-  let score = scoreIdea(idea, {
-    ...baseInputs,
-    budget: profile.budget || baseInputs.budget,
-    skill: profile.skill || baseInputs.skill,
-    region: profile.region || baseInputs.region,
-    risk: profile.risk || baseInputs.risk,
-    hours: profile.hours || baseInputs.hours
-  });
-
-  score += words.reduce((sum, word) => sum + (haystack.includes(word) ? 5 : 0), 0);
-  if (profile.budgetAmount && idea.startupCost <= profile.budgetAmount) score += 18;
-  if (profile.budgetAmount && idea.startupCost > profile.budgetAmount * 2) score -= 24;
-  if (profile.skill === idea.category) score += 18;
-  if (profile.risk === idea.risk) score += 10;
-
-  return Math.max(1, Math.min(99, Math.round(score)));
-}
-
-function money(value) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0
-  }).format(value);
-}
-
-function renderIdeas(ranked) {
-  if (!state.hasAsked) return;
-  elements.ideaList.innerHTML = ranked
-    .slice(0, 3)
-    .map(
-      (item, index) => `
-        <article class="idea-card">
-          <div class="rank">${index + 1}</div>
-          <div>
-            <h3>${escapeHtml(item.name)}</h3>
-            <p>${escapeHtml(item.description)}</p>
-            <div class="tags">
-              ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
-            </div>
-          </div>
-          <div class="fit">
-            <span>${item.score}</span>
-            fit
-          </div>
-        </article>
-      `
-    )
-    .join("");
-}
-
-function renderRecommendation(best, averageScore) {
-  if (!state.hasAsked) return;
-  elements.marketScore.textContent = averageScore;
-  elements.aiPick.textContent = `Start with: ${best.name}.`;
-  elements.aiReason.textContent = `${best.description} The signal is strong because demand is ${best.demand}/100, competition is manageable at ${best.competition}/100, and the trend line is up ${best.trend.at(-1) - best.trend[0]} points.`;
-  elements.startupCost.textContent = money(best.startupCost);
-  elements.firstSale.textContent = `${best.firstSaleDays} days`;
-  if (elements.launchPlan) elements.launchPlan.innerHTML = best.plan.map((step) => `<li>${step}</li>`).join("");
-  if (elements.trendHeadline) {
-    elements.trendHeadline.textContent = `${best.name} is the strongest match for your budget, skill set, region, and risk level.`;
-  }
-}
-
-function analyzePrompt(prompt, ranked) {
-  const cleanPrompt = prompt.trim();
-  const text = cleanPrompt.toLowerCase();
-  if (!text) return;
-
-  const inputs = getInputs();
-  const promptRanked = trendData
-    .map((idea) => ({ ...idea, score: promptScoreIdea(idea, cleanPrompt, inputs) }))
-    .sort((a, b) => b.score - a.score);
-  const best = promptRanked[0];
-  const profile = readPromptProfile(cleanPrompt);
-  const averageScore = Math.round(promptRanked.slice(0, 3).reduce((sum, item) => sum + item.score, 0) / 3);
-
-  const meaningfulWords = text.split(/[^a-z0-9]+/).filter((word) => word.length > 3);
-  const trendHint = state.liveTrends
+function titleCase(value) {
+  return value
+    .replace(/[^a-zA-Z0-9 ]/g, " ")
+    .split(" ")
+    .filter(Boolean)
     .slice(0, 5)
-    .find((trend) => {
-      const title = trend.title.toLowerCase();
-      return text.includes(title) || meaningfulWords.some((word) => title.includes(word));
-    });
-  const trendLine = trendHint
-    ? ` Also, "${trendHint.title}" is hot right now, so look for a way to connect your offer to that attention.`
-    : "";
-  const budgetLine = profile.budgetAmount
-    ? ` Since you mentioned about ${money(profile.budgetAmount)}, I avoided ideas that need too much money upfront.`
-    : "";
-  const firstStep = best.plan[0] ? ` First move: ${best.plan[0]}` : "";
-
-  elements.marketScore.textContent = averageScore;
-  elements.aiPick.textContent = `Start with: ${best.name}.`;
-  elements.aiReason.textContent = `${best.description} Validate it by selling one simple version before building anything complicated.`;
-  elements.startupCost.textContent = money(best.startupCost);
-  elements.firstSale.textContent = `${best.firstSaleDays} days`;
-  state.ranked = promptRanked;
-  renderIdeas(promptRanked);
-  return {
-    best,
-    summary: `${best.description} This fits your prompt with a ${best.score}/100 score.${budgetLine}${trendLine}${firstStep}`
-  };
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 }
 
-function parseTraffic(value, fallbackIndex) {
-  const clean = String(value || "").replace(/\+/g, "").trim().toLowerCase();
-  const number = Number.parseFloat(clean.replace(/[^0-9.]/g, ""));
-  const multiplier = clean.includes("m") ? 1000000 : clean.includes("k") ? 1000 : 1;
-  return Number.isFinite(number) && number > 0 ? number * multiplier : (10 - fallbackIndex) * 10000;
-}
+function inferName(prompt, type) {
+  const cleanedPrompt = prompt
+    .replace(/\b(gimmie|gimme|give me|make me|build me|create me)\b/gi, "")
+    .replace(/\b(wiuth|wih|withh)\b/gi, "with")
+    .replace(/\b(pronto|please|pls)\b/gi, "")
+    .trim();
 
-function renderLiveTrends(trends, sourceLabel) {
-  const visible = trends.slice(0, 8);
-  const maxTraffic = Math.max(...visible.map((trend, index) => parseTraffic(trend.traffic, index)), 1);
+  const descriptiveLead = cleanedPrompt.match(
+    /(?:website|site|page)\s+for\s+(?:a|an|the)?\s*([^.,]{6,64})/i
+  );
+  if (descriptiveLead?.[1]) {
+    return titleCase(descriptiveLead[1].replace(/\s+in\s+[A-Za-z ]+$/i, ""));
+  }
 
-  elements.trendSource.textContent = sourceLabel;
-  if (!state.hasAsked) return;
-  elements.trendBars.innerHTML = visible
-    .map((trend, index) => {
-      const traffic = parseTraffic(trend.traffic, index);
-      const width = Math.max(12, Math.round((traffic / maxTraffic) * 100));
-      return `
-        <div class="trend-row">
-          <span class="trend-name">${escapeHtml(trend.title)}</span>
-          <span class="bar-track"><span class="bar-fill" style="width: ${width}%"></span></span>
-          <span class="trend-count">${escapeHtml(trend.traffic || "rising")}</span>
-        </div>
-      `;
-    })
-    .join("");
-}
+  const simpleCategory = cleanedPrompt.match(
+    /(?:a|an)?\s*([a-z0-9 '&-]{3,42}?)\s+(?:website|site|page)\b/i
+  );
+  if (simpleCategory?.[1]) {
+    return titleCase(`${simpleCategory[1]} website`);
+  }
 
-async function loadLiveTrends() {
-  const fallback = [
-    { title: "AI tools", traffic: "500K+" },
-    { title: "summer travel", traffic: "200K+" },
-    { title: "meal prep", traffic: "100K+" },
-    { title: "electric bills", traffic: "100K+" },
-    { title: "side hustles", traffic: "50K+" },
-    { title: "short form video", traffic: "50K+" },
-    { title: "personal finance", traffic: "50K+" },
-    { title: "home services", traffic: "20K+" }
+  const patterns = [
+    /(?:for|called|named)\s+(?:a|an|the)?\s*([A-Z][A-Za-z0-9 '&-]{2,42})/,
+    /([A-Z][A-Za-z0-9 '&-]{2,42})\s+(?:website|site|app|studio|cafe|agency)/,
   ];
 
+  for (const pattern of patterns) {
+    const match = cleanedPrompt.match(pattern);
+    if (match?.[1]) return titleCase(match[1]);
+  }
+
+  const fallback = cleanedPrompt.split(".")[0].split(" for ").pop() || `${type} website`;
+  return titleCase(fallback) || "New Website";
+}
+
+function getGeneratedDocumentTitle(html) {
+  const match = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+  return match?.[1]?.trim();
+}
+
+function inferAudience(prompt) {
+  const audienceMatch = prompt.match(/(?:audience is|for|helps|serves)\s+([^.,]{8,80})/i);
+  return audienceMatch?.[1]?.trim() || "people who need a better, easier way to get started";
+}
+
+function inferKeywords(prompt) {
+  const words = prompt
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 4 && !["website", "modern", "should", "clear", "focused"].includes(word));
+
+  return [...new Set(words)].slice(0, 6);
+}
+
+function inferSiteType(prompt) {
+  const text = prompt.toLowerCase();
+  if (/(restaurant|cafe|coffee|bakery|bar|food|menu)/.test(text)) return "restaurant";
+  if (/(portfolio|photography|designer|artist|studio|creator|resume)/.test(text)) return "portfolio";
+  if (/(agency|service|consulting|marketing|coach|consultant)/.test(text)) return "agency";
+  if (/(event|conference|festival|summit|wedding|ticket)/.test(text)) return "event";
+  return "startup";
+}
+
+function inferMood(prompt) {
+  const text = prompt.toLowerCase();
+  if (/(warm|cozy|brown|orange|friendly|soft|handmade|local)/.test(text)) return "warm";
+  if (/(bold|loud|bright|energetic|fitness|sports|launch)/.test(text)) return "bold";
+  if (/(editorial|luxury|elegant|magazine|refined|minimal)/.test(text)) return "editorial";
+  return "clean";
+}
+
+function buildSite(prompt, type, mood) {
+  const palette = palettes[mood];
+  const defaults = typeDefaults[type];
+  const name = inferName(prompt, type);
+  const audience = inferAudience(prompt);
+  const keywords = inferKeywords(prompt);
+  const benefit = keywords.length ? keywords.slice(0, 3).join(", ") : "clarity, confidence, and momentum";
+  const cards = defaults.sections.map((section, index) => {
+    const detail = keywords[index] || ["strategy", "experience", "growth"][index];
+    return `
+      <article class="card">
+        <span>0${index + 1}</span>
+        <h3>${section}</h3>
+        <p>Purpose-built around ${detail} so ${audience} can move from interest to action without friction.</p>
+      </article>`;
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${name}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: ${palette.text};
+      background: ${palette.bg};
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: ${palette.accent} transparent;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: ${palette.accent};
+      border: 2px solid transparent;
+      border-radius: 999px;
+      background-clip: content-box;
+    }
+    a { color: inherit; text-decoration: none; }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px clamp(18px, 5vw, 64px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .logo { font-weight: 900; font-size: 1.05rem; }
+    .nav a:last-child, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      color: white;
+      background: ${palette.accent};
+      border-radius: 8px;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.84fr);
+      gap: clamp(26px, 5vw, 72px);
+      align-items: center;
+      padding: clamp(34px, 6vw, 72px) clamp(18px, 5vw, 64px);
+    }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: ${palette.accent};
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.8rem, 7vw, 5.4rem);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+    .lead {
+      max-width: 650px;
+      color: ${palette.muted};
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.7;
+    }
+    .hero-image {
+      min-height: 380px;
+      background: linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)), url("${defaults.heroImage}");
+      background-position: center;
+      background-size: cover;
+      border-radius: 12px;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.16);
+    }
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(0,0,0,0.08);
+      margin: 0 clamp(18px, 5vw, 64px);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .stat {
+      padding: 24px;
+      background: ${palette.contrast};
+    }
+    .stat strong {
+      display: block;
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      line-height: 1;
+    }
+    .stat span, .card p, .final p {
+      color: ${palette.muted};
+      line-height: 1.65;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: clamp(42px, 7vw, 86px) clamp(18px, 5vw, 64px);
+    }
+    .card {
+      min-height: 260px;
+      padding: 24px;
+      background: ${palette.contrast};
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+    }
+    .card span {
+      color: ${palette.accent};
+      font-weight: 900;
+    }
+    .card h3 {
+      margin: 58px 0 10px;
+      font-size: 1.45rem;
+    }
+    .final {
+      margin: 0 clamp(18px, 5vw, 64px) clamp(42px, 7vw, 86px);
+      padding: clamp(30px, 6vw, 64px);
+      background: ${palette.soft};
+      border-radius: 12px;
+    }
+    .final h2 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.5rem);
+      line-height: 0.98;
+    }
+    @media (max-width: 850px) {
+      .hero, .cards, .strip { grid-template-columns: 1fr; }
+      .hero-image { min-height: 310px; }
+      .nav a:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="#">${name}</a>
+    <a href="#contact">${defaults.cta}</a>
+  </nav>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">${type} website</p>
+        <h1>${name} helps your audience choose with confidence.</h1>
+        <p class="lead">A focused homepage shaped around ${benefit}. Built for ${audience}, with crisp messaging, strong visual rhythm, and a simple next step.</p>
+        <a class="button" href="#contact">${defaults.cta}</a>
+      </div>
+      <div class="hero-image" role="img" aria-label="${name} website visual"></div>
+    </section>
+    <section class="strip" aria-label="Highlights">
+      <div class="stat"><strong>3x</strong><span>Clearer path from visit to action</span></div>
+      <div class="stat"><strong>24h</strong><span>Fast launch-ready starter direction</span></div>
+      <div class="stat"><strong>100%</strong><span>Responsive layout for every screen</span></div>
+    </section>
+    <section class="cards">
+      ${cards.join("")}
+    </section>
+    <section class="final" id="contact">
+      <p class="eyebrow">Next step</p>
+      <h2>Ready to make ${name} the obvious choice?</h2>
+      <p>Use this section for booking, purchasing, subscribing, or starting a conversation. Keep the ask simple and the promise specific.</p>
+      <a class="button" href="mailto:hello@example.com">${defaults.cta}</a>
+    </section>
+  </main>
+</body>
+</html>`;
+}
+
+function renderLocalSite() {
+  const prompt = promptInput.value.trim() || examples.saas;
+  const siteType = typeInput?.value || inferSiteType(prompt);
+  const mood = moodInput?.value || inferMood(prompt);
+  currentHtml = buildSite(prompt, siteType, mood);
+  preview.srcdoc = currentHtml;
+  codeOutput.textContent = currentHtml;
+  const name = inferName(prompt, siteType);
+  previewTitle.textContent = `${name} preview`;
+  if (projectName) projectName.textContent = name;
+  saveSiteRecord({ name, prompt, siteType, source: "Preview" });
+}
+
+async function renderGeneratedSite() {
+  const prompt = promptInput.value.trim() || examples.saas;
+  const siteType = typeInput?.value || inferSiteType(prompt);
+  const mood = moodInput?.value || inferMood(prompt);
+  previewTitle.textContent = "Generating with AI...";
+  if (generateButton) {
+    generateButton.disabled = true;
+    generateButton.textContent = "Generating...";
+  }
+
   try {
-    const response = await fetch("/api/trends");
-    if (!response.ok) throw new Error("Trends request failed");
-    const payload = await response.json();
-    state.liveTrends = payload.trends?.length ? payload.trends : fallback;
-    renderLiveTrends(state.liveTrends, payload.source || "Google Trends");
-  } catch (error) {
-    state.liveTrends = fallback;
-    renderLiveTrends(fallback, "Fallback trend signals");
-  }
-}
-
-function drawChart(ranked) {
-  const canvas = elements.canvas;
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width;
-  const height = canvas.height;
-  const pad = 28;
-  const colors = ["#36d399", "#5fb3ff", "#f7c948"];
-  const top = ranked.slice(0, 3);
-
-  ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#10211f";
-  ctx.fillRect(0, 0, width, height);
-
-  ctx.strokeStyle = "rgba(255,255,255,0.12)";
-  ctx.lineWidth = 1;
-  for (let i = 0; i < 5; i += 1) {
-    const y = pad + ((height - pad * 2) / 4) * i;
-    ctx.beginPath();
-    ctx.moveTo(pad, y);
-    ctx.lineTo(width - pad, y);
-    ctx.stroke();
-  }
-
-  top.forEach((idea, ideaIndex) => {
-    const points = idea.trend.map((value, index) => {
-      const x = pad + ((width - pad * 2) / (idea.trend.length - 1)) * index;
-      const y = height - pad - (value / 100) * (height - pad * 2);
-      return { x, y };
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt,
+        siteType,
+        mood,
+      }),
     });
 
-    ctx.strokeStyle = colors[ideaIndex];
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    points.forEach((point, index) => {
-      if (index === 0) ctx.moveTo(point.x, point.y);
-      else ctx.lineTo(point.x, point.y);
-    });
-    ctx.stroke();
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({}));
+      throw new Error(errorPayload.error || "AI generation failed.");
+    }
 
-    points.forEach((point) => {
-      ctx.fillStyle = colors[ideaIndex];
-      ctx.beginPath();
-      ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    ctx.fillStyle = colors[ideaIndex];
-    ctx.font = "700 13px system-ui";
-    ctx.fillText(idea.name, pad + 4, 24 + ideaIndex * 20);
-  });
-}
-
-function update() {
-  const inputs = getInputs();
-  const ranked = trendData
-    .map((idea) => ({ ...idea, score: scoreIdea(idea, inputs) }))
-    .sort((a, b) => b.score - a.score);
-  const averageScore = Math.round(ranked.slice(0, 3).reduce((sum, item) => sum + item.score, 0) / 3);
-  state.ranked = ranked;
-
-  renderIdeas(ranked);
-  renderRecommendation(ranked[0], averageScore);
-  drawChart(ranked);
-
-  if (state.lastPrompt) {
-    analyzePrompt(state.lastPrompt, ranked);
-  }
-}
-
-elements.hours.addEventListener("input", () => {
-  elements.hoursValue.textContent = `${elements.hours.value} hrs/week`;
-});
-
-elements.segments.forEach((button) => {
-  button.addEventListener("click", () => {
-    elements.segments.forEach((segment) => segment.classList.remove("active"));
-    button.classList.add("active");
-    state.risk = button.dataset.risk;
-    update();
-  });
-});
-
-[elements.budget, elements.skill, elements.hours, elements.region].forEach((control) => {
-  control.addEventListener("input", update);
-});
-
-elements.generate.addEventListener("click", () => {
-  update();
-  if (state.lastPrompt) sendChat(state.lastPrompt, { echoUser: false });
-});
-
-function addMessage(role, text, options = {}) {
-  const message = document.createElement("article");
-  message.className = `message ${role === "user" ? "user-message" : "assistant-message"}${options.loading ? " loading-message" : ""}`;
-  if (options.id) message.id = options.id;
-
-  const label = document.createElement("strong");
-  label.textContent = role === "user" ? "You" : "AI business coach";
-  const body = document.createElement("p");
-  body.textContent = text;
-
-  message.append(label, body);
-  elements.chatThread.append(message);
-  message.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  return message;
-}
-
-function showResults() {
-  if (state.hasAsked) return;
-  state.hasAsked = true;
-  elements.resultsPanel.classList.remove("hidden");
-  if (state.ranked.length) {
-    renderIdeas(state.ranked);
-    const averageScore = Math.round(state.ranked.slice(0, 3).reduce((sum, item) => sum + item.score, 0) / 3);
-    renderRecommendation(state.ranked[0], averageScore);
-  }
-  if (state.liveTrends.length) renderLiveTrends(state.liveTrends, elements.trendSource.textContent || "Trend signals");
-}
-
-function fallbackReply(prompt, analysis) {
-  return `${analysis.best.name} is the best fit I can recommend from the local trend model right now.\n\n${analysis.summary}\n\nTo make it real: sell one tiny version first, talk to 10 possible customers, and only build more after someone says yes.`;
-}
-
-async function askRealAi(prompt, analysis) {
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: prompt,
-      context: {
-        recommendation: analysis.best,
-        trendSignals: state.liveTrends.slice(0, 6),
-        preferences: getInputs()
-      }
-    })
-  });
   const payload = await response.json();
-  if (!response.ok) throw new Error(payload.error || "AI request failed");
-  return payload.reply;
-}
-
-async function sendChat(prompt, options = { echoUser: true }) {
-  const cleanPrompt = prompt.trim();
-  if (!cleanPrompt) return;
-
-  state.lastPrompt = cleanPrompt;
-  if (!state.ranked.length) update();
-  showResults();
-  const analysis = analyzePrompt(cleanPrompt, state.ranked);
-
-  if (options.echoUser) addMessage("user", cleanPrompt);
-  const loading = addMessage("assistant", "Thinking...", { id: "thinkingMessage", loading: true });
-  elements.aiAskButton.disabled = true;
-  elements.aiAskButton.textContent = "Sending";
-
-  try {
-    const reply = await askRealAi(cleanPrompt, analysis);
-    loading.querySelector("p").textContent = reply;
+  currentHtml = payload.html;
   } catch (error) {
-    loading.querySelector("p").textContent = `${fallbackReply(cleanPrompt, analysis)}\n\nReal AI is not connected yet. Set OPENAI_API_KEY on the server to enable live model replies.`;
+    console.warn(error);
+    currentHtml = buildSite(prompt, siteType, mood);
+    previewTitle.textContent = `${inferName(prompt, siteType)} generated locally`;
   } finally {
-    loading.classList.remove("loading-message");
-    loading.removeAttribute("id");
-    elements.aiAskButton.disabled = false;
-    elements.aiAskButton.textContent = "Send";
+    if (generateButton) {
+      generateButton.disabled = false;
+      generateButton.textContent = "Generate site";
+    }
+  }
+
+  preview.srcdoc = currentHtml;
+  codeOutput.textContent = currentHtml;
+  const generatedTitle = getGeneratedDocumentTitle(currentHtml);
+  const displayName = generatedTitle && generatedTitle.length < 64 ? generatedTitle : inferName(prompt, siteType);
+  if (!previewTitle.textContent.includes("locally")) {
+    previewTitle.textContent = `${displayName} generated with AI`;
+  }
+  const name = displayName;
+  if (projectName) projectName.textContent = name;
+  saveSiteRecord({ name, prompt, siteType, source: previewTitle.textContent.includes("locally") ? "Local" : "AI" });
+}
+
+function saveSiteRecord({ name, prompt, siteType, source }) {
+  const existing = getStoredSites();
+  const next = [
+    {
+      id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "site",
+      name,
+      prompt,
+      type: siteType.charAt(0).toUpperCase() + siteType.slice(1),
+      status: source === "AI" ? "Generated" : "Draft",
+      updatedAt: new Date().toISOString(),
+    },
+    ...existing.filter((site) => site.name !== name),
+  ].slice(0, 12);
+
+  localStorage.setItem("siteforge-sites", JSON.stringify(next));
+}
+
+function useExample(key) {
+  promptInput.value = examples[key];
+  const typeByExample = { fitness: "agency", saas: "startup", cafe: "restaurant" };
+  const moodByExample = { fitness: "bold", saas: "clean", cafe: "warm" };
+  if (typeInput) typeInput.value = typeByExample[key];
+  if (moodInput) moodInput.value = moodByExample[key];
+  renderLocalSite();
+  document.querySelector(".builder-app").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function initializeBuilder() {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    void renderGeneratedSite();
+  });
+
+  document.querySelectorAll("[data-example]").forEach((button) => {
+    button.addEventListener("click", () => useExample(button.dataset.example));
+  });
+
+  copyButton.addEventListener("click", async () => {
+    if (!currentHtml) await renderGeneratedSite();
+    await navigator.clipboard.writeText(currentHtml);
+    copyButton.textContent = "Copied";
+    setTimeout(() => {
+      copyButton.textContent = "Copy code";
+    }, 1400);
+  });
+
+  downloadButton.addEventListener("click", async () => {
+    if (!currentHtml) await renderGeneratedSite();
+    const blob = new Blob([currentHtml], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "generated-site.html";
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+
+  openFullPageButton.addEventListener("click", async () => {
+    if (!currentHtml) await renderGeneratedSite();
+    const blob = new Blob([currentHtml], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener,noreferrer");
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const siteId = params.get("site");
+  const existingSite = siteId ? getStoredSites().find((site) => site.id === siteId) : null;
+
+  if (existingSite) {
+    promptInput.value = existingSite.prompt;
+    if (projectName) projectName.textContent = existingSite.name;
+  }
+
+  if (promptInput.value.trim() || existingSite) {
+    renderLocalSite();
+  } else {
+    currentHtml = "";
+    preview.srcdoc = emptyPreviewHtml();
+    codeOutput.textContent = "";
+    previewTitle.textContent = "No site selected";
+    if (projectName) projectName.textContent = "Untitled site";
   }
 }
 
-elements.aiSearchForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  showResults();
-  sendChat(elements.aiPrompt.value);
-  elements.aiPrompt.value = "";
-});
-
-elements.aiAskButton.addEventListener("click", (event) => {
-  event.preventDefault();
-  elements.aiSearchForm.requestSubmit();
-});
-
-elements.aiPrompt.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    elements.aiSearchForm.requestSubmit();
-  }
-});
-
-initClerkAuth();
+function emptyPreviewHtml() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Empty preview</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      color: #66736d;
+      background: #f8faf7;
+      font-family: Inter, system-ui, sans-serif;
+      text-align: center;
+    }
+    h1 { margin: 0 0 10px; color: #151917; font-size: clamp(2.2rem, 7vw, 5rem); }
+    p { margin: 0; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Empty preview</h1>
+    <p>Describe a site and generate your first draft.</p>
+  </main>
+</body>
+</html>`;
+}

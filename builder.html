@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Builder | SiteForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="builder-body">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="SiteForge AI home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span>SiteForge AI</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a aria-current="page" href="builder.html">Builder</a>
+      </nav>
+      <a class="header-button" href="index.html">Home</a>
+    </header>
+
+    <main class="builder-app">
+      <aside class="builder-sidebar">
+        <div>
+          <p class="eyebrow">Builder</p>
+          <h1>What should this website become?</h1>
+          <p class="project-line">Current project: <strong id="projectName">Untitled site</strong></p>
+        </div>
+
+        <form id="builderForm" class="builder-form">
+          <label for="sitePrompt">AI description</label>
+          <textarea
+            id="sitePrompt"
+            rows="9"
+            placeholder="A modern website for a mobile dog grooming service in Austin. Friendly, premium, booking-focused, with services, testimonials, and pricing."
+          ></textarea>
+
+          <button class="primary-button full-width" type="submit">Generate site</button>
+        </form>
+
+        <div class="prompt-hints">
+          <span>Prompt should include</span>
+          <p>Business type, style, colors, audience, sections, and the main action visitors should take.</p>
+        </div>
+      </aside>
+
+      <section class="workspace">
+        <div class="workspace-bar">
+          <div>
+            <span class="status-dot"></span>
+            <strong id="previewTitle">Ready to generate</strong>
+          </div>
+          <div class="workspace-actions">
+            <button type="button" id="openFullPage">Open full page</button>
+            <button type="button" id="copyCode">Copy code</button>
+            <button type="button" id="downloadCode">Download</button>
+          </div>
+        </div>
+        <iframe id="sitePreview" title="Generated site preview"></iframe>
+      </section>
+
+      <section class="code-panel" aria-label="Generated HTML code" hidden>
+        <div class="code-panel-header">
+          <strong>Generated HTML</strong>
+        </div>
+        <pre><code id="codeOutput"></code></pre>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

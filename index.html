@@ -1,166 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrendSearcher</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5M6G3NV1H"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-Z5M6G3NV1H");
-    </script>
+    <title>SiteForge AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <section class="auth-shell" id="authShell">
-      <div class="auth-card">
-        <div class="brand-block">
-          <div class="brand-mark">TS</div>
-          <div>
-            <p class="eyebrow">TrendSearcher</p>
-            <h1>Sign in to continue</h1>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="SiteForge AI home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span>SiteForge AI</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="builder.html">Builder</a>
+      </nav>
+      <a class="header-button" href="builder.html">Open builder</a>
+    </header>
+
+    <main>
+      <section class="home-hero">
+        <div class="home-copy">
+          <p class="eyebrow">AI website generator</p>
+          <h1>Describe a site. Get a polished first draft.</h1>
+          <p>
+            SiteForge turns a short business description into a clean responsive
+            homepage with copy, layout, color direction, and downloadable HTML.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="builder.html">Start building</a>
+            <a class="secondary-button" href="examples.html">Browse prompts</a>
           </div>
         </div>
-        <div id="authMount">
-          <p class="auth-note">Loading authentication...</p>
-        </div>
-      </div>
-    </section>
 
-    <main class="page-shell hidden" id="appShell">
-      <div class="user-menu" id="userMenu"></div>
-      <section class="search-home">
-        <div class="brand-block">
-          <div class="brand-mark">TS</div>
-          <div>
-            <p class="eyebrow">TrendSearcher</p>
-            <h1>Business idea finder</h1>
+        <div class="home-preview" aria-label="Generated website mockup">
+          <div class="preview-window">
+            <div class="window-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="mock-page">
+              <div class="mock-text">
+                <span>Generated site</span>
+                <h2>Better pages without the blank canvas.</h2>
+                <p>Strategy, copy, visual rhythm, and exportable starter code.</p>
+              </div>
+              <div class="mock-image"></div>
+              <div class="mock-row">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div>
-          <h2>Ask what business to start.</h2>
-          <p class="hero-copy">Get an AI reply first. Analytics show up after you ask.</p>
-        </div>
-
-        <form class="ai-search" id="aiSearchForm">
-          <input
-            id="aiPrompt"
-            type="search"
-            placeholder="Ask: what business should I start with $500?"
-            autocomplete="off"
-          />
-          <button type="submit" id="aiAskButton">Send</button>
-        </form>
       </section>
 
-      <section class="results hidden" id="resultsPanel">
-        <section class="answer-panel" id="answerPanel" aria-live="polite">
-          <div>
-            <p class="eyebrow">AI reply</p>
-            <div class="chat-thread" id="chatThread"></div>
-          </div>
-          <div class="score-badge">
-            <span id="marketScore">87</span>
-            <small>fit</small>
-          </div>
-        </section>
-
-        <section class="analytics-grid">
-          <section class="live-trends" aria-label="Current most searched topics">
-            <div>
-              <p class="eyebrow">Analytics</p>
-              <h3>Search heat</h3>
-              <span id="trendSource">Loading trends...</span>
-            </div>
-            <div class="trend-bars" id="trendBars"></div>
-          </section>
-
-          <aside class="insight-panel">
-            <div>
-              <p class="eyebrow">Best match</p>
-              <h3 id="aiPick">Start with an AI workflow service for small local businesses.</h3>
-              <p id="aiReason">
-                It has low setup cost, clear demand, and lets you sell useful outcomes before building a complex product.
-              </p>
-            </div>
-
-            <div class="mini-metrics">
-              <div>
-                <span id="startupCost">$450</span>
-                <small>starter cost</small>
-              </div>
-              <div>
-                <span id="firstSale">14 days</span>
-                <small>first sale</small>
-              </div>
-            </div>
-          </aside>
-        </section>
-
-        <section class="ideas-section">
-          <p class="eyebrow">Top ideas</p>
-          <div class="idea-list" id="ideaList" aria-live="polite"></div>
-        </section>
-
-        <details class="filters">
-          <summary>Customize analytics</summary>
-          <section class="control-panel" aria-label="Business preferences">
-            <label>
-              Budget
-              <select id="budget">
-                <option value="low">Under $1,000</option>
-                <option value="medium">$1,000 to $10,000</option>
-                <option value="high">$10,000+</option>
-              </select>
-            </label>
-
-            <label>
-              Skill
-              <select id="skill">
-                <option value="creative">Creative / design</option>
-                <option value="technical">Tech / automation</option>
-                <option value="sales">Sales / marketing</option>
-                <option value="local">Local services</option>
-                <option value="education">Teaching / coaching</option>
-              </select>
-            </label>
-
-            <label>
-              Hours
-              <input id="hours" type="range" min="5" max="60" value="15" step="5" />
-              <span id="hoursValue">15 hrs/week</span>
-            </label>
-
-            <label>
-              Risk
-              <div class="segmented" role="radiogroup" aria-label="Risk level">
-                <button type="button" class="segment active" data-risk="safe">Safe</button>
-                <button type="button" class="segment" data-risk="balanced">Balanced</button>
-                <button type="button" class="segment" data-risk="bold">Bold</button>
-              </div>
-            </label>
-
-            <label>
-              Region
-              <select id="region">
-                <option value="us">United States</option>
-                <option value="global">Global</option>
-                <option value="urban">Big city</option>
-                <option value="suburban">Suburban</option>
-              </select>
-            </label>
-
-            <button id="generate" class="primary-action" type="button">Update</button>
-          </section>
-        </details>
+      <section class="home-band">
+        <div>
+          <span>01</span>
+          <h2>Write one useful prompt</h2>
+          <p>Name the business, audience, tone, location, and what the page should help people do.</p>
+        </div>
+        <div>
+          <span>02</span>
+          <h2>Review the generated page</h2>
+          <p>See the site rendered live beside the controls, then adjust type and mood until it feels right.</p>
+        </div>
+        <div>
+          <span>03</span>
+          <h2>Take the code with you</h2>
+          <p>Copy or download a single HTML file that can become the start of the real site.</p>
+        </div>
       </section>
     </main>
 
-    <script src="app.js"></script>
+    <footer class="site-footer">
+      <span>SiteForge AI</span>
+      <a href="builder.html">Build a site</a>
+    </footer>
   </body>
 </html>
